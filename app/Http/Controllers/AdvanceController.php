@@ -11,7 +11,7 @@ class AdvanceController extends Controller
     {
         $user_id = 1;//$request->user()->id;
         $advances = advance::where('user_id', $user_id)->get();
-        return view('advance.home', compact('boughts', 'solds'));
+        return view('advance.home', compact('advances'));
     }
 
     public function create(Request $request)

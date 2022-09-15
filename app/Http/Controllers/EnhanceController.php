@@ -2,85 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEnhanceRequest;
-use App\Http\Requests\UpdateEnhanceRequest;
+use Illuminate\Http\Request;
 use App\Models\Enhance;
 
 class EnhanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function home(Request $request)
     {
-        //
+        $user_id = 1;//$request->user()->id;
+        $enhances = enhance::where('user_id', $user_id)->get();
+        return view('enhance.home', compact('enhances'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function create(Request $request)
+    {        
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreEnhanceRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreEnhanceRequest $request)
-    {
-        //
-    }
+        $enhance = new enhance;
+        $enhance->gold_amount = $request->gold_amount;
+        $enhance->fiat_leased = 1;
+        $enhance->currency = 'MYR';
+        $enhance->status = 'CRT';
+        $enhance->user_id = $request->user()->id;
+        $enhance->save();
+       
+        return view('enhance.created', compact('enhance'));
+    }    
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Enhance  $enhance
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Enhance $enhance)
+    public function show(enhance $enhance)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Enhance  $enhance
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Enhance $enhance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateEnhanceRequest  $request
-     * @param  \App\Models\Enhance  $enhance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateEnhanceRequest $request, Enhance $enhance)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Enhance  $enhance
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Enhance $enhance)
-    {
-        //
+        return view('enhance.detail', compact('enhance'));
     }
 }

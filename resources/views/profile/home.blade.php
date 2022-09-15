@@ -12,7 +12,7 @@
 				<h1 class="header-title">
 					Profile
 				</h1>
-				<p class="header-subtitle">---.</p>
+				<p class="header-subtitle">---</p>
 			</div>
 
 			

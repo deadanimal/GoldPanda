@@ -50,9 +50,14 @@ class TradeController extends Controller
         return view('trade.created', compact('trade'));
     }    
 
-    public function show(Trade $trade)
+    public function show_bought(Bought $trade)
     {
         return view('trade.detail', compact('trade'));
     }
+
+    public function show_sold(Sold $trade)
+    {
+        return view('trade.detail', compact('trade'));
+    }    
 
 }

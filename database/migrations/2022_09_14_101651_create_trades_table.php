@@ -13,19 +13,32 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trades', function (Blueprint $table) {
+        Schema::create('boughts', function (Blueprint $table) {
             $table->id();
-            $table->boolean('flow')->default(1);
-            $table->decimal('amount', 18, 6);
-            $table->decimal('fiat', 18, 6);
-            $table->char('currency', 3);
+            $table->decimal('gold_amount', 18, 6);
+            $table->decimal('fiat_nett', 18, 6);
+            $table->decimal('fiat_fee', 18, 6);
+            $table->decimal('fiat_inflow', 18, 6);
+            $table->char('fiat_currency', 3);
             $table->char('status', 3);
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete');             
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
+
+
+        Schema::create('solds', function (Blueprint $table) {
+            $table->id();
+            $table->decimal('gold_amount', 18, 6);
+            $table->decimal('fiat_outflow', 18, 6);
+            $table->decimal('fiat_nett', 18, 6);
+            $table->decimal('fiat_fee', 18, 6);            
+            $table->char('fiat_currency', 3);
+            $table->char('status', 3);      
+            $table->foreignId('user_id')->constrained('users');  
+            $table->timestamps();
+        });        
+
+
     }
 
     /**
@@ -35,6 +48,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trades');
+        Schema::dropIfExists('boughts');
+        Schema::dropIfExists('solds');
     }
 };

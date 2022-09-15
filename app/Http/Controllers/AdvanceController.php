@@ -2,85 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAdvanceRequest;
-use App\Http\Requests\UpdateAdvanceRequest;
+use Illuminate\Http\Request;
 use App\Models\Advance;
 
 class AdvanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function home(Request $request)
     {
-        //
+        $user_id = 1;//$request->user()->id;
+        $advances = advance::where('user_id', $user_id)->get();
+        return view('advance.home', compact('boughts', 'solds'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function create(Request $request)
+    {        
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAdvanceRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreAdvanceRequest $request)
-    {
-        //
-    }
+        $advance = new Advance;
+        $advance->gold_amount = $request->gold_amount;
+        $advance->fiat_leased = 1;
+        $advance->currency = 'MYR';
+        $advance->status = 'CRT';
+        $advance->user_id = $request->user()->id;
+        $advance->save();
+       
+        return view('advance.created', compact('advance'));
+    }    
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Advance  $advance
-     * @return \Illuminate\Http\Response
-     */
     public function show(Advance $advance)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Advance  $advance
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Advance $advance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAdvanceRequest  $request
-     * @param  \App\Models\Advance  $advance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAdvanceRequest $request, Advance $advance)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Advance  $advance
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Advance $advance)
-    {
-        //
+        return view('advance.detail', compact('advance'));
     }
 }

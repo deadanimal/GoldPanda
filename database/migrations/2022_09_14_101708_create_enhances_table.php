@@ -25,13 +25,10 @@ return new class extends Migration
 
             $table->char('status', 3);
 
-            $table->decimal('interest', 18, 6);
-            $table->timestamp('interest_calculated', $precision = 0);
+            $table->decimal('interest', 18, 6)->default(0.00);
+            $table->timestamp('interest_calculated_at', $precision = 0)->useCurrent();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete'); 
+            $table->foreignId('user_id')->constrained('users'); 
 
             $table->timestamps();
         });

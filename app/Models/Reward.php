@@ -10,7 +10,3 @@ class Reward extends Model
     use HasFactory;
 }
 
-class RewardProfile extends Model
-{
-    use HasFactory;
-}

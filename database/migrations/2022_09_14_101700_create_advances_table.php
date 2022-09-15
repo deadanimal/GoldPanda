@@ -16,19 +16,16 @@ return new class extends Migration
         Schema::create('advances', function (Blueprint $table) {
             $table->id();
 
-            $table->decimal('amount', 18, 6);
-            $table->decimal('fiat', 18, 6);
+            $table->decimal('gold_amount', 18, 6);
+            $table->decimal('fiat_leased', 18, 6);
             $table->char('currency', 3);
 
             $table->char('status', 3);
 
-            $table->decimal('interest', 18, 6);
-            $table->timestamp('interest_calculated', $precision = 0);
+            $table->decimal('interest', 18, 6)->default(0.00);
+            $table->timestamp('interest_calculated_at', $precision = 0)->useCurrent();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete');     
+            $table->foreignId('user_id')->constrained('users');   
 
             $table->timestamps();
         });

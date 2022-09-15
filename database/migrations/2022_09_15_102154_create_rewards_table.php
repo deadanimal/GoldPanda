@@ -12,34 +12,24 @@ return new class extends Migration
         Schema::create('rewards', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount', 18, 6);
+            $table->char('currency', 3);
             $table->integer('level');
-            $table->foreign('trade_id')
-                ->references('id')
-                ->on('trades')
-                ->onCascade('delete');             
-            $table->foreign('promoter_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete');             
-            $table->foreign('buyer_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete');              
+            $table->foreignId('bought_id')->constrained('boughts');                          
+            $table->foreignId('promoter_id')->constrained('users');             
+            $table->foreignId('buyer_id')->constrained('users');                        
             $table->timestamps();
         });
 
         Schema::create('reward_profiles', function (Blueprint $table) {
             $table->id();
             $table->integer('level');
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete');    
-            $table->foreign('promoter_id')
-                ->references('id')
-                ->on('users')
-                ->onCascade('delete');
+            $table->foreignId('user_id')->constrained('users');   
+            $table->foreignId('promoter_id')->constrained('users');   
             $table->timestamps();
+
+            $table->unique('user_id');
+
+
         });        
     }
 

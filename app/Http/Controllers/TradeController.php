@@ -2,81 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTradeRequest;
-use App\Http\Requests\UpdateTradeRequest;
-use App\Models\Trade;
+use Illuminate\Http\Request;
+use App\Models\Bought;
+use App\Models\Sold;
 
 class TradeController extends Controller
 {
 
-    public function home()
+    public function home(Request $request)
     {
-        return view('trade.home');
+        $user_id = 1;//$request->user()->id;
+        $boughts = Bought::where('user_id', $user_id)->get();
+        $solds = Sold::where('user_id', $user_id)->get();
+        return view('trade.home', compact('boughts', 'solds'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function create(Request $request)
+    {        
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTradeRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTradeRequest $request)
-    {
-        //
-    }
+        $fiat_flow = $request->amount;
+        $fiat_fee = $request->amount * 0.05;
+        $fiat_nett = $fiat_flow - $fiat_fee;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Trade  $trade
-     * @return \Illuminate\Http\Response
-     */
+        if($request->flow == 'buy') {
+            $trade = new Bought;
+
+            $gold_amount = $fiat_nett / $gold_price;
+            $trade->fiat_inflow = $fiat_flow;
+            $trade->gold_amount = $gold_amount;
+
+        } else {
+            $trade = new Sold;
+
+            $gold_amount = $fiat_nett * $gold_price;
+            $trade->fiat_outflow = $fiat_flow;
+            $trade->gold_amount = 123.45;           
+        }
+
+        $trade->fiat_fee = $fiat_fee;
+        $trade->fiat_nett = $fiat_nett;
+        $trade->gold_amount = $gold_amount;
+        $trade->fiat_currency = 'MYR';
+        $trade->status = 'CRT';
+        $trade->user_id = $request->user()->id;
+        $trade->save();
+       
+        return view('trade.created', compact('trade'));
+    }    
+
     public function show(Trade $trade)
     {
-        //
+        return view('trade.detail', compact('trade'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Trade  $trade
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Trade $trade)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateTradeRequest  $request
-     * @param  \App\Models\Trade  $trade
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateTradeRequest $request, Trade $trade)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Trade  $trade
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Trade $trade)
-    {
-        //
-    }
 }

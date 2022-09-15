@@ -10,9 +10,9 @@
 
 			<div class="header">
 				<h1 class="header-title">
-					RM 123.456 per gram
+					Trade
 				</h1>
-				<p class="header-subtitle">You have 24 new messages and 5 new notifications.</p>
+				<p class="header-subtitle">---</p>
 			</div>
 
 			<div class="row">

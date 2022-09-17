@@ -7,9 +7,14 @@
     "require": {
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
+        "jomweb/billplz-laravel": "^3.0",
+        "kornrunner/ethereum-address": "^0.3.0",
+        "kornrunner/secp256k1": "^0.2.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "santigarcor/laratrust": "^7.1",
+        "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

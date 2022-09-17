@@ -9,10 +9,18 @@ class AdvanceController extends Controller
 {
     public function home(Request $request)
     {
-        $user_id = 1;//$request->user()->id;
-        $advances = advance::where('user_id', $user_id)->get();
+        $user_id = auth()->user()->id;
+        $advances = Advance::where('user_id', $user_id)->get();
         return view('advance.home', compact('advances'));
     }
+
+    public function admin_home(Request $request)
+    {
+
+        $advances = Advance::all->get();
+        return view('advance.admin_home', compact('advances'));
+    }
+
 
     public function create(Request $request)
     {        

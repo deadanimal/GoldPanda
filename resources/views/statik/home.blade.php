@@ -251,11 +251,11 @@
 			<div class="row">
 				<div class="col-lg-6 mx-auto">
 					<h2 class="mb-3">
-						Join over 5,000+ developers who are already working with our products
+						Join the gold investment revolution now!
 					</h2>
-					<a href="https://themes.getbootstrap.com/product/spark-responsive-admin-template/" target="_blank"
+					<a href="/app" 
 						class="align-middle btn btn-success btn-lg mt-n1">
-						Purchase Now
+						Access the dashboard
 					</a>
 				</div>
 			</div>

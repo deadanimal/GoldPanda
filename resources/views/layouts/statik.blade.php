@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="Modern and advanced gold market">
 	<meta name="author" content="Gold Panda">
+	<link rel="icon" type="image/png" href="/img/gold-bars.png" />
 
 	<title>Gold Panda - @yield('title')</title>
 
@@ -21,13 +22,13 @@
 
 	<nav class="navbar navbar-expand navbar-dark absolute-top w-100 py-2">
 		<div class="container">
-			<a class="navbar-brand fw-bold" href="#">
-				<svg>
+			<a class="navbar-brand fw-bold" href="/">
+				<!-- <svg>
 					<use xlink:href="#ion-ios-pulse-strong"></use>
-				</svg>
+				</svg> -->
 				Gold Panda
 			</a>
-			<a class="btn btn-success btn-pill my-2 ms-2" href="/app">
+			<a class="btn btn-warning btn-pill my-2 ms-2" href="/app">
 				Dashboard
 			</a>
 		</div>

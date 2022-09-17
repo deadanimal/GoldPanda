@@ -14,6 +14,11 @@ class ProfileController extends Controller
         return view('profile.home');
     }
 
+    public function admin_home()
+    {
+        return view('profile.admin_home');
+    } 
+
     /**
      * Display a listing of the resource.
      *

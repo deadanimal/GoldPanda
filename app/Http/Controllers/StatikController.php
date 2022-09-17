@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStatikRequest;
 use App\Http\Requests\UpdateStatikRequest;
 use App\Models\Statik;
+use App\Models\User;
 
 class StatikController extends Controller
 {
@@ -49,38 +50,10 @@ class StatikController extends Controller
         return view('app');
     }     
 
-    public function index()
+    public function admin()
     {
-        //
-    }
+        return view('admin');
+    }       
 
-    public function create()
-    {
-        //
-    }
 
-    public function store(StoreStatikRequest $request)
-    {
-        //
-    }
-
-    public function show(Statik $statik)
-    {
-        //
-    }
-
-    public function edit(Statik $statik)
-    {
-        //
-    }
-
-    public function update(UpdateStatikRequest $request, Statik $statik)
-    {
-        //
-    }
-
-    public function destroy(Statik $statik)
-    {
-        //
-    }
 }

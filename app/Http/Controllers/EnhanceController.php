@@ -14,6 +14,11 @@ class EnhanceController extends Controller
         return view('enhance.home', compact('enhances'));
     }
 
+    public function admin_home(Request $request)
+    {
+        return view('enhance.admin_home');
+    }    
+
     public function create(Request $request)
     {        
 

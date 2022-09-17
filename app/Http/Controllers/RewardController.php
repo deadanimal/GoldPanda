@@ -105,6 +105,16 @@ class RewardController extends Controller
     }
 
 
+    public function home()
+    {
+        return view('reward.home');
+    }  
+    
+    public function admin_home()
+    {
+        return view('reward.admin_home');
+    }        
+
     public function index()
     {
         //

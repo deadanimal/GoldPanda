@@ -5,12 +5,20 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Modern, flexible and responsive Bootstrap 5 admin &amp; dashboard template">
-	<meta name="author" content="Bootlab">
+	<meta name="description" content="Modern and advanced gold market">
+	<meta name="author" content="Gold Panda">
+    <link rel="icon" type="image/png" href="/img/gold-bars.png" />
 
-	<title>Gold Panda</title>
+	<title>Gold Panda - @yield('title')</title>
 
 	<link href="{{ URL::asset('css/modern.css') }}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>	
 
 </head>
 
@@ -27,9 +35,9 @@
 			</a>
 			<div class="sidebar-content">
 				<div class="sidebar-user">
-					<img src="/img/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="Gold Panda" />
-					<div class="fw-bold">Gold Panda</div>
-					<small>Premier Gold Platform</small>
+					<img src="/img/gold-bars.png" class="img-fluid rounded-circle mb-2" alt="Gold Panda" />
+					<div class="fw-bold">RM 234.34</div>
+					<small>At 23/09/2022 9:00pm</small>
 				</div>
 
 				<ul class="sidebar-nav">
@@ -43,27 +51,56 @@
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="/app/trade">
-							<i class="align-middle me-2 fas fa-fw fa-home"></i> <span class="align-middle">Trade</span>
+							<i class="align-middle me-2 fas fa-fw fa-university"></i> <span class="align-middle">Trade</span>
 						</a>
 					</li>	
 					
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="/app/advance">
-							<i class="align-middle me-2 fas fa-fw fa-home"></i> <span class="align-middle">Advance</span>
+							<i class="align-middle me-2 fas fa-fw fa-credit-card"></i> <span class="align-middle">Advance</span>
 						</a>
 					</li>	
 					
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="/app/enhance">
-							<i class="align-middle me-2 fas fa-fw fa-home"></i> <span class="align-middle">Enhance</span>
+							<i class="align-middle me-2 fas fa-fw fa-bar-chart"></i> <span class="align-middle">Enhance</span>
+						</a>
+					</li>	
+
+                    <li class="sidebar-header">
+						Management
+					</li>					
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/app/reward">
+							<i class="align-middle me-2 fas fa-fw fa-gift"></i> <span class="align-middle">Reward</span>
 						</a>
 					</li>	
 					
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/profile">
-							<i class="align-middle me-2 fas fa-fw fa-home"></i> <span class="align-middle">Profile</span>
+						<a class="sidebar-link" href="/app/blockchain">
+							<i class="align-middle me-2 fas fa-fw fa-server"></i> <span class="align-middle">Blockchain</span>
+						</a>
+					</li>	
+                    
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/app/physical">
+							<i class="align-middle me-2 fas fa-fw fa-industry"></i> <span class="align-middle">Mint</span>
 						</a>
 					</li>						
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/app/support">
+							<i class="align-middle me-2 fas fa-fw fa-life-ring"></i> <span class="align-middle">Support</span>
+						</a>
+					</li>	                    
+					
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/app/profile">
+							<i class="align-middle me-2 fas fa-fw fa-user"></i> <span class="align-middle">Profile</span>
+						</a>
+					</li>	
+                                 
 
 
 				</ul>
@@ -76,16 +113,18 @@
 					<i class="hamburger align-self-center"></i>
 				</a>
 
+
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav ms-auto">
 						<li class="nav-item dropdown ms-lg-2">
 							<a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" data-bs-toggle="dropdown">
 								<i class="align-middle fas fa-cog"></i>
 							</a>
-							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="/app/profile"><i class="align-middle me-1 fas fa-fw fa-user"></i>Profile</a>
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">								
+                                <a class="dropdown-item" href="/app/support"><i class="align-middle me-1 fas fa-fw fa-life-ring"></i>Support</a>
+                                <a class="dropdown-item" href="/app/profile"><i class="align-middle me-1 fas fa-fw fa-user"></i>Profile</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="/signout"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i> Sign Out</a>
+								<a class="dropdown-item" href="/logout"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i> Sign Out</a>
 							</div>
 						</li>
 					</ul>
@@ -101,15 +140,25 @@
 					<div class="row text-muted">
 						<div class="col-8 text-start">
 							<ul class="list-inline">
+
+                                @role('admin')  
+                                    <li class="list-inline-item">
+                                        <a class="text-muted" href="/admin">Access Admin Site</a>
+                                    </li>
+                                @endrole  
+
 								<li class="list-inline-item">
-									<a class="text-muted" href="/support">Support</a>
+									<a class="text-muted" href="/app/support">Support</a>
 								</li>
+
 								<li class="list-inline-item">
 									<a class="text-muted" href="/privacy">Privacy</a>
 								</li>
+
 								<li class="list-inline-item">
 									<a class="text-muted" href="/terms">Terms</a>
-								</li>
+								</li>    
+                                
 							</ul>
 						</div>
 						<div class="col-4 text-end">

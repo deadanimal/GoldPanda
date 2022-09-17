@@ -141,7 +141,7 @@
 						<div class="col-8 text-start">
 							<ul class="list-inline">
 
-                                @role('admin')  
+                                @role('super-admin')  
                                     <li class="list-inline-item">
                                         <a class="text-muted" href="/admin">Access Admin Site</a>
                                     </li>

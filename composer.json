@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "doctrine/dbal": "^3.4",
         "guzzlehttp/guzzle": "^7.2",
         "jomweb/billplz-laravel": "^3.0",
         "kornrunner/ethereum-address": "^0.3.0",

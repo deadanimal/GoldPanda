@@ -6,6 +6,7 @@ use App\Http\Requests\StoreStatikRequest;
 use App\Http\Requests\UpdateStatikRequest;
 use App\Models\Statik;
 use App\Models\User;
+use App\Models\GoldPrice;
 
 class StatikController extends Controller
 {
@@ -47,7 +48,8 @@ class StatikController extends Controller
     
     public function app()
     {
-        return view('app');
+        $gold_price = GoldPrice::latest()->first();
+        return view('app', compact('gold_price'));
     }     
 
     public function admin()

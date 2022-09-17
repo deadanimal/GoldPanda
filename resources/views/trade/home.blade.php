@@ -27,15 +27,15 @@
 									<h6 class="card-subtitle text-muted">Default Bootstrap form layout.</h6>
 								</div>
 								<div class="card-body">
-									<form method="POST" action="/app/buy">
+									<form method="POST" action="/app/trade/buy">
     									@csrf
 										<div class="mb-3">
 											<label class="form-label">Ringgit Malaysia, RM</label>
-											<input type="number" class="form-control" name="fiat_amount" value=20.00 step="0.01" min=20.00>
+											<input type="number" class="form-control" id="in_fiat_amount" name="in_fiat_amount" step="1" min=20 onchange="updateFiatInput()">
 										</div>
 										<div class="mb-3">
 										<label class="form-label">Gold Amount, gram</label>
-											<input type="number" class="form-control" name="gold_amount" readonly>
+											<input type="number" class="form-control" id="out_gold_amount" name="out_gold_amount" readonly>
 										</div>
 										<button type="submit" class="btn btn-success">Buy</button>
 									</form>
@@ -54,15 +54,15 @@
 									<h6 class="card-subtitle text-muted">Default Bootstrap form layout.</h6>
 								</div>
 								<div class="card-body">
-									<form method="POST" action="/app/sell">
+									<form method="POST" action="/app/trade/sell">
     									@csrf
 										<div class="mb-3">
 											<label class="form-label">Gold Amount, gram</label>
-											<input type="number" class="form-control" name="gold_amount" value=0.01 step="0.01" min=0.01>
+											<input type="number" class="form-control" id="in_gold_amount" name="in_gold_amount" step="0.1" min=0.1 onchange="updateGoldInput()">
 										</div>
 										<div class="mb-3">
 										<label class="form-label">Ringgit Malaysia, RM</label>
-											<input type="number" class="form-control" name="fiat_amount" readonly>
+											<input type="number" class="form-control" id="out_fiat_amount" name="out_fiat_amount" readonly>
 										</div>
 										<button type="submit" class="btn btn-danger">Sell</button>
 									</form>
@@ -77,7 +77,7 @@
 				
 
 				<div class="col-xl-4 d-flex">
-					<div class="w-100">
+					<!-- <div class="w-100">
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="card">
@@ -89,13 +89,13 @@
 
 										</div>
 										<h1 class="display-5 mt-1 mb-3">242.64</h1>
-										<!-- <div class="mb-0">
+										<div class="mb-0">
 											<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span>
 											24H change
-										</div> -->
+										</div>
 									</div>
 								</div>
-								<!-- <div class="card">
+								<div class="card">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mt-0">
@@ -109,7 +109,7 @@
 											24H change
 										</div>
 									</div>
-								</div> -->
+								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="card">
@@ -122,13 +122,13 @@
 
 										</div>
 										<h1 class="display-5 mt-1 mb-3">3.456</h1>
-										<!-- <div class="mb-0">
+										<div class="mb-0">
 											<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 8.35% </span>
 											More 
-										</div> -->
+										</div>
 									</div>
 								</div>
-								<!-- <div class="card">
+								<div class="card">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mt-0">
@@ -142,42 +142,40 @@
 											Less 
 										</div>
 									</div>
-								</div> -->
+								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>		
 
 			<div class="row">
 				<div class="col">
 
-				<div class="card">
+							<div class="card">
 								<div class="card-header">
-									<h5 class="card-title">Trade Transaction</h5>
+									<h5 class="card-title">BUY</h5>
 									<h6 class="card-subtitle text-muted">---</h6>
 								</div>
 								<table class="table table-striped">
 									<thead>
 										<tr>
-											<th style="width:5%;">No</th>
-											<th style="width:30%;">Date</th>
-											<th style="width:10%"></th>
+											<th style="width:10%;">No</th>
+											<th style="width:25%;">Date</th>
 											<th style="width:25%">Gold</th>
-											<th style="width:25%">Cash</th>											
+											<th style="width:25%">Price</th>											
 											<th class="d-none d-md-table-cell" style="width:15%">Status</th>
 											
 										</tr>
 									</thead>
 									<tbody>
 
-										@foreach ($trades as $trade)
+										@foreach ($boughts as $bought)
 											<tr>
-												<td>{{ $trade->id }}</td>
-												<td>12 September 2020</td>
-												<td>BUY</td>
-												<td>1.234567g</td>
-												<td>RM 200.00</td>
+												<td><a href="/app/bought/{{ $bought->id }}">B-{{ $bought->id }}</a></td>
+												<td>{{ $bought->created_at }}</td>
+												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }}</td>
+												<td>{{ $bought->fiat_currency }} {{ number_format($bought->fiat_inflow / 100, 2, '.', ',') }}</td>
 												<td class="d-none d-md-table-cell">Created</td>
 		
 											</tr>
@@ -185,36 +183,47 @@
 									</tbody>
 								</table>
 							</div>				
-
-
-					<!-- <div class="card">
-						<div class="card-body">
-							<div class="form-group">
-								<label><strong>Status :</strong></label>
-								<select id='status' class="form-control" style="width: 200px">
-									<option value="">--Select Status--</option>
-									<option value="1">Active</option>
-									<option value="0">Deactive</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				
-					<table class="table table-bordered data-table">
-						<thead>
-							<tr>
-								<th>No</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th width="100px">Status</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>	 -->
 					
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col">
+
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">SELL</h5>
+									<h6 class="card-subtitle text-muted">---</h6>
+								</div>
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width:10%;">No</th>
+											<th style="width:25%;">Date</th>
+											<th style="width:25%">Gold</th>
+											<th style="width:25%">Price</th>											
+											<th class="d-none d-md-table-cell" style="width:15%">Status</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+
+										@foreach ($solds as $sold)
+											<tr>
+												<td><a href="/app/sold/{{ $sold->id }}">S-{{ $sold->id }}</a></td>
+												<td>{{ $sold->created_at }}</td>
+												<td>{{ number_format($sold->gold_amount / 1000000, 6, '.', ',') }}</td>
+												<td>{{ $sold->fiat_currency }} {{ number_format($sold->fiat_outflow / 100, 2, '.', ',') }}</td>
+												<td class="d-none d-md-table-cell">Created</td>
+		
+											</tr>
+										@endforeach									
+									</tbody>
+								</table>
+							</div>				
+					
+				</div>
+			</div>			
 			
 
 			
@@ -253,5 +262,32 @@
     });
       
   });
+</script>
+
+<script type="text/javascript">
+
+	var gold_price = {!! json_encode($gold_price->toArray()) !!};
+	var myr_price = {!! json_encode($myr_price->toArray()) !!};
+
+
+	function updateFiatInput(){
+		var fiat_flow = document.getElementById("in_fiat_amount").value * 100;
+		var fiat_fee = document.getElementById("in_fiat_amount").value * 5;
+		var fiat_nett = fiat_flow - fiat_fee;
+		var gold_amount = fiat_nett * 100 / (gold_price['buy_price'] * myr_price['buy_price'])
+		document.getElementById("out_gold_amount").value = gold_amount.toFixed(6);
+		// var in_fiat_amount = document.getElementById("in_fiat_amount").value
+		// document.getElementById("out_gold_amount").value = ish;
+	}
+
+	function updateGoldInput(){
+		var gold_amount = document.getElementById("in_gold_amount").value;
+		var fiat_amount = gold_amount * (gold_price['sell_price'] * myr_price['sell_price']) / 10000;
+		document.getElementById("out_fiat_amount").value = fiat_amount.toFixed(2);
+		// var in_fiat_amount = document.getElementById("in_fiat_amount").value
+		// document.getElementById("out_gold_amount").value = ish;
+	}	
+
+
 </script>
 @endsection

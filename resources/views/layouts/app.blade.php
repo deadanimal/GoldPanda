@@ -36,8 +36,8 @@
 			<div class="sidebar-content">
 				<div class="sidebar-user">
 					<img src="/img/gold-bars.png" class="img-fluid rounded-circle mb-2" alt="Gold Panda" />
-					<div class="fw-bold">RM 234.34</div>
-					<small>At 23/09/2022 9:00pm</small>
+					<div class="fw-bold">RM {{ number_format($gold_price->price * $myr_price->price / 10000, 2, '.', ',') }} per gram</div>
+					<small>at {{ $gold_price->created_at }}</small>
 				</div>
 
 				<ul class="sidebar-nav">

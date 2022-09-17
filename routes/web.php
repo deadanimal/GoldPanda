@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\EnhanceController;
@@ -11,6 +12,8 @@ use App\Http\Controllers\StatikController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\BlockchainMintController;
 use App\Http\Controllers\PhysicalMintController;
+
+use App\Models\User;
  
 Route::get('/', [StatikController::class, 'home']);
 Route::get('/about', [StatikController::class, 'about']);
@@ -26,7 +29,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/app/trade', [TradeController::class, 'home']);
     Route::get('/app/trade/calculate', [TradeController::class, 'calculate']);
-    Route::post('/app/trade', [TradeController::class, 'create']);
+    Route::post('/app/trade/buy', [TradeController::class, 'buy_gold']);
+    Route::post('/app/trade/sell', [TradeController::class, 'sell_gold']);
     Route::get('/app/bought/{id}', [TradeController::class, 'show_bought']);
     Route::get('/app/sold/{id}', [TradeController::class, 'show_sold']);
     
@@ -117,6 +121,70 @@ Route::middleware(['auth', 'role:super-admin'])->group(function () {
     
 });
 
+Route::post('/token', function (Request $request) {
+    if (!Auth::attempt($request->only('email', 'password'))) 
+
+     return response()->json([
+        'message' => 'Invalid login details'
+     ], 401);
+
+    $user = User::where('email',  $request->email)->firstOrFail();
+    auth()->user()->tokens()->delete();
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'user' => $user,
+        'token' => $token
+    ], 200);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/api/trade', [TradeController::class, 'api_home']);
+    Route::get('/api/trade/calculate', [TradeController::class, 'api_calculate']);
+    Route::post('/api/trade', [TradeController::class, 'api_create']);
+    Route::get('/api/bought/{id}', [TradeController::class, 'api_show_bought']);
+    Route::get('/api/sold/{id}', [TradeController::class, 'api_show_sold']);
+
+    Route::get('/api/advance', [AdvanceController::class, 'api_home']);
+    Route::get('/api/advance/calculate', [AdvanceController::class, 'api_calculate']);
+    Route::post('/api/advance', [AdvanceController::class, 'api_create']);
+    Route::get('/api/advance/{id}', [AdvanceController::class, 'api_show']);
+    Route::put('/api/advance/{id}/redeem', [AdvanceController::class, 'api_redeem']);
+    Route::get('/api/advance/{id}/calculate', [AdvanceController::class, 'api_calculate_specific']);
+    
+    Route::get('/api/enhance', [EnhanceController::class, 'api_home']);
+    Route::get('/api/enhance/calculate', [EnhanceController::class, 'api_calculate']);
+    Route::post('/api/enhance', [EnhanceController::class, 'api_create']);
+    Route::get('/api/enhance/{id}', [EnhanceController::class, 'api_show']);
+    Route::put('/api/enhance/{id}/redeem', [EnhanceController::class, 'api_redeem']);
+    Route::put('/api/enhance/{id}/cancel', [EnhanceController::class, 'api_cancel']);
+    Route::get('/api/enhance/{id}/calculate', [EnhanceController::class, 'api_calculate_specific']);
+    
+    Route::get('/api/profile', [ProfileController::class, 'api_home']);    
+    Route::put('/api/profile/promoter', [ProfileController::class, 'api_update_promoter']);
+    Route::put('/api/profile/bank-account', [ProfileController::class, 'api_update_bank_account']);
+    Route::put('/api/profile/kyc', [ProfileController::class, 'api_update_kyc']);
+
+    Route::get('/api/reward', [RewardController::class, 'api_home']);    
+    Route::get('/api/reward/{id}', [RewardController::class, 'api_show']);
+    Route::post('/api/reward/redeem', [RewardController::class, 'api_redeem_reward']);    
+    Route::get('/api/reward/redeem/{id}', [RewardController::class, 'api_show_redeem']);    
+
+    Route::get('/api/blockchain', [BlockchainMintController::class, 'api_home']);    
+    Route::post('/api/blockchain/mint', [BlockchainMintController::class, 'api_mint']);
+    Route::get('/api/blockchain/mint/{id}', [BlockchainMintController::class, 'api_show']);
+
+    Route::get('/api/physical', [PhysicalMintController::class, 'api_home']);    
+    Route::post('/api/physical/mint', [PhysicalMintController::class, 'api_mint']);
+    Route::get('/api/physical/mint/{id}', [PhysicalMintController::class, 'api_show']);    
+
+    Route::get('/api/support', [SupportController::class, 'api_home']);
+    Route::post('/api/support', [SupportController::class, 'api_create_support']);
+    Route::get('/api/support/{id}', [SupportController::class, 'api_show']);
+    Route::put('/api/support/{id}/message', [SupportController::class, 'api_send_message']);    
+
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

@@ -111,6 +111,10 @@ class TradeController extends Controller
     public function buy_gold(Request $request)
     {        
 
+        $validatedData = $request->validate([
+            'in_fiat_amount' => ['required', 'gte:20.00', 'lte:50000.00'],
+        ]);        
+
         $fiat_flow = $request->in_fiat_amount * 100; // in cent
         $fiat_fee = $request->in_fiat_amount * 5;
         
@@ -179,6 +183,11 @@ class TradeController extends Controller
     public function sell_gold(Request $request)
     {        
 
+        $validatedData = $request->validate([
+            'in_gold_amount' => ['required', 'gte:0.1'],
+        ]);              
+            
+
         $gold_amount = $request->in_gold_amount;
         $gold_price = GoldPrice::latest()->first()->sell_price;
         $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->sell_price;
@@ -188,8 +197,10 @@ class TradeController extends Controller
         $fiat_nett = $fiat_flow - $fiat_fee;  
         
         $gold_balance = $request->user()->alloted_gold;
-        if($gold_amount * 1000000 < $gold_balance) {
-            return redirect('/app/trade')->with('error', 'Not enough gold');
+        if($gold_amount * 1000000 > $gold_balance) {
+            $gold_balance_string = number_format($gold_balance / 1000000, 6, '.', ',');
+            $statement = 'You do not enough gold balance. Your current available gold balance is '.$gold_balance_string.' g';
+            return Redirect::back()->withErrors(['msg' => $statement]);
         }
 
         $trade = new Sold;

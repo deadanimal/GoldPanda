@@ -15,7 +15,7 @@
 	<link href="{{ URL::asset('css/modern.css') }}" rel="stylesheet">
 
 </head>
-<!-- SET YOUR THEME -->
+
 
 <body class="theme-blue">
 	<div class="splash active">
@@ -28,29 +28,11 @@
 				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
 					<div class="d-table-cell align-middle">
 
-						<div class="text-center mt-4">
-							<h1 class="h2">Reset password</h1>
-							<p class="lead">
-								Enter your email to reset your password.
-							</p>
-						</div>
-
-						<div class="card">
-							<div class="card-body">
-								<div class="m-sm-4">
-                                    <form method="POST" action="{{ route('password.email') }}">
-                                        @csrf
-										<div class="mb-3">
-											<label>Email</label>
-											<input class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" />
-										</div>
-										<div class="text-center mt-3">
-											<a href="dashboard-default.html" class="btn btn-lg btn-primary">Reset password</a>
-											<!-- <button type="submit" class="btn btn-lg btn-primary">Reset password</button> -->
-										</div>
-									</form>
-								</div>
-							</div>
+						<div class="text-center">
+                        <h1 class="display-1 fw-bold">500</h1>
+							<p class="h1">Internal server error.</p>
+							<p class="h2 fw-normal mt-3 mb-4">The server encountered something unexpected that didn't allow it to complete the request.</p>
+							<a href="/app" class="btn btn-primary btn-lg">Return to website</a>
 						</div>
 
 					</div>

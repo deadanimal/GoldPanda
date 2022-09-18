@@ -131,6 +131,55 @@
 				</div>
 			</nav>
 
+			@if ($errors->any())
+
+				@foreach ($errors->all() as $error)
+
+					<div class="modal fade show" id="modalText" style="display: block;" aria-modal="true" role="dialog">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Error Message</h5>
+									<!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+								</div>
+								<div class="modal-body m-3">
+									<p class="mb-0">{{ $error }}</p>
+								</div>
+								<div class="modal-footer">
+									<!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
+									<button type="button" class="btn btn-danger" onclick="closeModal()">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+									
+											
+				@endforeach
+
+				<div id="modalBackdrop" class="modal-backdrop fade show"></div>
+
+				<script>
+					function closeModal() {
+  						//document.getElementById("modalText").classList.remove('show');
+						//document.getElementById("modalText").classList.add('hide');
+						var element = document.getElementById("modalText");
+						element.remove();								
+						var element = document.getElementById("modalBackdrop");
+						element.remove();					
+					}
+				</script>				
+					
+					
+				
+			@endif		
+			
+			@isset($message)
+<div class="alert alert-success">
+<strong>{{@message}}</strong>
+</div>
+@endif			
+
 
 			@yield('content')
 

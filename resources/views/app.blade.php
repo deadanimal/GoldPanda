@@ -10,9 +10,9 @@
 
 			<div class="header">
 				<h1 class="header-title">
-					RM 123.456 per gram
+					RM {{ number_format(($user->alloted_gold + $user->unalloted_gold) * $myr_price->price * $gold_price->price / 1000000 / 100 / 100, 2, '.', ',')  }}
 				</h1>
-				<p class="header-subtitle">You have 24 new messages and 5 new notifications.</p>
+				<p class="header-subtitle">Total gold portfolio net worth as of ...</p>
 			</div>
 
 			<div class="row">
@@ -20,9 +20,9 @@
 					<div class="card flex-fill w-100">
 						<div class="card-header">
 							<div class="card-actions float-end">
-								RM 123.213 per gram
+								
 							</div>
-							<h5 class="card-title mb-0">Gold Portfolio</h5>
+							<h5 class="card-title mb-0">Gold Price</h5>
 						</div>
 						<div class="card-body py-3">
 							<div class="chart chart-sm">
@@ -40,7 +40,7 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col mt-0">
-												<h5 class="card-title">Total Gold, gram</h5>
+												<h5 class="card-title">Gold Portfolio</h5>
 											</div>
 
 											<!-- <div class="col-auto">
@@ -51,10 +51,12 @@
 												</div>
 											</div> -->
 										</div>
-										<h1 class="display-5 mt-1 mb-3">2.562</h1>
+										<h1 class="display-5 mt-1 mb-3">
+											{{ number_format(($user->alloted_gold + $user->unalloted_gold) / 1000000, 2, '.', ',') }}
+										</h1>
 										<div class="mb-0">
-											<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span>
-											Less 
+											<!-- <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span> -->
+											
 										</div>
 									</div>
 								</div>
@@ -62,22 +64,18 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col mt-0">
-												<h5 class="card-title">Gold Savings, g</h5>
+												<h5 class="card-title">Gold Savings</h5>
 											</div>
 
-											<!-- <div class="col-auto">
-												<div class="avatar">
-													<div class="avatar-title rounded-circle bg-primary-dark">
-														<i class="align-middle" data-feather="users"></i>
-													</div>
-												</div>
-											</div> -->
+											
 										</div>
-										<h1 class="display-5 mt-1 mb-3">17.213</h1>
-										<div class="mb-0">
+										<h1 class="display-5 mt-1 mb-3">
+											{{ number_format($user->alloted_gold / 1000000, 2, '.', ',') }}											
+										</h1>
+										<!-- <div class="mb-0">
 											<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span>
-											More 
-										</div>
+											
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -86,7 +84,7 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col mt-0">
-												<h5 class="card-title">Gold Booked, gram</h5>
+												<h5 class="card-title">Gold Booked</h5>
 											</div>
 
 											<!-- <div class="col-auto">
@@ -97,26 +95,30 @@
 												</div>
 											</div> -->
 										</div>
-										<h1 class="display-5 mt-1 mb-3">123.456</h1>
-										<div class="mb-0">
+										<h1 class="display-5 mt-1 mb-3">
+											{{ number_format($user->enhance_gold_latest / 1000000, 2, '.', ',') }}																						
+										</h1>
+										<!-- <div class="mb-0">
 											<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 8.35% </span>
-											More 
-										</div>
+											
+										</div> -->
 									</div>
 								</div>
 								<div class="card">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mt-0">
-												<h5 class="card-title">Gold Leased, g</h5>
+												<h5 class="card-title">Gold Leased</h5>
 											</div>
 
 										</div>
-										<h1 class="display-5 mt-1 mb-3">43.123</h1>
-										<div class="mb-0">
+										<h1 class="display-5 mt-1 mb-3">
+											{{ number_format($user->advance_gold_latest / 1000000, 2, '.', ',') }}																																	
+										</h1>
+										<!-- <div class="mb-0">
 											<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -4.25% </span>
 											Less 
-										</div>
+										</div> -->
 									</div>
 								</div>
 							</div>
@@ -149,22 +151,10 @@
 					<div class="card flex-fill w-100">
 						<div class="card-header">
 							<div class="card-actions float-end">
-								<a href="#" class="me-1">
-									<i class="align-middle" data-feather="refresh-cw"></i>
-								</a>
-								<div class="d-inline-block dropdown show">
-									<a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-										<i class="align-middle" data-feather="more-vertical"></i>
-									</a>
-
-									<div class="dropdown-menu dropdown-menu-end">
-										<a class="dropdown-item" href="#">Action</a>
-										<a class="dropdown-item" href="#">Another action</a>
-										<a class="dropdown-item" href="#">Something else here</a>
-									</div>
-								</div>
+				
+	
 							</div>
-							<h5 class="card-title mb-0">Browser Usage</h5>
+							<h5 class="card-title mb-0">Portfolio Allocation</h5>
 						</div>
 						<div class="card-body d-flex">
 							<div class="align-self-center w-100">
@@ -177,16 +167,16 @@
 								<table class="table mb-0">
 									<tbody>
 										<tr>
-											<td><i class="fas fa-circle text-primary fa-fw"></i> Chrome</td>
-											<td class="text-end">4401</td>
+											<td><i class="fas fa-circle text-primary fa-fw"></i> Gold Savings</td>
+											<td class="text-end">{{ number_format($user->alloted_gold / 1000000, 2, '.', ',') }} g</td>
 										</tr>
 										<tr>
-											<td><i class="fas fa-circle text-warning fa-fw"></i> Firefox</td>
-											<td class="text-end">4003</td>
+											<td><i class="fas fa-circle text-warning fa-fw"></i> Gold Advance</td>
+											<td class="text-end">{{ number_format($user->advance_gold_latest / 1000000, 2, '.', ',') }} g</td>
 										</tr>
 										<tr>
-											<td><i class="fas fa-circle text-danger fa-fw"></i> IE</td>
-											<td class="text-end">1589</td>
+											<td><i class="fas fa-circle text-danger fa-fw"></i> Gold Enhance</td>
+											<td class="text-end">{{ number_format($user->advance_gold_latest / 1000000, 2, '.', ',') }} g</td>
 										</tr>
 									</tbody>
 								</table>
@@ -653,14 +643,21 @@
 	</script>
 
 	<script>
+		var savings = {!! json_encode($user->alloted_gold) !!};
+		var advance = {!! json_encode($user->advance_gold_latest) !!};
+		var enhance = {!! json_encode($user->enhance_gold_latest) !!};
+
 		document.addEventListener("DOMContentLoaded", function() {
 			// Pie chart
 			new Chart(document.getElementById("chartjs-dashboard-pie"), {
 				type: 'pie',
 				data: {
-					labels: ["Chrome", "Firefox", "IE", "Other"],
+					labels: ["Savings", "Advance", "Enhance"],
 					datasets: [{
-						data: [4401, 4003, 1589],
+						data: [
+							savings / 1000000, 
+							advance / 1000000, 
+							enhance / 1000000],
 						backgroundColor: [
 							window.theme.primary,
 							window.theme.warning,
@@ -682,110 +679,6 @@
 		});
 	</script>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			// Bar chart
-			new Chart(document.getElementById("chartjs-dashboard-bar"), {
-				type: 'bar',
-				data: {
-					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-					datasets: [{
-						label: "This year",
-						backgroundColor: window.theme.primary,
-						borderColor: window.theme.primary,
-						hoverBackgroundColor: window.theme.primary,
-						hoverBorderColor: window.theme.primary,
-						data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
-						barPercentage: .75,
-						categoryPercentage: .5
-					}]
-				},
-				options: {
-					maintainAspectRatio: false,
-					legend: {
-						display: false
-					},
-					scales: {
-						yAxes: [{
-							gridLines: {
-								display: false
-							},
-							stacked: false,
-							ticks: {
-								stepSize: 20
-							}
-						}],
-						xAxes: [{
-							stacked: false,
-							gridLines: {
-								color: "transparent"
-							}
-						}]
-					}
-				}
-			});
-		});
-	</script>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function() {
-			var map = new jsVectorMap({
-				map: "world",
-				selector: "#world_map",
-				zoomButtons: true,
-				selectedRegions: [
-					'US',
-					'SA',
-					'DE',
-					'FR',
-					'CN',
-					'AU',
-					'BR',
-					'IN',
-					'GB'
-				],
-				regionStyle: {
-					initial: {
-						fill: '#e4e4e4',
-						"fill-opacity": 0.9,
-						stroke: 'none',
-						"stroke-width": 0,
-						"stroke-opacity": 0
-					},
-					selected: {
-						fill: window.theme.primary,
-					}
-				},
-				zoomOnScroll: false
-			});
-			window.addEventListener("resize", () => {
-				map.updateSize();
-			});
-			setTimeout(function() {
-				map.updateSize();
-			}, 250);
-		});
-	</script>
-
-	<script>
-		$(function() {
-			$('#datatables-dashboard-projects').DataTable({
-				pageLength: 6,
-				lengthChange: false,
-				bFilter: false,
-				autoWidth: false
-			});
-		});
-	</script>
-
-	<script>
-		$(function() {
-			$('#datetimepicker-dashboard').datetimepicker({
-				inline: true,
-				sideBySide: false,
-				format: 'L'
-			});
-		});
-	</script>	
 
 @endsection

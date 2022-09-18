@@ -11,8 +11,8 @@ class SupportController extends Controller
     public function home(Request $request)
     {
         $user_id = $request->user()->id;
-        //compact('boughts', 'solds')
-        return view('support.home');
+        $support_tickets = Support::where('user_id', $user_id)->get();
+        return view('support.home', compact('support_tickets'));
     }
 
     public function admin_home(Request $request)

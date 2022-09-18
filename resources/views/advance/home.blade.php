@@ -51,9 +51,59 @@
 					</div>
 				</div>
 
-			</div>	
+			</div>
+			
+			<div class="row">
+				<div class="col">
+
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">List of advances</h5>
+									<h6 class="card-subtitle text-muted">- - -</h6>
+								</div>
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width:10%;">ID</th>
+											<th style="width:25%;">Date</th>
+											<th style="width:25%">Gold</th>
+											<th style="width:25%">Amount</th>											
+											<th class="d-none d-md-table-cell" style="width:15%">Status</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+
+										@foreach ($advances as $advance)
+											<tr>
+												<td>{{ $advance }}</td>
+												<!-- <td><a href="/app/bought/{{ $bought->id }}">B-{{ $bought->id }}</a></td>
+												<td>{{ $bought->created_at }}</td>
+												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }} gram</td>
+												<td>{{ $bought->fiat_currency }} {{ number_format($bought->fiat_inflow / 100, 2, '.', ',') }}</td>
+												<td class="d-none d-md-table-cell">Created</td> -->
+		
+											</tr>
+										@endforeach									
+									</tbody>
+								</table>
+							</div>				
+					
+				</div>
+			</div>				
 			
 		</div>
+
+		<!-- 1	id	bigint unsigned	NULL	NULL	NO	NULL	auto_increment		
+2	gold_amount	int	NULL	NULL	NO	NULL			
+3	fiat_leased	int	NULL	NULL	NO	NULL			
+4	currency	char(3)	utf8mb4	utf8mb4_unicode_ci	NO	NULL			
+5	status	char(3)	utf8mb4	utf8mb4_unicode_ci	NO	NULL			
+6	interest	int	NULL	NULL	NO	0			
+7	interest_calculated_at	timestamp	NULL	NULL	NO	CURRENT_TIMESTAMP	DEFAULT_GENERATED		
+8	user_id	bigint unsigned	NULL	NULL	NO	NULL		users(id)	
+9	created_at	timestamp	NULL	NULL	YES	NULL			
+10	updated_at	timestamp	NULL	NULL	YES	NULL			 -->
 
 		<!-- <div class="container-fluid">
 

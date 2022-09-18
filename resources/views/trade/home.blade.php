@@ -24,7 +24,7 @@
 							<div class="card">
 								<div class="card-header">
 									<h5 class="card-title">Buy Gold</h5>
-									<h6 class="card-subtitle text-muted">Default Bootstrap form layout.</h6>
+									<h6 class="card-subtitle text-muted">- - -</h6>
 								</div>
 								<div class="card-body">
 									<form method="POST" action="/app/trade/buy">
@@ -50,15 +50,15 @@
 
 							<div class="card">
 								<div class="card-header">
-									<h5 class="card-title">Sell</h5>
-									<h6 class="card-subtitle text-muted">Default Bootstrap form layout.</h6>
+									<h5 class="card-title">Sell Gold</h5>
+									<h6 class="card-subtitle text-muted">- - -</h6>
 								</div>
 								<div class="card-body">
 									<form method="POST" action="/app/trade/sell">
     									@csrf
 										<div class="mb-3">
 											<label class="form-label">Gold Amount, gram</label>
-											<input type="number" class="form-control" id="in_gold_amount" name="in_gold_amount" step="0.1" min=0.1 onchange="updateGoldInput()">
+											<input type="number" class="form-control" id="in_gold_amount" name="in_gold_amount" step="0.1" onchange="updateGoldInput()">
 										</div>
 										<div class="mb-3">
 										<label class="form-label">Ringgit Malaysia, RM</label>
@@ -154,13 +154,13 @@
 
 							<div class="card">
 								<div class="card-header">
-									<h5 class="card-title">BUY</h5>
-									<h6 class="card-subtitle text-muted">---</h6>
+									<h5 class="card-title">List of gold purchases</h5>
+									<h6 class="card-subtitle text-muted">- - -</h6>
 								</div>
 								<table class="table table-striped">
 									<thead>
 										<tr>
-											<th style="width:10%;">No</th>
+											<th style="width:10%;">ID</th>
 											<th style="width:25%;">Date</th>
 											<th style="width:25%">Gold</th>
 											<th style="width:25%">Price</th>											
@@ -174,7 +174,7 @@
 											<tr>
 												<td><a href="/app/bought/{{ $bought->id }}">B-{{ $bought->id }}</a></td>
 												<td>{{ $bought->created_at }}</td>
-												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }}</td>
+												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }} gram</td>
 												<td>{{ $bought->fiat_currency }} {{ number_format($bought->fiat_inflow / 100, 2, '.', ',') }}</td>
 												<td class="d-none d-md-table-cell">Created</td>
 		
@@ -192,13 +192,13 @@
 
 							<div class="card">
 								<div class="card-header">
-									<h5 class="card-title">SELL</h5>
-									<h6 class="card-subtitle text-muted">---</h6>
+									<h5 class="card-title">List of gold solds</h5>
+									<h6 class="card-subtitle text-muted">- - -</h6>
 								</div>
 								<table class="table table-striped">
 									<thead>
 										<tr>
-											<th style="width:10%;">No</th>
+											<th style="width:10%;">ID</th>
 											<th style="width:25%;">Date</th>
 											<th style="width:25%">Gold</th>
 											<th style="width:25%">Price</th>											
@@ -212,7 +212,7 @@
 											<tr>
 												<td><a href="/app/sold/{{ $sold->id }}">S-{{ $sold->id }}</a></td>
 												<td>{{ $sold->created_at }}</td>
-												<td>{{ number_format($sold->gold_amount / 1000000, 6, '.', ',') }}</td>
+												<td>{{ number_format($sold->gold_amount / 1000000, 6, '.', ',') }} gram</td>
 												<td>{{ $sold->fiat_currency }} {{ number_format($sold->fiat_outflow / 100, 2, '.', ',') }}</td>
 												<td class="d-none d-md-table-cell">Created</td>
 		

@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/app/reward', [RewardController::class, 'home']);    
     Route::get('/app/reward/{id}', [RewardController::class, 'show']);
+    Route::post('/app/reward/register', [RewardController::class, 'add_new_user']);    
     Route::post('/app/reward/redeem', [RewardController::class, 'redeem_reward']);    
     Route::get('/app/reward/redeem/{id}', [RewardController::class, 'show_redeem']);    
 

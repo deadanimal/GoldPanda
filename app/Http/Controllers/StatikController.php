@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateStatikRequest;
 use App\Models\Statik;
 use App\Models\User;
 use App\Models\GoldPrice;
+use App\Models\ForexPrice;
 
 class StatikController extends Controller
 {
@@ -49,7 +50,9 @@ class StatikController extends Controller
     public function app()
     {
         $gold_price = GoldPrice::latest()->first();
-        return view('app', compact('gold_price'));
+        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first();  
+        $user = auth()->user();
+        return view('app', compact('gold_price', 'myr_price', 'user'));
     }     
 
     public function admin()

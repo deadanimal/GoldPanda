@@ -10,7 +10,7 @@
 
 			<div class="header">
 				<h1 class="header-title">
-					Profile
+					Blockchain
 				</h1>
 				<p class="header-subtitle">---</p>
 			</div>

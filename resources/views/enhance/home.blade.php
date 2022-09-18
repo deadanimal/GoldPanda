@@ -30,13 +30,17 @@
 									<form method="POST" action="/app/buy">
     									@csrf
 										<div class="mb-3">
-											<label class="form-label">Gold Amount, gram</label>
-											<input type="number" class="form-control" name="gold_amount" value=0.01 step="0.01" min=0.01>											
+											<label class="form-label">Ringgit Malaysia, RM</label>
+											<input type="number" class="form-control" name="fiat_amount" value=200 min=200 step="100" max="50000">
 										</div>
 										<div class="mb-3">
-											<label class="form-label">Ringgit Malaysia, RM</label>
-											<input type="number" class="form-control" name="fiat_amount" readonly>
-										</div>
+											<label class="form-label">Multiplier</label>
+											<input type="number" class="form-control" name="multiplier" value=1 min=1 step="1" max="19">
+										</div>										
+										<div class="mb-3">
+											<label class="form-label">Gold Amount, gram</label>
+											<input type="number" class="form-control" name="gold_amount" value=2.3 readonly>											
+										</div>										
 										<button type="submit" class="btn btn-primary">Enhance Gold</button>
 									</form>
 								</div>
@@ -52,8 +56,60 @@
 				</div>
 
 			</div>	
+
+			<div class="row">
+				<div class="col">
+
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title">List of enhances</h5>
+									<h6 class="card-subtitle text-muted">- - -</h6>
+								</div>
+								<table class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width:10%;">ID</th>
+											<th style="width:25%;">Date</th>
+											<th style="width:25%">Gold</th>
+											<th style="width:25%">Amount</th>											
+											<th class="d-none d-md-table-cell" style="width:15%">Status</th>
+											
+										</tr>
+									</thead>
+									<tbody>
+
+										@foreach ($enhances as $enhance)
+											<tr>
+												<td>{{ $enhance }}</td>
+												<!-- <td><a href="/app/bought/{{ $bought->id }}">B-{{ $bought->id }}</a></td>
+												<td>{{ $bought->created_at }}</td>
+												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }} gram</td>
+												<td>{{ $bought->fiat_currency }} {{ number_format($bought->fiat_inflow / 100, 2, '.', ',') }}</td>
+												<td class="d-none d-md-table-cell">Created</td> -->
+		
+											</tr>
+										@endforeach									
+									</tbody>
+								</table>
+							</div>				
+					
+				</div>
+			</div>			
 			
 		</div>
+
+		<!-- 1	id	bigint unsigned	NULL	NULL	NO	NULL	auto_increment		
+2	amount	int	NULL	NULL	NO	NULL			
+3	leverage	int	NULL	NULL	NO	NULL			
+4	capital	int	NULL	NULL	NO	NULL			
+5	loan	int	NULL	NULL	NO	NULL			
+6	currency	char(3)	utf8mb4	utf8mb4_unicode_ci	NO	NULL			
+7	status	char(3)	utf8mb4	utf8mb4_unicode_ci	NO	NULL			
+8	interest	int	NULL	NULL	NO	0			
+9	interest_calculated_at	timestamp	NULL	NULL	NO	CURRENT_TIMESTAMP	DEFAULT_GENERATED		
+10	user_id	bigint unsigned	NULL	NULL	NO	NULL		users(id)	
+11	created_at	timestamp	NULL	NULL	YES	NULL			
+12	updated_at	timestamp	NULL	NULL	YES	NULL					 -->
 
 		<!-- <div class="container-fluid">
 

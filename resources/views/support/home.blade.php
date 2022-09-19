@@ -31,10 +31,6 @@
 									<form method="POST" action="/app/support">
     									@csrf
 										<div class="mb-3">
-											<label class="form-label">Title</label>
-											<input type="text" class="form-control" name="title">
-										</div>	
-										<div class="mb-3">
 											<label class="form-label">Message</label>
 											<textarea class="form-control" rows="5" name="message"></textarea>
 										</div>																			
@@ -58,8 +54,7 @@
 									<thead>
 										<tr>
 											<th style="width:10%;">ID</th>
-											<th style="width:30%;">Date</th>
-											<th style="width:50%">Title</th>											
+											<th style="width:70%;">Last Message</th>										
 											<th class="d-none d-md-table-cell" style="width:20%">Status</th>
 											
 										</tr>
@@ -68,13 +63,9 @@
 
 										@foreach ($support_tickets as $ticket)
 											<tr>
-												<td>{{ $ticket }}</td>
-												<!-- <td><a href="/app/bought/{{ $bought->id }}">B-{{ $bought->id }}</a></td>
-												<td>{{ $bought->created_at }}</td>
-												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }} gram</td>
-												<td>{{ $bought->fiat_currency }} {{ number_format($bought->fiat_inflow / 100, 2, '.', ',') }}</td>
-												<td class="d-none d-md-table-cell">Created</td> -->
-		
+												<td><a href="/app/support/{{ $ticket->id }}">S-{{ $ticket->id }}</a></td>
+												<td>{{ $ticket->id }}</td>
+												<td>{{ $ticket->created_at }}</td>
 											</tr>
 										@endforeach									
 									</tbody>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Support;
+use App\Models\SupportTicket;
 
 class SupportController extends Controller
 {
@@ -20,19 +21,33 @@ class SupportController extends Controller
         return view('support.admin_home');
     }    
 
-    public function index()
+    public function index(Request $request)
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function create_support(Request $request)
     {
-        //
+        $user_id = $request->user()->id;
+        $support_ticket = new Support;
+
+        $support_ticket->user_id = $user_id;
+        $support_ticket->status = 'CRT';
+
+        $support_ticket->save();
+
+        $support_message = new SupportTicket;
+
+        $support_message->message = $request->message;
+        $support_message->support_id = $support_ticket->id;
+        $support_message->sender_id = $user_id;
+
+        $support_message->save();
+
+        $support_messages = SupportTicket::where('support_id', $support_ticket->id)->get();
+
+        return view('support.detail', compact('support_ticket', 'support_messages'));
     }
 
     /**
@@ -52,9 +67,16 @@ class SupportController extends Controller
      * @param  \App\Models\Support  $support
      * @return \Illuminate\Http\Response
      */
-    public function show(Support $support)
+    public function show(Request $request)
     {
-        //
+        $user_id = $request->user()->id;
+        $id = (int)$request->route('id');
+        $support_ticket = Support::where([
+            ['user_id', '=', $user_id],
+            ['id', '=', $id]
+        ])->firstOrFail();
+        $support_messages = SupportTicket::where('support_id', $support_ticket->id)->get();
+        return view('support.detail', compact('support_ticket', 'support_messages'));
     }
 
     /**

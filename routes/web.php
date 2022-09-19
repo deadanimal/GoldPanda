@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/app/advance', [AdvanceController::class, 'home']);
     Route::get('/app/advance/calculate', [AdvanceController::class, 'calculate']);
-    Route::post('/app/advance', [AdvanceController::class, 'create']);
+    Route::post('/app/advance', [AdvanceController::class, 'advance']);
     Route::get('/app/advance/{id}', [AdvanceController::class, 'show']);
     Route::put('/app/advance/{id}/redeem', [AdvanceController::class, 'redeem']);
     Route::get('/app/advance/{id}/calculate', [AdvanceController::class, 'calculate_specific']);
@@ -71,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/app/support', [SupportController::class, 'home']);
     Route::post('/app/support', [SupportController::class, 'create_support']);
     Route::get('/app/support/{id}', [SupportController::class, 'show']);
-    Route::put('/app/support/{id}/message', [SupportController::class, 'send_message']);
+    Route::post('/app/support/{id}/message', [SupportController::class, 'send_message']);
     
     
 });

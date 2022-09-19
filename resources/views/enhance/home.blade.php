@@ -27,7 +27,7 @@
 									<h6 class="card-subtitle text-muted">Book extra gold</h6>
 								</div>
 								<div class="card-body">
-									<form method="POST" action="/app/buy">
+									<form method="POST" action="/app/enhance">
     									@csrf
 										<div class="mb-3">
 											<label class="form-label">Ringgit Malaysia, RM</label>
@@ -35,7 +35,7 @@
 										</div>
 										<div class="mb-3">
 											<label class="form-label">Multiplier</label>
-											<input type="number" class="form-control" name="multiplier" value=1 min=1 step="1" max="19">
+											<input type="number" class="form-control" name="leverage" value=1 min=1 step="1" max="19">
 										</div>										
 										<div class="mb-3">
 											<label class="form-label">Gold Amount, gram</label>
@@ -80,12 +80,11 @@
 
 										@foreach ($enhances as $enhance)
 											<tr>
-												<td>{{ $enhance }}</td>
-												<!-- <td><a href="/app/bought/{{ $bought->id }}">B-{{ $bought->id }}</a></td>
-												<td>{{ $bought->created_at }}</td>
-												<td>{{ number_format($bought->gold_amount / 1000000, 6, '.', ',') }} gram</td>
-												<td>{{ $bought->fiat_currency }} {{ number_format($bought->fiat_inflow / 100, 2, '.', ',') }}</td>
-												<td class="d-none d-md-table-cell">Created</td> -->
+												<td><a href="/app/enhance/{{ $enhance->id }}">E-{{ $enhance->id }}</a></td>
+												<td>{{ $enhance->created_at }}</td>
+												<td>{{ number_format($enhance->amount / 1000000, 6, '.', ',') }} gram</td>
+												<td>{{ $enhance->currency }} {{ number_format(($enhance->capital + $enhance->loan) / 100, 2, '.', ',') }}</td>
+												<td class="d-none d-md-table-cell">Created</td>
 		
 											</tr>
 										@endforeach									

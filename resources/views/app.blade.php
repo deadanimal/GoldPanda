@@ -128,8 +128,8 @@
 			</div>		
 			
 			<div class="row">
-				<div class="col-12 col-md-6 col-xxl-6 d-flex order-1 order-xxl-1">
-					<div class="card flex-fill">
+				<div class="col-4">
+					<!-- <div class="card flex-fill">
 						<div class="card-header">
 							<div class="card-actions float-end">
 
@@ -143,11 +143,44 @@
 								- advance gold <br>
 								- enhance gold <br>
 						</div>
-					</div>
+					</div> -->
+
+
+							<div class="card flex-fill">
+								<div class="card-header">
+									<h5 class="card-title">Add new user</h5>
+									<h6 class="card-subtitle text-muted">Promote Gold to new users</h6>
+								</div>
+								<div class="card-body">
+									<form method="POST" action="/app/reward/register">
+    									@csrf
+										<input name="promoter_id" type="hidden" value="{{ auth()->user()->id }}">
+
+										<div class="mb-3">
+											<label class="form-label">Name</label>
+											<input type="text" class="form-control" name="name">											
+										</div>
+
+										<div class="mb-3">
+											<label class="form-label">Email</label>
+											<input type="email" class="form-control" name="email">											
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Password</label>
+											<input type="password" class="form-control" name="password">											
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Confirm Password</label>
+											<input type="password" class="form-control" name="password_confirmation">											
+										</div>										
+										<button type="submit" class="btn btn-primary">Add New User</button>
+									</form>
+								</div>
+							</div>						
 				</div>
 
 
-				<div class="col-12 col-md-6 col-xxl-6 d-flex order-2 order-xxl-2">
+				<div class="col-4">
 					<div class="card flex-fill w-100">
 						<div class="card-header">
 							<div class="card-actions float-end">

@@ -50,6 +50,29 @@ class SupportController extends Controller
         return view('support.detail', compact('support_ticket', 'support_messages'));
     }
 
+    public function send_message(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $id = (int)$request->route('id');
+
+        $support_ticket = Support::where([
+            ['user_id', '=', $user_id],
+            ['id', '=', $id],
+        ])->first();
+
+        $support_message = new SupportTicket;
+
+        $support_message->message = $request->message;
+        $support_message->support_id = $support_ticket->id;
+        $support_message->sender_id = $user_id;
+
+        $support_message->save();
+
+        $support_messages = SupportTicket::where('support_id', $support_ticket->id)->get();
+
+        return view('support.detail', compact('support_ticket', 'support_messages'));
+    }    
+
     /**
      * Store a newly created resource in storage.
      *

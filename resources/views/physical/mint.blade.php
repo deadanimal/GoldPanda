@@ -1,6 +1,6 @@
 @extends('layouts.app')
  
-@section('title', 'Trade Gold')
+@section('title', 'Mint Gold')
  
 @section('content')
 
@@ -10,64 +10,23 @@
 
 			<div class="header">
 				<h1 class="header-title">
-					Support Ticket Detail
+					Mint Gold 
 				</h1>
-				<p class="header-subtitle">S-{{ $support_ticket->id }}</p>
+				<p class="header-subtitle">PM-{{ $mint->id }}</p>
 			</div>
 
 			<div class="row">
-
-                <div class="col-xl-6">
-					
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Send Message</h5>
-                            <h6 class="card-subtitle text-muted">- - -</h6>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST" action="/app/support/{{ $support_ticket->id }}/message">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label">Message</label>
-                                    <textarea class="form-control" rows="5" name="message"></textarea>
-                                </div>																			
-                                <button type="submit" class="btn btn-primary">Open Support Ticket</button>
-                            </form>
-                        </div>
-                    </div>
-
-            
-                </div>	            
-
-
-				<div class="col-xl-6">
+				<div class="col-xl-6 col-xxl-7">
 					<div class="card flex-fill w-100">
-                        user_id: {{ $support_ticket->user_id }} <br>
-
-                        <br>
-
-                        support_message
-
-
+                        gold amount: {{ $mint->amount }} <br>
+                        user_id: {{ $mint->user_id }} <br>
+                        status: {{ $mint->status }} <br>
+                        created: {{ $mint->created_at }} <br>
 
 					</div>
 				</div>
 
 			</div>		
-
-            <div class="row">
-
-                <div class="col-xl-12">
-
-                    @foreach ($support_messages as $support_message)
-
-                        {{ $support_message }} <br>
-					@endforeach		                
-                
-                </div>
-
-            </div>
 			
 
 			

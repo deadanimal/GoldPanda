@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBlockchainMintRequest;
-use App\Http\Requests\UpdateBlockchainMintRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
+
+
+use App\Models\GoldPrice;
+use App\Models\ForexPrice;
+use App\Models\Bought;
+use App\Models\Sold;
+use App\Models\PayIn;
+use App\Models\PayOut;
 use App\Models\BlockchainMint;
 
 class BlockchainMintController extends Controller
 {
 
-    public function home()
+    public function home(Request $request)
     {
-        return view('blockchain.home');
+        $user_id = $request->user()->id;
+        $mints = BlockchainMint::where([
+            ['user_id', '=', $user_id]
+        ])->get();        
+        return view('blockchain.home', compact('mints'));
     }
 
     public function admin_home()
@@ -19,25 +32,24 @@ class BlockchainMintController extends Controller
         return view('blockchain.admin_home');
     } 
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreBlockchainMintRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreBlockchainMintRequest $request)
+    public function mint(Request $request)
     {
-        //
+        $mint = new BlockchainMint;        
+
+        $mint->amount = $request->amount * 1000000;
+        $mint->status =	'CRT';
+        $mint->user_id = $request->user()->id;
+
+        $mint->save();
+
+        $url = '/app/blockchain/mint/'.$mint->id;
+       
+        return redirect($url);                
     }
 
     /**
@@ -46,9 +58,15 @@ class BlockchainMintController extends Controller
      * @param  \App\Models\BlockchainMint  $blockchainMint
      * @return \Illuminate\Http\Response
      */
-    public function show(BlockchainMint $blockchainMint)
+    public function show_mint(Request $request)
     {
-        //
+        $id = (int)$request->route('id');
+        $user_id = $request->user()->id;
+        $mint = BlockchainMint::where([
+            ['id','=', $id],
+            ['user_id', '=', $user_id]
+        ])->first();
+        return view('blockchain.mint', compact('mint'));
     }
 
     /**

@@ -62,11 +62,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/app/blockchain', [BlockchainMintController::class, 'home']);    
     Route::post('/app/blockchain/mint', [BlockchainMintController::class, 'mint']);
-    Route::get('/app/blockchain/mint/{id}', [BlockchainMintController::class, 'show']);
+    Route::get('/app/blockchain/mint/{id}', [BlockchainMintController::class, 'show_mint']);
 
     Route::get('/app/physical', [PhysicalMintController::class, 'home']);    
     Route::post('/app/physical/mint', [PhysicalMintController::class, 'mint']);
-    Route::get('/app/physical/mint/{id}', [PhysicalMintController::class, 'show']);    
+    Route::get('/app/physical/mint/{id}', [PhysicalMintController::class, 'show_mint']);    
 
     Route::get('/app/support', [SupportController::class, 'home']);
     Route::post('/app/support', [SupportController::class, 'create_support']);

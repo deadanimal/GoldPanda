@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProfileRequest;
-use App\Http\Requests\UpdateProfileRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
+
+// use App\Http\Requests\StoreProfileRequest;
+// use App\Http\Requests\UpdateProfileRequest;
+
 use App\Models\Profile;
+use App\Models\User;
+
 
 class ProfileController extends Controller
 {
 
-    public function home()
+    public function home(Request $request)
     {
-        return view('profile.home');
+        $user_id = $request->user()->id;
+        $user = User::find($user_id);
+        return view('profile.home', compact('user'));
     }
 
     public function admin_home()

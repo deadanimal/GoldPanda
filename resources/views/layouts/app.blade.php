@@ -44,12 +44,6 @@
 						</a>
 					</li>
 
-					{{-- <li class="sidebar-item">
-						<a class="sidebar-link" href="/flow">
-							<i class="align-middle me-2 fas fa-fw fa-exchange"></i> <span class="align-middle">Bank Transaction</span>
-						</a>
-					</li>						 --}}
-
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="/pro">
 							<i class="align-middle me-2 fas fa-fw fa-university"></i> <span class="align-middle">Trade</span>
@@ -69,11 +63,11 @@
 						</a>
 					</li>	 --}}
                     
-					<li class="sidebar-item">
+					{{-- <li class="sidebar-item">
 						<a class="sidebar-link" href="/physical">
 							<i class="align-middle me-2 fas fa-fw fa-industry"></i> <span class="align-middle">Mint</span>
 						</a>
-					</li>						
+					</li>						 --}}
                                  
 
 				</ul>

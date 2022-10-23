@@ -48,56 +48,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(Advance::class);
     }    
-
-    public function bank_accounts()
-    {
-        return $this->hasMany(BankAccount::class);
-    }     
+  
     
-    public function blockchain_mints()
+    public function trades()
     {
-        return $this->hasMany(BlockchainMint::class);
-    }   
-    
-    public function blockchain_transactions()
-    {
-        return $this->hasMany(BlockchainTransaction::class);
-    }    
-    
-    public function blockchain_wallets()
-    {
-        return $this->hasMany(BlockchainWallet::class);
-    }    
-    
-    public function boughts()
-    {
-        return $this->hasMany(Bought::class);
+        return $this->hasMany(Trade::class);
     }      
 
     public function enhances()
     {
         return $this->hasMany(Enhance::class);
     }     
-    
-    public function identity_documents()
+       
+    public function introducer()
     {
-        return $this->hasMany(IdentityDocument::class);
-    }      
+        return $this->belongsTo(User::class, 'introducer_id');
+    }   
 
-    public function physical_mints()
+    public function downlines()
     {
-        return $this->hasMany(PhysicalMint::class);
-    }      
-    
-    public function promoted_users()
-    {
-        return $this->hasMany(RewardProfile::class, 'promoter_id');
+        return $this->hasMany(User::class, 'introducer_id');
     }    
     
-    public function solds()
-    {
-        return $this->hasMany(Sold::class);
-    }  
     
     public function support_tickets()
     {

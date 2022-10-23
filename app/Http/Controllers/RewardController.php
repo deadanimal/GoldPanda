@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
+use DateTime;
+use Carbon\Carbon;
+use Alert;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreRewardRequest;
 use App\Http\Requests\UpdateRewardRequest;
@@ -24,24 +29,24 @@ class RewardController extends Controller
         $third_level_amount = (int)($amount * 0.08);
         $profit_amount = (int)($amount * 0.60);
 
-        $first_promoter_profile = RewardProfile::where('user_id', $user_id)->first();
-        
-        if (RewardProfile::where('user_id', $first_promoter_profile->promoter_id)->exists()) {
-            $second_promoter_profile = RewardProfile::where('user_id', $first_promoter_profile->promoter_id)->first();
+        $first_introducer = User::where('user_id', $user_id)->first();
+
+        if (User::where('user_id', $first_introducer->introducer_id)->exists()) {
+            $second_introducer = User::where('user_id', $first_introducer->introducer_id)->first();
         } else {
-            $second_promoter_profile = RewardProfile::where('code', 'SAUFIA')->first();
+            $second_introducer = User::where('code', 'SAUFIA')->first();
         }
 
-        if (RewardProfile::where('user_id', $second_promoter_profile->promoter_id)->exists()) {
-            $third_promoter_profile = RewardProfile::where('user_id', $second_promoter_profile->promoter_id)->first();
+        if (User::where('user_id', $second_introducer->introducer_id)->exists()) {
+            $third_introducer = User::where('user_id', $second_introducer->introducer_id)->first();
         } else {
-            $third_promoter_profile = RewardProfile::where('code', 'SAUFIA')->first();
+            $third_introducer = User::where('code', 'SAUFIA')->first();
         }
 
         if ($trade == 1) {
-            $tradable_type = 'App\Models\Bought';        
-        } else{
-            $tradable_type = 'App\Models\Enhance';        
+            $tradable_type = 'App\Models\Trade';
+        } else {
+            $tradable_type = 'App\Models\Enhance';
         }
 
         $first_reward = new Reward;
@@ -50,7 +55,7 @@ class RewardController extends Controller
         $first_reward->level = 1;
         $first_reward->tradable_id = $trade_id;
         $first_reward->tradable_type = $tradable_type;
-        $first_reward->promoter_id = $first_promoter_profile->id;
+        $first_reward->introducer_id = $first_introducer->id;
         $first_reward->buyer_id = $user_id;
         $first_reward->save();
 
@@ -60,51 +65,67 @@ class RewardController extends Controller
         $second_reward->level = 2;
         $second_reward->tradable_id = $trade_id;
         $second_reward->tradable_type = $tradable_type;
-        $second_reward->promoter_id = $second_promoter_profile->id;
+        $second_reward->introducer_id = $second_introducer->id;
         $second_reward->buyer_id = $user_id;
         $second_reward->save();
-        
+
         $third_reward = new Reward;
         $third_reward->amount = $third_level_amount;
         $third_reward->currency = $currency;
         $third_reward->level = 3;
         $third_reward->tradable_id = $trade_id;
         $third_reward->tradable_type = $tradable_type;
-        $third_reward->promoter_id = $third_promoter_profile->id;
+        $third_reward->introducer_id = $third_introducer->id;
         $third_reward->buyer_id = $user_id;
         $third_reward->save();
-        
+
         $profit = new Reward;
         $profit->amount = $profit_amount;
         $profit->currency = $currency;
         $profit->level = 0;
         $profit->tradable_id = $trade_id;
         $profit->tradable_type = $tradable_type;
-        $profit->promoter_id = 1;
+        $profit->introducer_id = 0;
         $profit->buyer_id = $user_id;
-        $profit->save();        
-
-
+        $profit->save();
     }
 
 
-    public function home()
+    public function home(Request $request)
     {
-        $user_id = auth()->user()->id;
-        $profile = RewardProfile::where('user_id', $user_id)->first();
-        $profiles = RewardProfile::where('promoter_id', $user_id)->get();
+        $user = $request->user();
         $rewards = Reward::where([
-            ['promoter_id', '=', $user_id],
+            ['introducer_id', '=', $user->id],
             ['level', '>', 0],
         ])->get();
-        return view('reward.home', compact('profile', 'profiles', 'rewards'));
-    }  
-    
+        if ($request->ajax()) {
+            return DataTables::collection($rewards)
+                ->addColumn('buyer_', function (Reward $reward) {
+                    $url = '/user/' . $reward->buyer->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">'.$reward->buyer->name.'</button></a>';
+                    return $html_button;
+                })
+                ->addColumn('amount_', function (Reward $reward) {
+                    $html_statement = 'RM '.number_format($reward->amount / 100, 3, '.', ','); ;
+                    return $html_statement;
+                })                
+                ->editColumn('created_at', function (reward $reward) {
+                    return [
+                        'display' => ($reward->created_at && $reward->created_at != '0000-00-00 00:00:00') ? with(new Carbon($reward->created_at))->format('d/m/Y') : '',
+                        'timestamp' => ($reward->created_at && $reward->created_at != '0000-00-00 00:00:00') ? with(new Carbon($reward->created_at))->timestamp : ''
+                    ];
+                })
+                ->rawColumns(['buyer_','amount_'])
+                ->make(true);
+        }
+        return view('reward.home', compact('rewards', 'user'));
+    }
+
     public function admin_home()
     {
         return view('reward.admin_home');
-    }  
-    
+    }
+
     public function add_new_user(Request $request)
     {
         $request->validate([
@@ -132,65 +153,29 @@ class RewardController extends Controller
         $reward_profile->code = $this->generateUniqueCode();
         $reward_profile->save();
 
-        return redirect('/app/reward');
+        return back();
     }
 
-    public function index()
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(StoreRewardRequest $request)
-    {
-        //
-    }
-
-    public function show(Reward $reward)
-    {
-        //
-    }
-
-    public function edit(Reward $reward)
-    {
-        //
-    }
-
-    public function update(UpdateRewardRequest $request, Reward $reward)
-    {
-        //
-    }
-
-    public function destroy(Reward $reward)
-    {
-        //
-    }
 
     public function generateUniqueCode()
     {
-    
+
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersNumber = strlen($characters);
         $codeLength = 6;
-    
+
         $code = '';
-    
+
         while (strlen($code) < 6) {
             $position = rand(0, $charactersNumber - 1);
             $character = $characters[$position];
-            $code = $code.$character;
+            $code = $code . $character;
         }
-    
+
         if (RewardProfile::where('code', $code)->exists()) {
             $this->generateUniqueCode();
         }
-    
+
         return $code;
-    
-    }    
-    
+    }
 }

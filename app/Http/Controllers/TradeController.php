@@ -84,7 +84,7 @@ class TradeController extends Controller
     {
         $user = $request->user();
         $trades = Trade::where('user_id', $user->id)->get();
-        // if ($request->ajax()) {
+        if ($request->ajax()) {
             return DataTables::collection($trades)
                 ->addColumn('gold_', function (Trade $trade) {
                     $amount = number_format($trade->gold / 1000000, 3, '.', ',');
@@ -118,7 +118,7 @@ class TradeController extends Controller
                 })
                 ->rawColumns(['fiat_','gold_','link'])
                 ->make(true);
-        // }
+        }
     }
 
     public function cipta(Request $request)

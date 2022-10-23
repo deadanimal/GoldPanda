@@ -27,14 +27,6 @@ class RegisteredUserController extends Controller
         return view('auth.register', compact('code'));
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -44,13 +36,13 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        if (RewardProfile::where('code', $request->code)->exists()) {
-            $promoter_profile = RewardProfile::where('code', $request->code)->first();
+        if (User::where('code', $request->code)->exists()) {
+            $promoter = User::where('code', $request->code)->first();
         } else {
-            $promoter_profile = RewardProfile::where('code', 'SAUFIA')->first();
+            $promoter = User::where('code', 'SAUFIA')->first();
         }        
 
-        $promoter = User::where('id', $promoter_profile->user_id)->first();
+        $promoter = User::where('id', $promoter->introducer_id)->first();
 
         $user = User::create([
             'name' => $request->name,
@@ -58,19 +50,17 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $new_level = $promoter_profile->level + 1;
-        if ($new_level > 3) {
-            $code = $promoter_profile->code;
+        $new_level = $promoter->level + 1;
+        if ($new_level > 4) {
+            $code = $promoter->code;
         } else {
             $code = $this->generateUniqueCode();
         }
 
-        $reward_profile = new RewardProfile;
-        $reward_profile->level = $new_level;
-        $reward_profile->user_id = $user->id;
-        $reward_profile->promoter_id = $promoter->id;
-        $reward_profile->code = $code;
-        $reward_profile->save();        
+        $user->level = $new_level;
+        $user->introducer_id = $promoter->id;
+        $user->code = $code;
+        $user->save();        
 
         event(new Registered($user));
 
@@ -94,7 +84,7 @@ class RegisteredUserController extends Controller
             $code = $code.$character;
         }
     
-        if (RewardProfile::where('code', $code)->exists()) {
+        if (User::where('code', $code)->exists()) {
             $this->generateUniqueCode();
         }
     

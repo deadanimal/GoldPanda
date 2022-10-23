@@ -12,7 +12,7 @@
 				<h1 class="header-title">
 					RM {{ number_format($myr_price->price * $gold_price->price  / 100 / 100, 2, '.', ',')  }}
 				</h1>
-				<p class="header-subtitle">Price of gold as of {{$gold_price->created_at}}</p>
+				<p id="priceDatetime" class="header-subtitle"></p>
 			</div>
 
 			<div class="row">
@@ -38,7 +38,7 @@
 											</div> -->
 										</div>
 										<h1 class="display-5 mt-1 mb-3">
-											{{ number_format(($user->balance + $user->booked + $user->advanced) / 1000000, 2, '.', ',') }}
+											{{ number_format(($user->balance + $user->booked + $user->advanced) / 1000000, 2, '.', ',') }}g
 										</h1>
 										<div class="mb-0">
 											<span class="text-dark">RM {{ number_format((($user->balance + $user->booked + $user->advanced)/ 10000000000) * ($myr_price->price * $gold_price->price), 2, '.', ',') }}</span>											
@@ -228,6 +228,13 @@
 
 	});
 </script>	
+
+<script type="text/javascript">
+	var goldPriceDatetime = {!! json_encode($gold_price->created_at) !!} 
+
+	var statement = 'Price of gold as of ' + moment(goldPriceDatetime).format("DD/MM/YYYY h:mma");	
+	document.getElementById("priceDatetime").innerHTML = statement;
+</script>
 
 
 

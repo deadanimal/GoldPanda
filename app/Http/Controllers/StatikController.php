@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Models\Statik;
 use App\Models\User;
 use App\Models\GoldPrice;
@@ -13,6 +14,7 @@ class StatikController extends Controller
 
     public function home()
     {
+
         return view('statik.home');
     }
 

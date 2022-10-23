@@ -32,7 +32,7 @@
 							<h1 class="display-1 fw-bold">404</h1>
 							<p class="h1">Page not found.</p>
 							<p class="h2 fw-normal mt-3 mb-4">The page you are looking for might have been removed.</p>
-							<a href="/app" class="btn btn-primary btn-lg">Return to website</a>
+							<a href="/" class="btn btn-primary btn-lg">Return to website</a>
 						</div>
 
 					</div>

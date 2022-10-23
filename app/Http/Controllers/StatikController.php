@@ -12,39 +12,40 @@ use App\Models\ForexPrice;
 class StatikController extends Controller
 {
 
-    public function home()
-    {
+    public function home() {
 
         return view('statik.home');
     }
 
-    public function about()
-    {
+    public function advance() {
+        return view('statik.product-advance');
+    }   
+    
+    public function enhance() {
+        return view('statik.product-enhance');
+    }      
+
+    public function about() {
         return view('statik.about');
     }    
 
-    public function products()
-    {
+    public function products() {
         return view('statik.products');
     }        
 
-    public function contact()
-    {
+    public function contact() {
         return view('statik.contact');
     }       
     
-    public function faq()
-    {
+    public function faq() {
         return view('statik.faq');
     }     
 
-    public function privacy()
-    {
+    public function privacy() {
         return view('statik.privacy');
     }  
     
-    public function terms()
-    {
+    public function terms() {
         return view('statik.terms');
     }    
     

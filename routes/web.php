@@ -17,8 +17,9 @@ use App\Http\Controllers\PhysicalMintController;
 use App\Models\User;
  
 Route::get('', [StatikController::class, 'home']);
+Route::get('product-advance', [StatikController::class, 'advance']);
+Route::get('product-enhance', [StatikController::class, 'enhance']);
 Route::get('about', [StatikController::class, 'about']);
-Route::get('products', [StatikController::class, 'products']);
 Route::get('faq', [StatikController::class, 'faq']);
 Route::get('privacy', [StatikController::class, 'privacy']);
 Route::get('terms', [StatikController::class, 'terms']);

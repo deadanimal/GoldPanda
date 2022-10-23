@@ -140,6 +140,10 @@ class TradeController extends Controller
             $fee = $fiat / 20; # 5% fee on buy
             $nett = $fiat - $fee;
             $gold = $nett * 100000000 / $gold_in_ringgit;
+            if($fiat < 2000) {
+                Alert::error('Minimum Amount Not Met', 'Gold purchased must be more than RM 20.00');
+                return back();
+            }
         } else {
             $fee = 0; # 0% fee on sell
             $nett = $fiat;
@@ -149,6 +153,10 @@ class TradeController extends Controller
                 Alert::error('Sell Gold', 'Insuffiecient gold balance to sell gold');
                 return back();
             }
+            if($fiat < 10000) {
+                Alert::error('Minimum Amount Not Met', 'Gold sold must be more than RM 100.00');
+                return back();
+            }            
         }
 
         $trade = new Trade;

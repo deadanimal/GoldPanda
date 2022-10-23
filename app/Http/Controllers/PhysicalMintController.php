@@ -32,10 +32,6 @@ class PhysicalMintController extends Controller
         return view('physical.admin_home');
     } 
 
-    public function create()
-    {
-        //
-    }
 
     public function mint(Request $request)
     {
@@ -52,12 +48,6 @@ class PhysicalMintController extends Controller
         return redirect($url);                
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PhysicalMint  $physicalMint
-     * @return \Illuminate\Http\Response
-     */
     public function show_mint(Request $request)
     {
         $id = (int)$request->route('id');
@@ -69,37 +59,5 @@ class PhysicalMintController extends Controller
         return view('physical.mint', compact('mint'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\PhysicalMint  $physicalMint
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PhysicalMint $physicalMint)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePhysicalMintRequest  $request
-     * @param  \App\Models\PhysicalMint  $physicalMint
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePhysicalMintRequest $request, PhysicalMint $physicalMint)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PhysicalMint  $physicalMint
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PhysicalMint $physicalMint)
-    {
-        //
-    }
 }

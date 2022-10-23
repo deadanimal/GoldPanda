@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreStatikRequest;
-use App\Http\Requests\UpdateStatikRequest;
+use Illuminate\Http\Request;
 use App\Models\Statik;
 use App\Models\User;
 use App\Models\GoldPrice;
@@ -47,12 +46,20 @@ class StatikController extends Controller
         return view('statik.terms');
     }    
     
-    public function app()
+    public function app(Request $request)
     {
         $gold_price = GoldPrice::latest()->first();
         $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first();  
         $user = auth()->user();
         return view('app', compact('gold_price', 'myr_price', 'user'));
+    }    
+    
+    public function pro(Request $request)
+    {
+        $gold_price = GoldPrice::latest()->first();
+        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first();  
+        $user = auth()->user();
+        return view('pro', compact('gold_price', 'myr_price', 'user'));
     }     
 
     public function admin()

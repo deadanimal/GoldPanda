@@ -6,10 +6,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="Modern and advanced gold market">
-	<meta name="author" content="Gold Panda">
+	<meta name="author" content="Easy Gold">
     <link rel="icon" type="image/png" href="/img/gold-bars.png" />
 
-	<title>Gold Panda - @yield('title')</title>
+	<title>Easy Gold - @yield('title')</title>
 
 	<link href="{{ URL::asset('css/modern.css') }}" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -24,84 +24,57 @@
 
 <body>
 
+	@include('sweetalert::alert')
+
 	<div class="wrapper">
 
 		<nav id="sidebar" class="sidebar">
-			<a class="sidebar-brand" href="/app">
-				<!-- <svg>
-					<use xlink:href="#ion-ios-pulse-strong"></use>
-				</svg> -->
-				Gold Panda
+			<a class="sidebar-brand" href="/">
+				Easy Gold
 			</a>
 			<div class="sidebar-content">
-				<div class="sidebar-user">
-					<img src="/img/gold-bars.png" class="img-fluid rounded-circle mb-2" alt="Gold Panda" />
-					<div class="fw-bold">RM {{ number_format($gold_price->price * $myr_price->price / 10000, 2, '.', ',') }} per gram</div>
-					<small>at {{ $gold_price->created_at }}</small>
-				</div>
+
 
 				<ul class="sidebar-nav">
 
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app">
+						<a class="sidebar-link" href="/dashboard">
 							<i class="align-middle me-2 fas fa-fw fa-home"></i> <span class="align-middle">Dashboard</span>
 						</a>
 					</li>
 
+					{{-- <li class="sidebar-item">
+						<a class="sidebar-link" href="/flow">
+							<i class="align-middle me-2 fas fa-fw fa-exchange"></i> <span class="align-middle">Bank Transaction</span>
+						</a>
+					</li>						 --}}
+
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/trade">
+						<a class="sidebar-link" href="/pro">
 							<i class="align-middle me-2 fas fa-fw fa-university"></i> <span class="align-middle">Trade</span>
 						</a>
-					</li>	
-					
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/advance">
-							<i class="align-middle me-2 fas fa-fw fa-credit-card"></i> <span class="align-middle">Advance</span>
-						</a>
-					</li>	
-					
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/enhance">
-							<i class="align-middle me-2 fas fa-fw fa-bar-chart"></i> <span class="align-middle">Enhance</span>
-						</a>
-					</li>	
-
-                    <li class="sidebar-header">
-						Management
-					</li>					
+					</li>				
+										
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/reward">
+						<a class="sidebar-link" href="/reward">
 							<i class="align-middle me-2 fas fa-fw fa-gift"></i> <span class="align-middle">Reward</span>
 						</a>
 					</li>	
 					
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/blockchain">
+					{{-- <li class="sidebar-item">
+						<a class="sidebar-link" href="/blockchain">
 							<i class="align-middle me-2 fas fa-fw fa-server"></i> <span class="align-middle">Blockchain</span>
 						</a>
-					</li>	
+					</li>	 --}}
                     
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/physical">
+						<a class="sidebar-link" href="/physical">
 							<i class="align-middle me-2 fas fa-fw fa-industry"></i> <span class="align-middle">Mint</span>
 						</a>
 					</li>						
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/support">
-							<i class="align-middle me-2 fas fa-fw fa-life-ring"></i> <span class="align-middle">Support</span>
-						</a>
-					</li>	                    
-					
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="/app/profile">
-							<i class="align-middle me-2 fas fa-fw fa-user"></i> <span class="align-middle">Profile</span>
-						</a>
-					</li>	
                                  
-
 
 				</ul>
 			</div>
@@ -121,8 +94,8 @@
 								<i class="align-middle fas fa-cog"></i>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">								
-                                <a class="dropdown-item" href="/app/support"><i class="align-middle me-1 fas fa-fw fa-life-ring"></i>Support</a>
-                                <a class="dropdown-item" href="/app/profile"><i class="align-middle me-1 fas fa-fw fa-user"></i>Profile</a>
+                                <a class="dropdown-item" href="/support"><i class="align-middle me-1 fas fa-fw fa-life-ring"></i>Support</a>
+                                <a class="dropdown-item" href="/profile"><i class="align-middle me-1 fas fa-fw fa-user"></i>Profile</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="/logout"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i> Sign Out</a>
 							</div>
@@ -192,13 +165,9 @@
 
                                 @role('super-admin')  
                                     <li class="list-inline-item">
-                                        <a class="text-muted" href="/admin">Access Admin Site</a>
+                                        <a class="text-muted" href="/admin">Access Admin</a>
                                     </li>
                                 @endrole  
-
-								<li class="list-inline-item">
-									<a class="text-muted" href="/app/support">Support</a>
-								</li>
 
 								<li class="list-inline-item">
 									<a class="text-muted" href="/privacy">Privacy</a>
@@ -212,7 +181,7 @@
 						</div>
 						<div class="col-4 text-end">
 							<p class="mb-0">
-								&copy; 2022 - <a href="/" class="text-muted">Gold Panda</a>
+								&copy; 2022 - <a href="/" class="text-muted">Easy Gold</a>
 							</p>
 						</div>
 					</div>

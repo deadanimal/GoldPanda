@@ -61,7 +61,7 @@
 									</thead>
 									<tbody>
 
-										@foreach ($support_tickets as $ticket)
+										@foreach ($tickets as $ticket)
 											<tr>
 												<td><a href="/app/support/{{ $ticket->id }}">S-{{ $ticket->id }}</a></td>
 												<td>{{ $ticket->id }}</td>

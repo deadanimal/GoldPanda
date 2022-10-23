@@ -23,12 +23,9 @@
 	<nav class="navbar navbar-expand navbar-dark absolute-top w-100 py-2">
 		<div class="container">
 			<a class="navbar-brand fw-bold" href="/">
-				<!-- <svg>
-					<use xlink:href="#ion-ios-pulse-strong"></use>
-				</svg> -->
 				Gold Panda
 			</a>
-			<a class="btn btn-warning btn-pill my-2 ms-2" href="/app">
+			<a class="btn btn-warning btn-pill my-2 ms-2" href="/dashboard">
 				Dashboard
 			</a>
 		</div>

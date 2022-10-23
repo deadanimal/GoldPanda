@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
+use DateTime;
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
+
+use App\Http\Controllers\RewardController;
 
 use App\Models\Enhance;
 use App\Models\GoldPrice;
@@ -18,9 +24,23 @@ class EnhanceController extends Controller
 {
     public function home(Request $request)
     {
-        $user_id = 1;//$request->user()->id;
+        $user_id = $request->user()->id;
         $enhances = enhance::where('user_id', $user_id)->get();
-        return view('enhance.home', compact('enhances'));
+
+        if ($request->ajax()) {
+            return DataTables::collection($enhances)
+                ->addIndexColumn()
+                ->editColumn('created_at', function (Enhance $enhance) {
+                    return [
+                        'display' => ($enhance->created_at && $enhance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($enhance->created_at))->format('d F Y') : '',
+                        'timestamp' => ($enhance->created_at && $enhance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($enhance->created_at))->timestamp : ''
+                    ];
+                })
+                ->make(true);
+        } else {
+            return view('enhance.home', compact('enhances'));
+        }
+
     }
 
     public function admin_home(Request $request)
@@ -43,12 +63,13 @@ class EnhanceController extends Controller
         $gold_price = GoldPrice::latest()->first()->buy_price;
         $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->buy_price;
 
+        $user_id = $request->user()->id;
+
         $fiat_nett = ($fiat_flow + $fiat_leased) - $fiat_fee;
         $gold_amount = $fiat_nett * 100000000 / ($gold_price * $myr_price);
         $gold_amount_string = substr(number_format((string)($gold_amount / 1000000), 7, '.', ''), 0, -1);        
 
         $enhance = new Enhance;        
-
         
         $enhance->amount = (int)$gold_amount;
         $enhance->loan = (int)$fiat_leased;
@@ -56,9 +77,12 @@ class EnhanceController extends Controller
         $enhance->leverage = (int)$request->leverage;
         $enhance->currency = 'MYR';
         $enhance->status = 'CRT';
-        $enhance->user_id = $request->user()->id;
+        $enhance->user_id = $user_id;
 
         $enhance->save();
+
+        $reward_controller = new RewardController;
+        $reward_controller->distribute_sell_reward($user_id, $fiat_fee, $enhance->currency, $enhance->id, 0);
 
         $billplz = Client::make(env('BILLPLZ_API_KEY'));
         $bill = $billplz->bill();

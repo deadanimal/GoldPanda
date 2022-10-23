@@ -6,10 +6,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="Modern and advanced gold market">
-	<meta name="author" content="Gold Panda">
+	<meta name="author" content="Easy Gold">
     <link rel="icon" type="image/png" href="/img/gold-bars.png" />
 
-	<title>Gold Panda - @yield('title')</title>
+	<title>Easy Gold - @yield('title')</title>
 
 	<link href="{{ URL::asset('css/modern.css') }}" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -18,26 +18,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>    
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>	
 
 </head>
 
 <body>
 
+	@include('sweetalert::alert')
+
 	<div class="wrapper">
 
 		<nav id="sidebar" class="sidebar">
-			<a class="sidebar-brand" href="/admin">
-				<!-- <svg>
-					<use xlink:href="#ion-ios-pulse-strong"></use>
-				</svg> -->
-				Gold Panda
+			<a class="sidebar-brand" href="/app">
+				Easy Gold
 			</a>
 			<div class="sidebar-content">
 				<div class="sidebar-user">
-					<img src="/img/gold-bars.png" class="img-fluid rounded-circle mb-2" alt="Gold Panda" />
-					<div class="fw-bold">RM 234.34</div>
-					<small>At 23/09/2022 9:00pm</small>
+					<img src="/img/gold-bars.png" class="img-fluid rounded-circle mb-2" alt="Easy Gold" />
+					<div class="fw-bold">RM {{ number_format($gold_price->price * $myr_price->price / 10000, 2, '.', ',') }} per gram</div>
+					<small>at {{ $gold_price->created_at }}</small>
 				</div>
 
 				<ul class="sidebar-nav">
@@ -142,7 +141,7 @@
 							<ul class="list-inline"> 
 
 								<li class="list-inline-item">
-									<a class="text-muted" href="/app">Access User Application</a>
+									<a class="text-muted" href="/app">Access User Side</a>
 								</li>
  
                                 

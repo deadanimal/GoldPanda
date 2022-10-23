@@ -18,7 +18,7 @@
 			<div class="row">
 
 
-				<div class="col-xl-4">
+				<div class="col-xl-3">
 					
 
 							<div class="card">
@@ -37,16 +37,10 @@
 										<label class="form-label">Gold Amount, gram</label>
 											<input type="number" class="form-control" id="out_gold_amount" name="out_gold_amount" readonly>
 										</div>
-										<button type="submit" class="btn btn-success">Buy</button>
+										<button type="submit" class="btn btn-success">Buy Gold</button>
 									</form>
 								</div>
 							</div>
-
-					
-				</div>
-
-				<div class="col-xl-4">
-					
 
 							<div class="card">
 								<div class="card-header">
@@ -64,93 +58,19 @@
 										<label class="form-label">Ringgit Malaysia, RM</label>
 											<input type="number" class="form-control" id="out_fiat_amount" name="out_fiat_amount" readonly>
 										</div>
-										<button type="submit" class="btn btn-danger">Sell</button>
+										<button type="submit" class="btn btn-danger">Sell Gold</button>
 									</form>
 								</div>
 							</div>
 
+
 					
-				</div>				
-
-
+				</div>
 
 				
 
-				<div class="col-xl-4 d-flex">
-					<!-- <div class="w-100">
-						<div class="row">
-							<div class="col-sm-6">
-								<div class="card">
-									<div class="card-body">
-										<div class="row">
-											<div class="col mt-0">
-												<h5 class="card-title">Gold price per gram, RM</h5>
-											</div>
 
-										</div>
-										<h1 class="display-5 mt-1 mb-3">242.64</h1>
-										<div class="mb-0">
-											<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span>
-											24H change
-										</div>
-									</div>
-								</div>
-								<div class="card">
-									<div class="card-body">
-										<div class="row">
-											<div class="col mt-0">
-												<h5 class="card-title">Gold balance, gram</h5>
-											</div>
-
-										</div>
-										<h1 class="display-5 mt-1 mb-3">0.123</h1>
-										<div class="mb-0">
-											<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i>+0.001g </span>
-											24H change
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="card">
-									<div class="card-body">
-										<div class="row">
-											<div class="col mt-0">
-												<h5 class="card-title">Gold savings, gram</h5>
-											</div>
-
-
-										</div>
-										<h1 class="display-5 mt-1 mb-3">3.456</h1>
-										<div class="mb-0">
-											<span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 8.35% </span>
-											More 
-										</div>
-									</div>
-								</div>
-								<div class="card">
-									<div class="card-body">
-										<div class="row">
-											<div class="col mt-0">
-												<h5 class="card-title">Gold Leased, g</h5>
-											</div>
-
-										</div>
-										<h1 class="display-5 mt-1 mb-3">43.123</h1>
-										<div class="mb-0">
-											<span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -4.25% </span>
-											Less 
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
-				</div>
-			</div>		
-
-			<div class="row">
-				<div class="col">
+				<div class="col-xl-9">
 
 							<div class="card">
 								<div class="card-header">
@@ -186,45 +106,6 @@
 					
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="col">
-
-							<div class="card">
-								<div class="card-header">
-									<h5 class="card-title">List of gold solds</h5>
-									<h6 class="card-subtitle text-muted">- - -</h6>
-								</div>
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th style="width:10%;">ID</th>
-											<th style="width:25%;">Date</th>
-											<th style="width:25%">Gold</th>
-											<th style="width:25%">Price</th>											
-											<th class="d-none d-md-table-cell" style="width:15%">Status</th>
-											
-										</tr>
-									</thead>
-									<tbody>
-
-										@foreach ($solds as $sold)
-											<tr>
-												<td><a href="/app/sold/{{ $sold->id }}">S-{{ $sold->id }}</a></td>
-												<td>{{ $sold->created_at }}</td>
-												<td>{{ number_format($sold->gold_amount / 1000000, 6, '.', ',') }} gram</td>
-												<td>{{ $sold->fiat_currency }} {{ number_format($sold->fiat_outflow / 100, 2, '.', ',') }}</td>
-												<td class="d-none d-md-table-cell">Created</td>
-		
-											</tr>
-										@endforeach									
-									</tbody>
-								</table>
-							</div>				
-					
-				</div>
-			</div>			
-			
 
 			
 		</div>

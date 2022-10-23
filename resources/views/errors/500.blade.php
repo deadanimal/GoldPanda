@@ -32,7 +32,7 @@
                         <h1 class="display-1 fw-bold">500</h1>
 							<p class="h1">Internal server error.</p>
 							<p class="h2 fw-normal mt-3 mb-4">The server encountered something unexpected that didn't allow it to complete the request.</p>
-							<a href="/app" class="btn btn-primary btn-lg">Return to website</a>
+							<a href="/" class="btn btn-primary btn-lg">Return to website</a>
 						</div>
 
 					</div>

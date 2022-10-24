@@ -70,5 +70,7 @@ class StatikController extends Controller
         return view('admin');
     }       
 
+    
+
 
 }

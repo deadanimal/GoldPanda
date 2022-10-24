@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Trade extends Model
 {
     use HasFactory;
+
+    
 }
 

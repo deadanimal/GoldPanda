@@ -88,7 +88,7 @@
 								<i class="align-middle fas fa-cog"></i>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">								
-                                <a class="dropdown-item" href="/support"><i class="align-middle me-1 fas fa-fw fa-life-ring"></i>Support</a>
+                                <a class="dropdown-item" href="/ticket"><i class="align-middle me-1 fas fa-fw fa-life-ring"></i>Support</a>
                                 <a class="dropdown-item" href="/profile"><i class="align-middle me-1 fas fa-fw fa-user"></i>Profile</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="/logout"><i class="align-middle me-1 fas fa-fw fa-arrow-alt-circle-right"></i> Sign Out</a>
@@ -159,8 +159,12 @@
 
                                 @role('super-admin')  
                                     <li class="list-inline-item">
-                                        <a class="text-muted" href="/admin">Access Admin</a>
+                                        <a class="text-muted" href="/admin/dashboard">As Admin</a>
                                     </li>
+
+                                    <li class="list-inline-item">
+                                        <a class="text-muted" href="/dashboard">As User</a>
+                                    </li>									
                                 @endrole  
 
 								<li class="list-inline-item">

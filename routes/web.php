@@ -52,9 +52,6 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('profile', [ProfileController::class, 'home']);
     Route::post('profile/password', [ProfileController::class, 'change_password']);    
-    Route::put('profile/promoter', [ProfileController::class, 'update_promoter']);
-    Route::put('profile/bank-account', [ProfileController::class, 'update_bank_account']);
-    Route::put('profile/kyc', [ProfileController::class, 'update_kyc']);
 
     Route::get('user/{id}', [ProfileController::class, 'satu_user']);    
 
@@ -64,10 +61,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('reward/redeem', [RewardController::class, 'redeem_reward']);    
     Route::get('reward/redeem/{id}', [RewardController::class, 'show_redeem']);       
 
-    Route::get('support', [SupportTicketController::class, 'home']);
-    Route::post('support', [SupportTicketController::class, 'create_support']);
-    Route::get('support/{id}', [SupportTicketController::class, 'show']);
-    Route::post('support/{id}/message', [SupportTicketController::class, 'send_message']);
+    Route::get('ticket', [SupportTicketController::class, 'home']);
+    Route::post('ticket', [SupportTicketController::class, 'create_support']);
+    Route::get('ticket/{id}', [SupportTicketController::class, 'show']);
+    Route::post('ticket/{id}/message', [SupportTicketController::class, 'send_message']);
     
     
 });
@@ -75,12 +72,11 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function () {
 
-    Route::get('', [StatikController::class, 'admin']);
+    Route::get('dashboard', [StatikController::class, 'admin']);
 
     Route::get('trade', [TradeController::class, 'admin_home']);
-    Route::get('bought/{id}', [TradeController::class, 'admin_show_bought']);
-    Route::get('sold/{id}', [TradeController::class, 'admin_show_sold']);
-    
+    Route::get('trade/{id}', [TradeController::class, 'admin_satu']);
+
     Route::get('advance', [AdvanceController::class, 'admin_home']);
     Route::get('advance/{id}', [AdvanceController::class, 'admin_show']);
     Route::put('advance/{id}/foreclose', [AdvanceController::class, 'admin_foreclose']);
@@ -96,20 +92,14 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function
 
     Route::get('reward', [RewardController::class, 'admin_home']);    
     Route::get('reward/{id}', [RewardController::class, 'admin_show']);
-    Route::get('reward/redeem/{id}', [RewardController::class, 'admin_show_redeem']);
-    
-    Route::get('blockchain', [BlockchainMintController::class, 'admin_home']);    
-    Route::post('blockchain/mint', [BlockchainMintController::class, 'admin_mint']);
-    Route::get('blockchain/mint/{id}', [BlockchainMintController::class, 'admin_show']);
 
-    Route::get('physical', [PhysicalMintController::class, 'admin_home']);    
-    Route::post('physical/mint', [PhysicalMintController::class, 'admin_mint']);
-    Route::get('physical/mint/{id}', [PhysicalMintController::class, 'admin_show']); 
-    
-    Route::get('cash', [TradeController::class, 'admin_cash']);
-    Route::post('cash', [TradeController::class, 'admin_manual_entry']);
-    Route::get('cash/payin/{id}', [TradeController::class, 'admin_payin']);
-    Route::get('cash/payout/{id}', [TradeController::class, 'admin_payout']);
+    Route::get('invoice', [InvoiceController::class, 'admin_home']);    
+    Route::get('invoice/{id}', [InvoiceController::class, 'admin_show']);    
+    Route::post('invoice/{id}/verify', [InvoiceController::class, 'admin_verify']);    
+
+    Route::get('payment', [PaymentController::class, 'admin_home']);    
+    Route::get('payment/{id}', [PaymentController::class, 'admin_show']);     
+    Route::post('payment/{id}/verify', [PaymentController::class, 'admin_verify']);     
 
     Route::get('support', [SupportController::class, 'admin_home']);
     Route::get('support/{id}', [SupportController::class, 'admin_show']);

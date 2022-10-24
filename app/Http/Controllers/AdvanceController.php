@@ -72,13 +72,12 @@ class AdvanceController extends Controller
 
 
         $gold_amount = $request->gold_amount;
-        $gold_price = GoldPrice::latest()->first()->sell_price;
-        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->sell_price;
+        $gold_price = GoldPrice::latest()->first()->price;
+        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->price;
 
-        $fiat_flow = $gold_amount * 1000000 * ($gold_price * $myr_price) / 100;
-        $fiat_fee = 0;
-        $fiat_nett = $fiat_flow - $fiat_fee;
-        $amount_lent = $fiat_nett * 85 / 100;
+        $fiat_flow = $gold_amount * ($gold_price * $myr_price) / 100;;
+        $fiat_nett = (int)$fiat_flow;
+        $amount_lent = (int)($fiat_nett * 85 / 100);
 
         if($gold_amount * 1000000 < $user->balance) {
             Alert::error('Gold Advanced', 'You have insufficient amount of gold to lease');
@@ -103,7 +102,8 @@ class AdvanceController extends Controller
         $payment->currency = $advance->currency;            
         $payment->save();
 
-        $user->balance -=$gold_amount * 1000000;
+        $user->balance -= $gold_amount * 1000000;
+        $user->advanced += $gold_amount * 1000000;
         $user->save();
 
         Alert::success('Gold Advanced', 'Your gold has been successfully been leased. You will receive a payment within two to three working days');

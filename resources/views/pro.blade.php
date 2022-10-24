@@ -87,7 +87,7 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Ringgit Malaysia, RM</label>
-                                    <input type="number" class="form-control" name="fiat" value=200 min=200 step="100" max="50000">
+                                    <input type="number" class="form-control" name="fiat_amount" value=200 min=200 step="100" max="50000">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Multiplier</label>

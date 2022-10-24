@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DataTables;
 use DateTime;
 use Carbon\Carbon;
+use Alert;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -16,7 +17,7 @@ use App\Models\Enhance;
 use App\Models\GoldPrice;
 use App\Models\ForexPrice;
 use App\Models\PayIn;
-use App\Models\PayOut;
+use App\Models\Invoice;
 
 use Billplz\Client;
 
@@ -60,8 +61,8 @@ class EnhanceController extends Controller
         $fiat_fee = ($fiat_flow + $fiat_leased) * 3 / 100;
     
         
-        $gold_price = GoldPrice::latest()->first()->buy_price;
-        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->buy_price;
+        $gold_price = GoldPrice::latest()->first()->price;
+        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->price;
 
         $user_id = $request->user()->id;
 
@@ -69,61 +70,29 @@ class EnhanceController extends Controller
         $gold_amount = $fiat_nett * 100000000 / ($gold_price * $myr_price);
         $gold_amount_string = substr(number_format((string)($gold_amount / 1000000), 7, '.', ''), 0, -1);        
 
-        $enhance = new Enhance;        
-        
+        $enhance = new Enhance;                
         $enhance->amount = (int)$gold_amount;
         $enhance->loan = (int)$fiat_leased;
         $enhance->capital = (int)$fiat_flow;
         $enhance->leverage = (int)$request->leverage;
         $enhance->currency = 'MYR';
-        $enhance->status = 'CRT';
+        $enhance->status = 'created';
+        $enhance->interest = (int)($fiat_leased/20);
+        $enhance->price = (int)($gold_price * $myr_price /100);
         $enhance->user_id = $user_id;
-
         $enhance->save();
 
-        $reward_controller = new RewardController;
-        $reward_controller->distribute_sell_reward($user_id, $fiat_fee, $enhance->currency, $enhance->id, 0);
+        $invoice = New Invoice;
+        $invoice->payable_type = 'App\Models\Enhance';
+        $invoice->payable_id = $enhance->id;
+        $invoice->user_id = $user_id;
+        $invoice->status = 'created';
+        $invoice->amount = $enhance->capital;
+        $invoice->currency = $enhance->currency;
+        $invoice->save();        
 
-        $billplz = Client::make(env('BILLPLZ_API_KEY'));
-        $bill = $billplz->bill();
-
-        $redirect_url = 'https://goldpanda.pipeline.com.my/app/enhance/'.(string)$enhance->id;
-        
-        $response = $bill->create(
-            'cvteldue',
-            $request->user()->email,
-            null,
-            $request->user()->name,
-            \Duit\MYR::given($fiat_flow),
-            'https://goldpanda.pipeline.com.my/billplz-webhook',
-            'Booking of '.$gold_amount_string.' gram of gold',
-            [
-                'redirect_url' => $redirect_url,
-                // 'reference_1_label' => 'Gold Amount, gram',
-                // 'reference_1' => $gold_amount_string
-            ], 
-        );        
-
-        $billplz_response = $response->toArray();
-
-        $pay_in = new PayIn;
-
-        $pay_in->amount = $enhance->capital;
-        $pay_in->currency = $enhance->currency;
-        $pay_in->method = 'BLP';
-        $pay_in->status = 'CRT';
-
-        $pay_in->payable_id = $enhance->id;
-        $pay_in->payable_type = 'App\Models\Enhance';
-
-        $pay_in->note_1 = $billplz_response['id'];
-        $pay_in->note_2 = '';
-        $pay_in->note_3 = '';
-        
-        $pay_in->save();
-       
-        $billplz_url = 'https://billplz.com/bills/'.$billplz_response['id'];
-        return Redirect::to($billplz_url);
+        Alert::success('Gold Booked', 'Gold has successfully been booked. Please proceed to make payment for the invoice');
+        return back();
     }    
 
     public function show(Request $request)

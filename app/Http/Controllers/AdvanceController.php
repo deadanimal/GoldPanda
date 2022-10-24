@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\Advance;
 use App\Models\GoldPrice;
 use App\Models\ForexPrice;
-use App\Models\Flow;
+use App\Models\Payment;
 use App\Models\PayOut;
 
 class AdvanceController extends Controller
@@ -68,49 +68,45 @@ class AdvanceController extends Controller
             'gold_amount' => ['required', 'gte:0.1'],
         ]);
 
+        $user = $request->user();
+
 
         $gold_amount = $request->gold_amount;
         $gold_price = GoldPrice::latest()->first()->sell_price;
         $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->sell_price;
 
-        $fiat_flow = $gold_amount  * ($gold_price * $myr_price) / 100;
+        $fiat_flow = $gold_amount * 1000000 * ($gold_price * $myr_price) / 100;
         $fiat_fee = 0;
         $fiat_nett = $fiat_flow - $fiat_fee;
         $amount_lent = $fiat_nett * 85 / 100;
 
-        // $gold_balance = $request->user()->alloted_gold;
-        // if($gold_amount * 1000000 > $gold_balance) {
-        //     $gold_balance_string = number_format($gold_balance / 1000000, 6, '.', ',');
-        //     $statement = 'You do not enough gold balance. Your current available gold balance is '.$gold_balance_string.' g';
-        //     return Redirect::back()->withErrors(['msg' => $statement]);
-        // }
+        if($gold_amount * 1000000 < $user->balance) {
+            Alert::error('Gold Advanced', 'You have insufficient amount of gold to lease');
+        }
+
+
 
         $advance = new Advance;
         $advance->gold_amount = $request->gold_amount * 1000000;
         $advance->fiat_leased = $amount_lent;
         $advance->currency = 'MYR';
-        $advance->status = 'CRT';
+        $advance->status = 'created';
         $advance->user_id = $request->user()->id;
         $advance->save();
 
-        $flow = new Flow;
+        $payment = New Payment;
+        $payment->payable_type = 'App\Models\Advance';
+        $payment->payable_id = $advance->id;
+        $payment->user_id = $request->user()->id;
+        $payment->status = 'created';
+        $payment->amount = $advance->fiat_leased;
+        $payment->currency = $advance->currency;            
+        $payment->save();
 
-        $flow->amount = $advance->fiat_leased;
-        $flow->currency = $advance->currency;
-        $flow->in = true;
-        $flow->method = 'MAN';
-        $flow->status = 'CRT';
+        $user->balance -=$gold_amount * 1000000;
+        $user->save();
 
-        $flow->payable_id = $advance->id;
-        $flow->payable_type = 'App\Models\Advance';
-
-        $flow->note_1 = '';
-        $flow->note_2 = '';
-        $flow->note_3 = '';
-
-        $flow->save();
-
-        Alert::alert('Title', 'Message', 'Type');
+        Alert::success('Gold Advanced', 'Your gold has been successfully been leased. You will receive a payment within two to three working days');
         return back();
     }
 

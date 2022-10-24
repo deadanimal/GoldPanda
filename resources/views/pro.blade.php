@@ -54,11 +54,11 @@
                             <table class="table table-striped table-sm advance-datatable">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
                                         <th>Date</th>
-                                        <th>Gold</th>
-                                        <th>Amount</th>
+                                        <th>Gold Leased</th>
+                                        <th>Ringgit</th>
                                         <th>Status</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>

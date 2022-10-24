@@ -9,65 +9,58 @@ use DataTables;
 use DateTime;
 use Carbon\Carbon;
 use Alert;
+
 use App\Http\Controllers\RewardController;
-
-
-use App\Models\GoldPrice;
-use App\Models\ForexPrice;
-use App\Models\Trade;
 use App\Models\Invoice;
-use App\Models\Payment;
-
-use Billplz\Client;
 
 
-class TradeController extends Controller
+class InvoiceController extends Controller
 {
 
-    public function senarai(Request $request) {
-        $user = $request->user();
-        $trades = Trade::where('user_id', $user->id)->get();
-        if ($request->ajax()) {
-            return DataTables::collection($trades)
-                ->addColumn('gold_', function (Trade $trade) {
-                    $amount = number_format($trade->gold / 1000000, 3, '.', ',');
-                    if ($trade->buy) {                        
-                        $html_badge = '<span class="badge rounded-pill bg-success">Buy '. $amount .'g</span>';
-                    } else {
-                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell '. $amount .'g</span>';
-                    }
-                    return $html_badge;
-                })
-                ->addColumn('fiat_', function (Trade $trade) {
-                    $amount = number_format($trade->fiat / 100, 2, '.', ',');
-                    // $html_statement = $trade->fiat_currency . 'RM ' . $amount;
-                    $html_statement = 'RM ' . $amount;
-                    return $html_statement;
-                })         
-                ->addColumn('status_', function (Trade $trade) {
-                    $html_statement = ucwords($trade->status);
-                    return $html_statement;
-                })                           
-                ->addColumn('link',function (Trade $trade) {
-                    $url = '/trade/'. $trade->id;
-                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
-                    return $html_button;
-                })
-                ->editColumn('created_at', function (Trade $trade) {
-                    return [
-                        'display' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->format('d/m/Y') : '',
-                        'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
-                    ];
-                })
-                ->rawColumns(['fiat_','gold_','link'])
-                ->make(true);
-        }
-    }
+    // public function senarai(Request $request) {
+    //     $user = $request->user();
+    //     $trades = Trade::where('user_id', $user->id)->get();
+    //     if ($request->ajax()) {
+    //         return DataTables::collection($trades)
+    //             ->addColumn('gold_', function (Trade $trade) {
+    //                 $amount = number_format($trade->gold / 1000000, 3, '.', ',');
+    //                 if ($trade->buy) {                        
+    //                     $html_badge = '<span class="badge rounded-pill bg-success">Buy '. $amount .'g</span>';
+    //                 } else {
+    //                     $html_badge = '<span class="badge rounded-pill bg-danger">Sell '. $amount .'g</span>';
+    //                 }
+    //                 return $html_badge;
+    //             })
+    //             ->addColumn('fiat_', function (Trade $trade) {
+    //                 $amount = number_format($trade->fiat / 100, 2, '.', ',');
+    //                 // $html_statement = $trade->fiat_currency . 'RM ' . $amount;
+    //                 $html_statement = 'RM ' . $amount;
+    //                 return $html_statement;
+    //             })         
+    //             ->addColumn('status_', function (Trade $trade) {
+    //                 $html_statement = ucwords($trade->status);
+    //                 return $html_statement;
+    //             })                           
+    //             ->addColumn('link',function (Trade $trade) {
+    //                 $url = '/trade/'. $trade->id;
+    //                 $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+    //                 return $html_button;
+    //             })
+    //             ->editColumn('created_at', function (Trade $trade) {
+    //                 return [
+    //                     'display' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->format('d/m/Y') : '',
+    //                     'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
+    //                 ];
+    //             })
+    //             ->rawColumns(['fiat_','gold_','link'])
+    //             ->make(true);
+    //     }
+    // }
 
     public function satu(Request $request) {
         $id = (int)$request->route('id');
-        $trade = Trade::find($id);
-        return view('trade.satu', compact('trade'));
+        $invoice = Invoice::find($id);
+        return view('invoice.satu', compact('invoice'));
     }    
 
     public function cipta(Request $request) {
@@ -90,6 +83,10 @@ class TradeController extends Controller
         If Buy:
             - 5% on trade
             - Minimum amount is RM20.00
+
+        If Sell:
+            - 0% on trade
+            - Minimum amount is RM100.00
         */
         if ($nature == 1) {
             $fee = $fiat / 20; # 5% fee on buy
@@ -99,14 +96,6 @@ class TradeController extends Controller
                 Alert::error('Minimum Amount Not Met', 'Gold purchased must be more than RM 20.00');
                 return back();
             }
-
-        /*
-        BUSINESS LOGIC 
-
-        If Sell:
-            - 0% on trade
-            - Minimum amount is RM100.00
-        */            
         } else {
             $fee = 0; # 0% fee on sell
             $nett = $fiat;
@@ -134,13 +123,13 @@ class TradeController extends Controller
         $trade->save();
 
         if ($trade->buy) {
-            Alert::success('Gold Bought', 'Gold purchase has successfully been created. Please proceed to make payment for the invoice');
+            Alert::success('Gold Bought', 'Gold purchase has successfully been created. Please proceed to next step');
             $invoice = New Invoice;
             $invoice->payable_type = 'App\Models\Trade';
             $invoice->payable_id = $trade->id;
             $invoice->user_id = $user->id;
             $invoice->status = 'created';
-            $invoice->amount = $trade->fiat;
+            $invoice->amount = $trade->amount;
             $invoice->currency = $trade->fiat_currency;
             $invoice->save();
         } else {
@@ -152,12 +141,38 @@ class TradeController extends Controller
             $payment->payable_id = $trade->id;
             $payment->user_id = $user->id;
             $payment->status = 'created';
-            $payment->amount = $trade->fiat;
+            $payment->amount = $trade->amount;
             $payment->currency = $trade->fiat_currency;            
             $payment->save();
         }
 
         return back();
+    }
+
+    public function sah(Request $request) {
+        $id = (int)$request->route('id');
+        $invoice = Invoice::find($id);
+
+        if($request->jenis == 'paid') {
+            $invoice->status = 'paid';
+            $reward_controller = new RewardController;
+            $reward_controller->distribute_sell_reward(
+                $invoice->user_id, 
+                $invoice->payable->fee, 
+                $invoice->payable->fiat_currency, 
+                $invoice->payable_id, 
+                1);               
+        } else if ($request->jenis == 'paid-partial') {
+            $invoice->status = 'partial';
+        } else if ($request->jenis == 'paid-over') {
+            $invoice->status = 'over';
+        } else {
+            $invoice->status = 'expire';
+        }
+        $invoice->save();     
+
+
+        return back();        
     }
 
 }

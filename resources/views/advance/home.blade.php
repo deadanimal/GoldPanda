@@ -58,7 +58,6 @@
                             <table class="table table-striped table-sm advance-datatable">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
                                         <th>Date</th>
                                         <th>Gold</th>
                                         <th>Amount</th>

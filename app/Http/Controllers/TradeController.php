@@ -129,7 +129,11 @@ class TradeController extends Controller
         $trade->nett = $nett;
         $trade->gold = $gold;
         $trade->fiat_currency = 'MYR';
-        $trade->status = 'created';
+        if ($nature == 1) {
+            $trade->status = 'Waiting For Payment';
+        } else {
+            $trade->status = 'Pending Transfer';
+        }
         $trade->user_id = $user->id;
         $trade->save();
 
@@ -139,7 +143,7 @@ class TradeController extends Controller
             $invoice->payable_type = 'App\Models\Trade';
             $invoice->payable_id = $trade->id;
             $invoice->user_id = $user->id;
-            $invoice->status = 'created';
+            $invoice->status = 'Waiting For Payment';
             $invoice->amount = $trade->fiat;
             $invoice->currency = $trade->fiat_currency;
             $invoice->save();
@@ -151,7 +155,7 @@ class TradeController extends Controller
             $payment->payable_type = 'App\Models\Trade';
             $payment->payable_id = $trade->id;
             $payment->user_id = $user->id;
-            $payment->status = 'created';
+            $payment->status = 'Pending Transfer';
             $payment->amount = $trade->fiat;
             $payment->currency = $trade->fiat_currency;            
             $payment->save();

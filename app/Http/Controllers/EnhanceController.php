@@ -31,12 +31,30 @@ class EnhanceController extends Controller
         if ($request->ajax()) {
             return DataTables::collection($enhances)
                 ->addIndexColumn()
+                ->addColumn('amount_', function (Enhance $enhance) {                    
+                    $html_button = 'RM '.number_format((int)($enhance->loan + $enhance->interest)  / 100, 2, '.', '');
+                    return $html_button;
+                })                
+                ->addColumn('gold_', function (Enhance $enhance) {                    
+                    $html_button = number_format((int)$enhance->amount / 1000000, 3, '.', '').'g';
+                    return $html_button;
+                })
+                ->addColumn('link', function (Enhance $enhance) {                    
+                    $url = '/enhance/'. $enhance->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                    return $html_button;  
+                })   
+                ->addColumn('status', function (Enhance $enhance) {                    
+                    $html_statement = ucwords($enhance->status);
+                    return $html_statement;
+                })                                               
                 ->editColumn('created_at', function (Enhance $enhance) {
                     return [
                         'display' => ($enhance->created_at && $enhance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($enhance->created_at))->format('d F Y') : '',
                         'timestamp' => ($enhance->created_at && $enhance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($enhance->created_at))->timestamp : ''
                     ];
                 })
+                ->rawColumns(['gold_', 'amount_', 'link', 'status'])
                 ->make(true);
         } else {
             return view('enhance.home', compact('enhances'));
@@ -76,7 +94,7 @@ class EnhanceController extends Controller
         $enhance->capital = (int)$fiat_flow;
         $enhance->leverage = (int)$request->leverage;
         $enhance->currency = 'MYR';
-        $enhance->status = 'created';
+        $enhance->status = 'Waiting For Payment';
         $enhance->interest = (int)($fiat_leased/20);
         $enhance->price = (int)($gold_price * $myr_price /100);
         $enhance->user_id = $user_id;
@@ -86,7 +104,7 @@ class EnhanceController extends Controller
         $invoice->payable_type = 'App\Models\Enhance';
         $invoice->payable_id = $enhance->id;
         $invoice->user_id = $user_id;
-        $invoice->status = 'created';
+        $invoice->status = 'Waiting For Payment';
         $invoice->amount = $enhance->capital;
         $invoice->currency = $enhance->currency;
         $invoice->save();        

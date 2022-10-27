@@ -25,25 +25,30 @@ class AdvanceController extends Controller
         if ($request->ajax()) {
             return DataTables::collection($advances)
                 ->addIndexColumn()
-                // ->addColumn('pelaksana', function (Advance $advance) {
-                //     return $advance->pekerja->name;
-                // })
-                // ->addColumn('status_', function (Advance $advance) {
-                //     $html_badge = '<span class="badge rounded-pill bg-primary">' . ucfirst($advance->status) . '</span>';
-                //     return $html_badge;
-                // })
-                // ->addColumn('link', function (Advance $advance) {
-                //     $url = '/projek/' . $advance->projek_id . '/advance/' . $advance->id;
-                //     $html_button = '<a href="' . $url . '"><button class="btn btn-primary">Lihat</button></a>';
-                //     return $html_button;
-                // })
+                ->addColumn('amount_', function (Advance $advance) {                    
+                    $html_button = 'RM '.number_format((int)($advance->fiat_leased + $advance->interest)  / 100, 2, '.', '');
+                    return $html_button;
+                })                
+                ->addColumn('gold_', function (Advance $advance) {                    
+                    $html_button = number_format((int)$advance->gold_amount / 1000000, 3, '.', '').'g';
+                    return $html_button;
+                })
+                ->addColumn('link', function (Advance $advance) {                    
+                    $url = '/advance/'. $advance->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                    return $html_button;  
+                })   
+                ->addColumn('status', function (Advance $advance) {                    
+                    $html_statement = ucwords($advance->status);
+                    return $html_statement;
+                })                                               
                 ->editColumn('created_at', function (Advance $advance) {
                     return [
                         'display' => ($advance->created_at && $advance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($advance->created_at))->format('d F Y') : '',
                         'timestamp' => ($advance->created_at && $advance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($advance->created_at))->timestamp : ''
                     ];
                 })
-                // ->rawColumns(['status_', 'link'])
+                ->rawColumns(['gold_', 'amount_', 'link', 'status'])
                 ->make(true);
         } else {            
             return view('advance.home', compact('advances'));
@@ -89,7 +94,7 @@ class AdvanceController extends Controller
         $advance->gold_amount = $request->gold_amount * 1000000;
         $advance->fiat_leased = $amount_lent;
         $advance->currency = 'MYR';
-        $advance->status = 'created';
+        $advance->status = 'Pending Transfer';
         $advance->user_id = $request->user()->id;
         $advance->save();
 
@@ -97,7 +102,7 @@ class AdvanceController extends Controller
         $payment->payable_type = 'App\Models\Advance';
         $payment->payable_id = $advance->id;
         $payment->user_id = $request->user()->id;
-        $payment->status = 'created';
+        $payment->status = 'Pending Transfer';
         $payment->amount = $advance->fiat_leased;
         $payment->currency = $advance->currency;            
         $payment->save();

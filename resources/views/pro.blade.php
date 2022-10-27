@@ -55,8 +55,8 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Gold Leased</th>
-                                        <th>Ringgit</th>
+                                        <th>Gold</th>
+                                        <th>Repayment</th>
                                         <th>Status</th>
                                         <th></th>
                                     </tr>
@@ -113,11 +113,11 @@
                             <table class="table table-striped table-sm enhance-datatable">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
                                         <th>Date</th>
                                         <th>Gold</th>
-                                        <th>Amount</th>
+                                        <th>Payment</th>
                                         <th>Status</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -147,10 +147,7 @@
                 serverSide: true,
                 responsive: true,
                 ajax: "/advance",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
+                columns: [
                     {
                         data: {
                             _: "created_at.display",
@@ -160,18 +157,21 @@
                         name: 'created_at.display'
                     },
                     {
-                        data: 'gold_amount',
-                        name: 'gold_amount'
+                        data: 'gold_',
+                        name: 'gold_'
                     },
                     {
-                        data: 'fiat_leased',
-                        name: 'fiat_leased'
+                        data: 'amount_',
+                        name: 'amount_'
                     },
                     {
                         data: 'status',
                         name: 'status'
+                    },                    
+                    {
+                        data: 'link',
+                        name: 'link'
                     },
-
                 ]
             });
 
@@ -187,10 +187,7 @@
                 serverSide: true,
                 responsive: true,
                 ajax: "/enhance",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
+                columns: [
                     {
                         data: {
                             _: "created_at.display",
@@ -200,16 +197,20 @@
                         name: 'created_at.display'
                     },
                     {
-                        data: 'gold_amount',
-                        name: 'gold_amount'
+                        data: 'gold_',
+                        name: 'gold_'
                     },
                     {
-                        data: 'fiat_leased',
-                        name: 'fiat_leased'
+                        data: 'amount_',
+                        name: 'amount_'
                     },
                     {
                         data: 'status',
                         name: 'status'
+                    },                    
+                    {
+                        data: 'link',
+                        name: 'link'
                     },
 
                 ]

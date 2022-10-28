@@ -30,10 +30,18 @@
                             <form method="POST" action="/advance">
                                 @csrf
                                 <div class="mb-3">
+                                    <label class="form-label">Available Gold, gram</label>
+                                    <input type="number" class="form-control" value="{{number_format($user->balance / 1000000, 2, '.', '')}}" readonly>
+                                </div>                                
+                                <div class="mb-3">
                                     <label class="form-label">Gold Amount, gram</label>
-                                    <input type="number" class="form-control" name="gold_amount" value=1 step="0.1"
+                                    <input type="number" class="form-control" onchange="advance_gold_changed()" id="gold_amount" name="gold_amount" value=1 step="0.1"
                                         min=1>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Amount Advanced, RM</label>
+                                    <input type="number" class="form-control" id="amount_advanced" readonly>
+                                </div>                                
                                 <button type="submit" class="btn btn-primary">Advance Gold</button>
                             </form>
                         </div>
@@ -79,22 +87,30 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Enhance Gold</h5>
+                            <h5 class="card-title">Book Gold</h5>
                             <h6 class="card-subtitle text-muted">Book extra gold</h6>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="/enhance">
                                 @csrf
                                 <div class="mb-3">
-                                    <label class="form-label">Ringgit Malaysia, RM</label>
-                                    <input type="number" class="form-control" name="fiat_amount" value=200 min=200 step="100" max="50000">
+                                    <label class="form-label">Booking Deposit, RM</label>
+                                    <input type="number" class="form-control" name="fiat_amount" value=200 min=200 step="100" max="50000" onchange="enhance_gold_changed()">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Multiplier</label>
-                                    <input type="number" class="form-control" name="leverage" value=1 min=1 step="1"
+                                    <input type="number" class="form-control" name="leverage" value=1 min=1 step="1" onchange="enhance_gold_changed()"
                                         max="19">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Enhance Gold</button>
+                                <div class="mb-3">
+                                    <label class="form-label">Amount Booked, RM</label>
+                                    <input type="number" class="form-control" id="amount_booked" readonly>
+                                </div>                                     
+                                <div class="mb-3">
+                                    <label class="form-label">Gold Booked, g</label>
+                                    <input type="number" class="form-control" id="gold_booked" readonly>
+                                </div>                                         
+                                <button type="submit" class="btn btn-primary">Book Gold</button>
                             </form>
                         </div>
                     </div>
@@ -138,6 +154,22 @@
 @endsection
 
 @section('script')
+
+    <script type="text/javascript">
+        advance_gold_changed();
+        function advance_gold_changed() {
+            var gold_price = {!! $gold_price->price * $myr_price->price / 10000 !!}
+            var gold_amount = document.getElementById('gold_amount').value;
+            document.getElementById('amount_advanced').value = (0.85 * gold_amount * gold_price).toFixed(2);            
+        }
+
+        enhance_gold_changed();
+        function enhance_gold_changed() {
+            var gold_price = {!! $gold_price->price * $myr_price->price / 10000 !!}
+            var gold_amount = document.getElementById('gold_amount').value;
+            document.getElementById('amount_enhanced').value = (0.85 * gold_amount * gold_price).toFixed(2);            
+        }        
+    </script>
 
     <script type="text/javascript">
         $(function() {

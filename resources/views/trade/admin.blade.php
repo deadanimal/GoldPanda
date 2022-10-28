@@ -1,6 +1,6 @@
 @extends('layouts.app')
  
-@section('title', 'Admin - Profile')
+@section('title', 'Admin - Trade')
  
 @section('content')
 
@@ -10,9 +10,8 @@
 
 			<div class="header">
 				<h1 class="header-title">
-					Profile - ADMIN
+                    Trade Dashboard
 				</h1>
-				<p class="header-subtitle">---</p>
 			</div>
 
 			<div class="row">
@@ -21,10 +20,11 @@
 					
 					<div class="card">
                         <div class="card-body">  
+    
+                            aggregate buys, sells, nets.. in gold and in rm
+                            total buys, sells, nets for the day..  in gold and in rm
 
-                        tables of Profiles: created, replied, closed <br> 
-                        email, nric, phone number, bank account, bank account number..                   
-
+                            list of buys(confirmed), list of sells(paid out)
                         </div>
                     </div>
                 </div>

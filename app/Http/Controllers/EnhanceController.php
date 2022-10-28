@@ -16,10 +16,8 @@ use App\Http\Controllers\RewardController;
 use App\Models\Enhance;
 use App\Models\GoldPrice;
 use App\Models\ForexPrice;
-use App\Models\PayIn;
 use App\Models\Invoice;
-
-use Billplz\Client;
+use App\Models\Payment;
 
 class EnhanceController extends Controller
 {
@@ -67,16 +65,16 @@ class EnhanceController extends Controller
         return view('enhance.admin_home');
     }    
 
-    public function create(Request $request)
+    public function cipta(Request $request)
     {        
 
         $validatedData = $request->validate([
-            'fiat_amount' => ['required', 'gte:20.00', 'lte:50000.00'],
+            'fiat_amount' => ['required', 'gte:100.00', 'lte:20000.00'],
         ]);        
 
         $fiat_flow = $request->fiat_amount * 100; // in cent
         $fiat_leased = $fiat_flow * $request->leverage;
-        $fiat_fee = ($fiat_flow + $fiat_leased) * 3 / 100;
+        $fiat_fee = ($fiat_flow + $fiat_leased) / 20;
     
         
         $gold_price = GoldPrice::latest()->first()->price;
@@ -113,14 +111,30 @@ class EnhanceController extends Controller
         return back();
     }    
 
-    public function show(Request $request)
+    public function satu(Request $request)
     {
         $id = (int)$request->route('id');
         $enhance = Enhance::find($id);
-        $pay_in = PayIn::where([
-            ['payable_id', '=', $enhance->id],
+        $payment = Payment::where([
             ['payable_type', '=', 'App\Models\Enhance'],
+            ['payable_id', '=', $id],
         ])->first();
-        return view('enhance.detail', compact('enhance', 'pay_in'));
+        $invoice = Invoice::where([
+            ['payable_type', '=', 'App\Models\Enhance'],
+            ['payable_id', '=', $id],
+        ])->first();
+
+        $fee = 0;
+        $total_amount = 0;
+
+        if ($enhance->status == 'Active') {
+            $now = time();
+            $start = strtotime($enhance->created_at);
+            $datediff = $now - $start;
+            $no_of_years = ceil($datediff / (60 * 60 * 24)) / 365;
+            $fee = $enhance->loan * $no_of_years;
+            $total_amount = $enhance->loan+ $fee;
+        }        
+        return view('enhance.satu', compact('enhance', 'fee', 'total_amount'));
     }
 }

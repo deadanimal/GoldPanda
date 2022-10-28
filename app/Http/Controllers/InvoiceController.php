@@ -72,13 +72,7 @@ class InvoiceController extends Controller
 
         if($request->jenis == 'paid') {
             $invoice->status = 'Paid';
-            $reward_controller = new RewardController;
-            $reward_controller->distribute_sell_reward(
-                $invoice->user_id, 
-                $invoice->payable->fee, 
-                $invoice->payable->fiat_currency, 
-                $invoice->payable_id, 
-                1);      
+            $reward_controller = new RewardController;    
             if($invoice->payable_type == 'App\Models\Trade') {
                 $trade = Trade::find($invoice->payable_id);
                 $trade->status = 'Paid';
@@ -86,6 +80,12 @@ class InvoiceController extends Controller
                 $user = User::find($trade->user_id);
                 $user->balance += $trade->gold;
                 $user->save();
+                $reward_controller->distribute_sell_reward(
+                    $trade->user_id, 
+                    $trade->fee, 
+                    $trade->fiat_currency, 
+                    $trade->id, 
+                    1);                  
             } else {
                 $enhance = Enhance::find($invoice->payable_id);
                 $enhance->status = 'Paid';
@@ -93,6 +93,17 @@ class InvoiceController extends Controller
                 $user = User::find($enhance->user_id);
                 $user->booked += $enhance->amount;
                 $user->save();
+
+                $fee_purchase = ($enhance->capital + $enhance->loan) / 20;
+                $fee_loan = $enhance->loan / 20;
+                $fee = $fee_purchase + $fee_loan;
+
+                $reward_controller->distribute_sell_reward(
+                    $enhance->user_id, 
+                    $fee, 
+                    $enhance->currency, 
+                    $enhance->id, 
+                    0);                  
             }
         } else if ($request->jenis == 'paid-partial') {
             $invoice->status = 'Partial Payment';

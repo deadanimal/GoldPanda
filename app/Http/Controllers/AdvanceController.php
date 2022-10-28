@@ -14,7 +14,7 @@ use App\Models\Advance;
 use App\Models\GoldPrice;
 use App\Models\ForexPrice;
 use App\Models\Payment;
-use App\Models\PayOut;
+use App\Models\Invoice;
 
 class AdvanceController extends Controller
 {
@@ -67,31 +67,33 @@ class AdvanceController extends Controller
     }
 
 
-    public function cipta_advance(Request $request)
+    public function cipta(Request $request)
     {
-        $validatedData = $request->validate([
-            'gold_amount' => ['required', 'gte:0.1'],
+        $validated = $request->validate([
+            'gold_amount' => ['required', 'gte:1'],
         ]);
 
         $user = $request->user();
 
 
-        $gold_amount = $request->gold_amount;
+        $gold_amount = (int)$request->gold_amount * 1000000;
+        if( $gold_amount > $user->balance) {
+            Alert::error('Gold Advanced', 'You have insufficient amount of gold to lease');
+            return back();
+        }
+
+
         $gold_price = GoldPrice::latest()->first()->price;
         $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->price;
 
-        $fiat_flow = $gold_amount * ($gold_price * $myr_price) / 100;;
+        $fiat_flow = $gold_amount * ($gold_price * $myr_price) / 100000000;
         $fiat_nett = (int)$fiat_flow;
         $amount_lent = (int)($fiat_nett * 85 / 100);
-
-        if($gold_amount * 1000000 < $user->balance) {
-            Alert::error('Gold Advanced', 'You have insufficient amount of gold to lease');
-        }
 
 
 
         $advance = new Advance;
-        $advance->gold_amount = $request->gold_amount * 1000000;
+        $advance->gold_amount = $gold_amount;
         $advance->fiat_leased = $amount_lent;
         $advance->currency = 'MYR';
         $advance->status = 'Pending Transfer';
@@ -107,8 +109,8 @@ class AdvanceController extends Controller
         $payment->currency = $advance->currency;            
         $payment->save();
 
-        $user->balance -= $gold_amount * 1000000;
-        $user->advanced += $gold_amount * 1000000;
+        $user->balance -= $gold_amount;
+        $user->advanced += $gold_amount;
         $user->save();
 
         Alert::success('Gold Advanced', 'Your gold has been successfully been leased. You will receive a payment within two to three working days');
@@ -116,14 +118,33 @@ class AdvanceController extends Controller
     }
 
 
-    public function satu_advance(Request $request)
+    public function satu(Request $request)
     {
         $id = (int)$request->route('id');
         $advance = Advance::find($id);
-        $pay_out = PayOut::where([
-            ['payable_id', '=', $id],
+        $payment = Payment::where([
             ['payable_type', '=', 'App\Models\Advance'],
+            ['payable_id', '=', $id],
         ])->first();
-        return view('advance.detail', compact('advance', 'pay_out'));
+        $invoice = Invoice::where([
+            ['payable_type', '=', 'App\Models\Advance'],
+            ['payable_id', '=', $id],
+        ])->first();
+
+        $fee = 0;
+        $total_amount = 0;
+
+        if ($advance->status == 'Active') {
+            $now = time();
+            $start = strtotime($advance->created_at);
+            $datediff = $now - $start;
+            $no_of_days = round($datediff / (60 * 60 * 24));
+            $fee = $advance->fiat_leased * $no_of_days * 137 / 1000000; 
+            $total_amount = $advance->fiat_leased + $fee;
+        }
+     
+
+
+        return view('advance.satu', compact('advance', 'payment', 'invoice', 'fee', 'total_amount'));
     }
 }

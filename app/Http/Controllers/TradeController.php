@@ -27,6 +27,7 @@ class TradeController extends Controller
     public function senarai(Request $request) {
         $user = $request->user();
         $trades = Trade::where('user_id', $user->id)->get();
+
         if ($request->ajax()) {
             return DataTables::collection($trades)
                 ->addColumn('gold_', function (Trade $trade) {
@@ -62,6 +63,11 @@ class TradeController extends Controller
                 ->rawColumns(['fiat_','gold_','link'])
                 ->make(true);
         }
+        
+    }
+
+    public function admin_home(Request $request) {
+        return view('trade.admin');
     }
 
     public function satu(Request $request) {

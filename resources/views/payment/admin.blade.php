@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin - User')
+@section('title', 'Admin - Payment')
 
 @section('content')
 
@@ -10,7 +10,7 @@
 
             <div class="header">
                 <h1 class="header-title">
-                    User
+                    Payment
                 </h1>
             </div>
 
@@ -23,10 +23,10 @@
                             <table class="table table-striped table-sm gold-datatable">
                                 <thead>
                                     <tr>
-										<th>Name</th>
-                                        <th>Mobile</th>
-                                        <th>Balance</th>
-                                        <th></th>
+                                        <th>Date</th>
+										<th>User</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -59,28 +59,32 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                ajax: "/admin/user",
-                columns: [
+                ajax: "/admin/payment",
+                columns: [{
+                        data: {
+                            _: "created_at.display",
+                            sort: "created_at.timestamp",
+                            filter: 'created_at.display'
+                        },
+                        name: 'created_at.display'
+                    },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'user',
+                        name: 'user'
                     },					
                     {
-                        data: 'mobile',
-                        name: 'mobile'
+                        data: 'amount_',
+                        name: 'amount_'
                     },
                     {
-                        data: 'balance',
-                        name: 'balance'
+                        data: 'status',
+                        name: 'status'
                     },
                     {
-                        data: 'booked',
-                        name: 'booked'
-                    },
-                    {
-                        data: 'advanced',
-                        name: 'advanced'
-                    },
+                        data: 'action',
+                        name: 'action'
+                    },                    
+  
 
                 ]
             });

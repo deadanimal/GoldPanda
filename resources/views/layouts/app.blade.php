@@ -109,12 +109,6 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/admin/ticket">
-                                <span class="align-middle">Ticket</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/reward">
                                 <span class="align-middle">Reward</span>
                             </a>
@@ -140,8 +134,6 @@
                                 <i class="align-middle fas fa-cog"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="/ticket"><i
-                                        class="align-middle me-1 fas fa-fw fa-life-ring"></i>Support</a>
                                 <a class="dropdown-item" href="/profile"><i
                                         class="align-middle me-1 fas fa-fw fa-user"></i>Profile</a>
                                 <div class="dropdown-divider"></div>

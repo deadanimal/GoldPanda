@@ -21,8 +21,7 @@ use App\Models\RewardProfile;
 class RewardController extends Controller
 {
 
-    public function distribute_sell_reward($user_id, $amount, $currency, $trade_id, $trade)
-    {
+    public function distribute_sell_reward($user_id, $amount, $currency, $trade_id, $trade) {
 
         $first_level_amount = (int)($amount * 0.20);
         $second_level_amount = (int)($amount * 0.12);
@@ -91,8 +90,7 @@ class RewardController extends Controller
     }
 
 
-    public function home(Request $request)
-    {
+    public function home(Request $request) {
         $user = $request->user();
         $rewards = Reward::where([
             ['introducer_id', '=', $user->id],
@@ -121,9 +119,8 @@ class RewardController extends Controller
         return view('reward.home', compact('rewards', 'user'));
     }
 
-    public function admin_home()
-    {
-        return view('reward.admin_home');
+    public function admin() {
+        return view('reward.admin');
     }
 
     public function add_new_user(Request $request)

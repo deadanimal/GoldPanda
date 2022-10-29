@@ -3,16 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\FlowController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdvanceController;
 use App\Http\Controllers\EnhanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\TradeController;
 use App\Http\Controllers\StatikController;
-use App\Http\Controllers\SupportTicketController;
-use App\Http\Controllers\BlockchainMintController;
-use App\Http\Controllers\PhysicalMintController;
 
 use App\Models\User;
  
@@ -62,9 +60,9 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function
     Route::get('trade', [TradeController::class, 'admin']);
     Route::get('advance', [AdvanceController::class, 'admin']);
     Route::get('enhance', [EnhanceController::class, 'admin']);    
-    Route::get('profile', [ProfileController::class, 'admin_home']);    
-    Route::get('profile/{id}', [ProfileController::class, 'admin_show']);    
-    Route::put('profile/{id}/kemaskini', [ProfileController::class, 'kemaskini']);
+    Route::get('user', [ProfileController::class, 'admin']);    
+    Route::get('user/{id}', [ProfileController::class, 'satu']);    
+    Route::put('user/{id}/kemaskini', [ProfileController::class, 'kemaskini']);
     Route::get('reward', [RewardController::class, 'admin']);    
     Route::get('invoice', [InvoiceController::class, 'admin']);    
     Route::get('invoice/{id}', [InvoiceController::class, 'satu']);    

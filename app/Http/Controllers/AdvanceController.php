@@ -60,6 +60,35 @@ class AdvanceController extends Controller
         if ($request->ajax()) {
             return DataTables::collection($advances)
                 ->addIndexColumn()
+                ->addColumn('user', function (Advance $advance) {                    
+                    $url = '/user/'. $advance->user_id;
+                    $html_button = $advance->user->name.'('.$advance->user->mobile.')';
+                    return $html_button;  
+                })                  
+                ->addColumn('amount_', function (Advance $advance) {                    
+                    $html_button = 'RM '.number_format((int)($advance->fiat_leased + $advance->interest)  / 100, 2, '.', '');
+                    return $html_button;
+                })                
+                ->addColumn('gold_', function (Advance $advance) {                    
+                    $html_button = number_format((int)$advance->gold_amount / 1000000, 3, '.', '').'g';
+                    return $html_button;
+                })
+                ->addColumn('link', function (Advance $advance) {                    
+                    $url = '/advance/'. $advance->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                    return $html_button;  
+                })   
+                ->addColumn('status', function (Advance $advance) {                    
+                    $html_statement = ucwords($advance->status);
+                    return $html_statement;
+                })                                               
+                ->editColumn('created_at', function (Advance $advance) {
+                    return [
+                        'display' => ($advance->created_at && $advance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($advance->created_at))->format('d F Y') : '',
+                        'timestamp' => ($advance->created_at && $advance->created_at != '0000-00-00 00:00:00') ? with(new Carbon($advance->created_at))->timestamp : ''
+                    ];
+                })
+                ->rawColumns(['gold_', 'amount_', 'link', 'status', 'user'])
                 ->make(true);
         } else {
             return view('advance.admin', compact('advances'));

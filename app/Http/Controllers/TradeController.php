@@ -66,8 +66,57 @@ class TradeController extends Controller
         
     }
 
-    public function admin_home(Request $request) {
-        return view('trade.admin');
+    public function admin(Request $request) {
+        $trades = Trade::all();
+        if ($request->ajax()) {
+            return DataTables::collection($trades)
+                ->addIndexColumn()
+                ->addColumn('user', function (Trade $trade) {                    
+                    $html_button = $trade->user->name.'('.$trade->user->mobile.')';
+                    return $html_button;  
+                })                  
+                ->addColumn('gold_', function (Trade $trade) {
+                    $amount = number_format($trade->gold / 1000000, 3, '.', ',');
+                    if ($trade->buy) {                        
+                        $html_badge = '<span class="badge rounded-pill bg-success">Buy '. $amount .'g</span>';
+                    } else {
+                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell '. $amount .'g</span>';
+                    }
+                    return $html_badge;
+                })
+                ->addColumn('fiat_', function (Trade $trade) {
+                    $amount = number_format($trade->fiat / 100, 2, '.', ',');
+                    // $html_statement = $trade->fiat_currency . 'RM ' . $amount;
+                    $html_statement = 'RM ' . $amount;
+                    return $html_statement;
+                })         
+                ->addColumn('status_', function (Trade $trade) {
+                    $html_statement = ucwords($trade->status);
+                    return $html_statement;
+                })                           
+                ->addColumn('link',function (Trade $trade) {
+                    $url = '/trade/'. $trade->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                    return $html_button;
+                })
+                ->editColumn('created_at', function (Trade $trade) {
+                    return [
+                        'display' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->format('d/m/Y') : '',
+                        'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
+                    ];
+                })
+                                            
+                ->editColumn('created_at', function (Trade $trade) {
+                    return [
+                        'display' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->format('d F Y') : '',
+                        'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
+                    ];
+                })
+                ->rawColumns(['gold_', 'amount_', 'link', 'status', 'user'])
+                ->make(true);
+        } else {
+            return view('trade.admin');
+        }
     }
 
     public function satu(Request $request) {

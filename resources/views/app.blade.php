@@ -133,15 +133,19 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Gold Trade</label>
-									<select class="form-control mb-3" name="nature">
+									<select class="form-control mb-3" name="nature" id="nature" onchange="trade_gold_changed()">
 										<option value=1 selected>Buy Gold</option>
 										<option value=0>Sell Gold</option>
 									</select>									
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Ringgit Malaysia, RM</label>
-                                    <input type="number" class="form-control" name="fiat">
-                                </div>								
+                                    <input type="number" class="form-control" name="fiat" id="fiat" value=100 onchange="trade_gold_changed()">
+                                </div>	
+                                <div class="mb-3">
+                                    <label class="form-label">Gold Amount, g</label>
+                                    <input type="number" class="form-control" name="gold_amount" id="gold_amount" readonly>
+                                </div>																
                                 <button type="submit" class="btn btn-primary">Trade Gold</button>
                             </form>
                         </div>
@@ -234,6 +238,23 @@
 
 	var statement = 'Price of gold as of ' + moment(goldPriceDatetime).format("DD/MM/YYYY h:mma");	
 	document.getElementById("priceDatetime").innerHTML = statement;
+
+	trade_gold_changed();
+    function trade_gold_changed() {
+        var gold_price = {!! $gold_price->price * $myr_price->price / 10000 !!}
+
+		var fiat_amount = document.getElementById('fiat').value;
+		var gold_amount = 0;
+
+		if (document.getElementById('nature').value == 1) {
+			gold_amount = (0.95 * fiat_amount) / gold_price;
+		} else {
+			gold_amount = fiat_amount / gold_price;
+		}
+		document.getElementById('gold_amount').value = gold_amount.toFixed(3);
+		console.log(gold_amount);
+                
+    }	
 </script>
 
 

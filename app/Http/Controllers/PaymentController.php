@@ -11,27 +11,26 @@ use Carbon\Carbon;
 use Alert;
 
 use App\Http\Controllers\RewardController;
-use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\User;
 use App\Models\Enhance;
 use App\Models\Trade;
 
 
-class InvoiceController extends Controller
+class PaymentController extends Controller
 {
 
-    public function senarai(Request $request)
-    {
+    public function senarai(Request $request) {
         $user = $request->user();
         $trades = Trade::where('user_id', $user->id)->get();
         if ($request->ajax()) {
             return DataTables::collection($trades)
                 ->addColumn('gold_', function (Trade $trade) {
                     $amount = number_format($trade->gold / 1000000, 3, '.', ',');
-                    if ($trade->buy) {
-                        $html_badge = '<span class="badge rounded-pill bg-success">Buy ' . $amount . 'g</span>';
+                    if ($trade->buy) {                        
+                        $html_badge = '<span class="badge rounded-pill bg-success">Buy '. $amount .'g</span>';
                     } else {
-                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell ' . $amount . 'g</span>';
+                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell '. $amount .'g</span>';
                     }
                     return $html_badge;
                 })
@@ -40,13 +39,13 @@ class InvoiceController extends Controller
                     // $html_statement = $trade->fiat_currency . 'RM ' . $amount;
                     $html_statement = 'RM ' . $amount;
                     return $html_statement;
-                })
+                })         
                 ->addColumn('status_', function (Trade $trade) {
                     $html_statement = ucwords($trade->status);
                     return $html_statement;
-                })
-                ->addColumn('link', function (Trade $trade) {
-                    $url = '/trade/' . $trade->id;
+                })                           
+                ->addColumn('link',function (Trade $trade) {
+                    $url = '/trade/'. $trade->id;
                     $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
                     return $html_button;
                 })
@@ -56,81 +55,77 @@ class InvoiceController extends Controller
                         'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
                     ];
                 })
-                ->rawColumns(['fiat_', 'gold_', 'link'])
+                ->rawColumns(['fiat_','gold_','link'])
                 ->make(true);
         }
     }
 
-    public function admin(Request $request)
-    {
-        $invoices = Invoice::all();
+    public function admin(Request $request)     {
+        $payments = payment::all();
         if ($request->ajax()) {
-            return DataTables::collection($invoices)
+            return DataTables::collection($payments)
                 ->addIndexColumn()
-                ->addColumn('amount_', function (Invoice $invoice) {
-                    $html_button = 'RM ' . number_format((int)($invoice->amount)  / 100, 2, '.', '');
+                ->addColumn('amount_', function (payment $payment) {
+                    $html_button = 'RM ' . number_format((int)($payment->amount)  / 100, 2, '.', '');
                     return $html_button;
                 })
-                ->addColumn('user', function (Invoice $invoice) {                    
-                    $html_button = $invoice->user->name.'('.$invoice->user->mobile.')';
+                ->addColumn('user', function (payment $payment) {                    
+                    $html_button = $payment->user->name.'('.$payment->user->mobile.')';
                     return $html_button;  
                 })                   
-                ->addColumn('action', function (Invoice $invoice) {
+                ->addColumn('action', function (payment $payment) {
                     $html_button = '-';
-                    if ($invoice->status == "Waiting For Payment") {
-                        $url = '/invoice/'.$invoice->id.'/kemaskini?action=received';
-                        $html_button = '<a href="' . $url . '"><button class="btn btn-success">Received</button></a>';
+                    if ($payment->status == "Pending Transfer") {
+                        $url = '/payment/'.$payment->id.'/kemaskini?action=made';
+                        $html_button = '<a href="' . $url . '"><button class="btn btn-success">Made</button></a>';
                     }
                     return $html_button;
                 })
-                ->addColumn('status', function (Invoice $invoice) {
-                    $html_statement = ucwords($invoice->status);
+                ->addColumn('status', function (payment $payment) {
+                    $html_statement = ucwords($payment->status);
                     return $html_statement;
                 })
-                ->editColumn('created_at', function (Invoice $invoice) {
+                ->editColumn('created_at', function (payment $payment) {
                     return [
-                        'display' => ($invoice->created_at && $invoice->created_at != '0000-00-00 00:00:00') ? with(new Carbon($invoice->created_at))->format('d F Y h:m:s') : '',
-                        'timestamp' => ($invoice->created_at && $invoice->created_at != '0000-00-00 00:00:00') ? with(new Carbon($invoice->created_at))->timestamp : ''
+                        'display' => ($payment->created_at && $payment->created_at != '0000-00-00 00:00:00') ? with(new Carbon($payment->created_at))->format('d F Y') : '',
+                        'timestamp' => ($payment->created_at && $payment->created_at != '0000-00-00 00:00:00') ? with(new Carbon($payment->created_at))->timestamp : ''
                     ];
                 })
                 ->rawColumns([ 'amount_', 'status', 'user', 'action'])
                 ->make(true);
         } else {
-            return view('invoice.admin');
+            return view('payment.admin');
         }
     }
 
-    public function satu(Request $request)
-    {
+    public function satu(Request $request) {
         $id = (int)$request->route('id');
-        $invoice = Invoice::find($id);
-        return view('invoice.satu', compact('invoice'));
-    }
+        $payment = payment::find($id);
+        return view('payment.satu', compact('payment'));
+    }  
 
-    public function kemaskini(Request $request)
-    {
+    public function kemaskini(Request $request) {
         $id = (int)$request->route('id');
-        $invoice = Invoice::find($id);
+        $payment = payment::find($id);
 
-        if ($request->jenis == 'paid') {
-            $invoice->status = 'Paid';
-            $reward_controller = new RewardController;
-            if ($invoice->payable_type == 'App\Models\Trade') {
-                $trade = Trade::find($invoice->payable_id);
+        if($request->jenis == 'paid') {
+            $payment->status = 'Paid';
+            $reward_controller = new RewardController;    
+            if($payment->payable_type == 'App\Models\Trade') {
+                $trade = Trade::find($payment->payable_id);
                 $trade->status = 'Paid';
                 $trade->save();
                 $user = User::find($trade->user_id);
                 $user->balance += $trade->gold;
                 $user->save();
                 $reward_controller->distribute_sell_reward(
-                    $trade->user_id,
-                    $trade->fee,
-                    $trade->fiat_currency,
-                    $trade->id,
-                    1
-                );
+                    $trade->user_id, 
+                    $trade->fee, 
+                    $trade->fiat_currency, 
+                    $trade->id, 
+                    1);                  
             } else {
-                $enhance = Enhance::find($invoice->payable_id);
+                $enhance = Enhance::find($payment->payable_id);
                 $enhance->status = 'Paid';
                 $enhance->save();
                 $user = User::find($enhance->user_id);
@@ -142,32 +137,32 @@ class InvoiceController extends Controller
                 $fee = $fee_purchase + $fee_loan;
 
                 $reward_controller->distribute_sell_reward(
-                    $enhance->user_id,
-                    $fee,
-                    $enhance->currency,
-                    $enhance->id,
-                    0
-                );
+                    $enhance->user_id, 
+                    $fee, 
+                    $enhance->currency, 
+                    $enhance->id, 
+                    0);                  
             }
         } else if ($request->jenis == 'paid-partial') {
-            $invoice->status = 'Partial Payment';
+            $payment->status = 'Partial Payment';
         } else if ($request->jenis == 'paid-over') {
-            $invoice->status = 'Overpaid';
+            $payment->status = 'Overpaid';
         } else {
-            $invoice->status = 'Expired';
-            if ($invoice->payable_type == 'App\Models\Trade') {
-                $trade = Trade::find($invoice->payable_id);
+            $payment->status = 'Expired';
+            if($payment->payable_type == 'App\Models\Trade') {
+                $trade = Trade::find($payment->payable_id);
                 $trade->status = 'Expired';
                 $trade->save();
             } else {
-                $enhance = Enhance::find($invoice->payable_id);
+                $enhance = Enhance::find($payment->payable_id);
                 $enhance->status = 'Expired';
                 $enhance->save();
-            }
+            }            
         }
-        $invoice->save();
+        $payment->save();     
 
 
-        return back();
+        return back();        
     }
+
 }

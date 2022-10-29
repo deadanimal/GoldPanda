@@ -60,9 +60,9 @@ class EnhanceController extends Controller
 
     }
 
-    public function admin_home(Request $request)
+    public function admin(Request $request)
     {
-        return view('enhance.admin_home');
+        return view('enhance.admin');
     }    
 
     public function cipta(Request $request)

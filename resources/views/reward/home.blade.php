@@ -12,7 +12,8 @@
                 <h1 class="header-title">
                     Reward
                 </h1>
-                {{-- <p class="header-subtitle">---</p> --}}
+                <p class="header-subtitle"></p>
+                <button type="button" class="btn btn-warning" onclick="copyCode()">Copy Registration URL</button>
             </div>
 
             <div class="row">
@@ -22,7 +23,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <h4 class="card-title">Promoter</h4>
+                            <h4 class="card-title">Consultant</h4>
                             <p class="card-text">{{ $user->introducer->name }}</p>
 
                             <h4 class="card-title">Code</h4>
@@ -32,8 +33,8 @@
                             <p class="card-text">RM {{ number_format($user->reward / 100, 2, '.', ',') }}</p>
 
                         </div>
-                        @if($user->reward >= 2000)
-                        <a href="/reward/claim" type="button" class="btn btn-primary">Redeem Reward</a>
+                        @if ($user->reward >= 2000)
+                            <a href="/reward/claim" type="button" class="btn btn-primary">Redeem Reward</a>
                         @endif
                     </div>
                 </div>
@@ -72,6 +73,20 @@
 @endsection
 
 @section('script')
+    <script>
+        function copyCode() {
+            var user = {!! auth()->user() !!};
+            var userCode = user['code'];
+            var copyText = "https://easygold.com.my/register/" + userCode;
+            navigator.clipboard.writeText(copyText).then(() => {
+                alert("Consultant URL copied");
+            }, () => {
+                alert("Consultant URL not copied");
+            });
+            
+        }
+    </script>
+
     <script type="text/javascript">
         $(function() {
 

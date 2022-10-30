@@ -15,10 +15,12 @@ use App\Models\Invoice;
 use App\Models\User;
 use App\Models\Enhance;
 use App\Models\Trade;
+use Billplz\Client;
 
 
 class InvoiceController extends Controller
 {
+    
 
     public function senarai(Request $request)
     {
@@ -78,8 +80,8 @@ class InvoiceController extends Controller
                 ->addColumn('action', function (Invoice $invoice) {
                     $html_button = '-';
                     if ($invoice->status == "Waiting For Payment") {
-                        $url = '/invoice/'.$invoice->id.'/kemaskini?action=received';
-                        $html_button = '<a href="' . $url . '"><button class="btn btn-success">Received</button></a>';
+                        $url = '/admin/invoice/'.$invoice->id.'/kemaskini?action=paid';
+                        $html_button = '<a href="' . $url . '"><button class="btn btn-success">Paid</button></a>';
                     }
                     return $html_button;
                 })
@@ -112,7 +114,9 @@ class InvoiceController extends Controller
         $id = (int)$request->route('id');
         $invoice = Invoice::find($id);
 
-        if ($request->jenis == 'paid') {
+        $action = $request->query('action');
+
+        if ($action == 'paid') {
             $invoice->status = 'Paid';
             $reward_controller = new RewardController;
             if ($invoice->payable_type == 'App\Models\Trade') {
@@ -149,9 +153,9 @@ class InvoiceController extends Controller
                     0
                 );
             }
-        } else if ($request->jenis == 'paid-partial') {
+        } else if ($action == 'paid-partial') {
             $invoice->status = 'Partial Payment';
-        } else if ($request->jenis == 'paid-over') {
+        } else if ($action == 'paid-over') {
             $invoice->status = 'Overpaid';
         } else {
             $invoice->status = 'Expired';
@@ -169,5 +173,19 @@ class InvoiceController extends Controller
 
 
         return back();
+    }
+
+    public function billplz_redirect(Request $request) {
+        $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
+        $bill = $billplz->bill();        
+        $data = $bill->redirect($_GET);
+        var_dump($data);
+    }
+
+    public function billplz_callback(Request $request) {
+        $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
+        $bill = $billplz->bill();        
+        $data = $bill->webhook($_POST);
+        var_dump($data);
     }
 }

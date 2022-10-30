@@ -42,7 +42,7 @@
 							<div class="card-body">
 								<div class="m-sm-4">
 	
-                                    <form method="POST" action="{{ route('register') }}">
+                                    <form method="POST" action="/register/{{ $promoter->code }}">
                                         @csrf
                                         <input type="hidden" name="code" value="{{ $promoter->code }}">
 										<div class="mb-3">

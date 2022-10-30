@@ -140,7 +140,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Ringgit Malaysia, RM</label>
-                                    <input type="number" class="form-control" name="fiat" id="fiat" value=100 onchange="trade_gold_changed()">
+                                    <input type="number" class="form-control" name="fiat" id="fiat" value=1 onchange="trade_gold_changed()">
                                 </div>	
                                 <div class="mb-3">
                                     <label class="form-label">Gold Amount, g</label>

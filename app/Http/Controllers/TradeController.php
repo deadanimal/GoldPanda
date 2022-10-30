@@ -20,11 +20,14 @@ use App\Models\Payment;
 
 use Billplz\Client;
 
+$billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
+$bill = $billplz->bill();
 
 class TradeController extends Controller
 {
 
-    public function senarai(Request $request) {
+    public function senarai(Request $request)
+    {
         $user = $request->user();
         $trades = Trade::where('user_id', $user->id)->get();
 
@@ -32,10 +35,10 @@ class TradeController extends Controller
             return DataTables::collection($trades)
                 ->addColumn('gold_', function (Trade $trade) {
                     $amount = number_format($trade->gold / 1000000, 3, '.', ',');
-                    if ($trade->buy) {                        
-                        $html_badge = '<span class="badge rounded-pill bg-success">Buy '. $amount .'g</span>';
+                    if ($trade->buy) {
+                        $html_badge = '<span class="badge rounded-pill bg-success">Buy ' . $amount . 'g</span>';
                     } else {
-                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell '. $amount .'g</span>';
+                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell ' . $amount . 'g</span>';
                     }
                     return $html_badge;
                 })
@@ -44,13 +47,13 @@ class TradeController extends Controller
                     // $html_statement = $trade->fiat_currency . 'RM ' . $amount;
                     $html_statement = 'RM ' . $amount;
                     return $html_statement;
-                })         
+                })
                 ->addColumn('status_', function (Trade $trade) {
                     $html_statement = ucwords($trade->status);
                     return $html_statement;
-                })                           
-                ->addColumn('link',function (Trade $trade) {
-                    $url = '/trade/'. $trade->id;
+                })
+                ->addColumn('link', function (Trade $trade) {
+                    $url = '/trade/' . $trade->id;
                     $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
                     return $html_button;
                 })
@@ -60,27 +63,27 @@ class TradeController extends Controller
                         'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
                     ];
                 })
-                ->rawColumns(['fiat_','gold_','link'])
+                ->rawColumns(['fiat_', 'gold_', 'link'])
                 ->make(true);
         }
-        
     }
 
-    public function admin(Request $request) {
+    public function admin(Request $request)
+    {
         $trades = Trade::all();
         if ($request->ajax()) {
             return DataTables::collection($trades)
                 ->addIndexColumn()
-                ->addColumn('user', function (Trade $trade) {                    
-                    $html_button = $trade->user->name.'('.$trade->user->mobile.')';
-                    return $html_button;  
-                })                  
+                ->addColumn('user', function (Trade $trade) {
+                    $html_button = $trade->user->name . '(' . $trade->user->mobile . ')';
+                    return $html_button;
+                })
                 ->addColumn('gold_', function (Trade $trade) {
                     $amount = number_format($trade->gold / 1000000, 3, '.', ',');
-                    if ($trade->buy) {                        
-                        $html_badge = '<span class="badge rounded-pill bg-success">Buy '. $amount .'g</span>';
+                    if ($trade->buy) {
+                        $html_badge = '<span class="badge rounded-pill bg-success">Buy ' . $amount . 'g</span>';
                     } else {
-                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell '. $amount .'g</span>';
+                        $html_badge = '<span class="badge rounded-pill bg-danger">Sell ' . $amount . 'g</span>';
                     }
                     return $html_badge;
                 })
@@ -89,13 +92,13 @@ class TradeController extends Controller
                     // $html_statement = $trade->fiat_currency . 'RM ' . $amount;
                     $html_statement = 'RM ' . $amount;
                     return $html_statement;
-                })         
+                })
                 ->addColumn('status_', function (Trade $trade) {
                     $html_statement = ucwords($trade->status);
                     return $html_statement;
-                })                           
-                ->addColumn('link',function (Trade $trade) {
-                    $url = '/trade/'. $trade->id;
+                })
+                ->addColumn('link', function (Trade $trade) {
+                    $url = '/trade/' . $trade->id;
                     $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
                     return $html_button;
                 })
@@ -105,7 +108,7 @@ class TradeController extends Controller
                         'timestamp' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->timestamp : ''
                     ];
                 })
-                                            
+
                 ->editColumn('created_at', function (Trade $trade) {
                     return [
                         'display' => ($trade->created_at && $trade->created_at != '0000-00-00 00:00:00') ? with(new Carbon($trade->created_at))->format('d F Y') : '',
@@ -119,16 +122,18 @@ class TradeController extends Controller
         }
     }
 
-    public function satu(Request $request) {
+    public function satu(Request $request)
+    {
         $id = (int)$request->route('id');
         $trade = Trade::find($id);
         return view('trade.satu', compact('trade'));
-    }    
+    }
 
-    public function cipta(Request $request) {
+    public function cipta(Request $request)
+    {
         $user = $request->user();
 
-        if($user->bank_account_verified == false) {
+        if ($user->bank_account_verified == false) {
             Alert::error('Unverified Account', 'Please verify your identity, mobile number, and bank account before you make a trade.');
             return back();
         }
@@ -150,18 +155,18 @@ class TradeController extends Controller
             $fee = $fiat / 20; # 5% fee on buy
             $nett = $fiat - $fee;
             $gold = $nett * 100000000 / $gold_in_ringgit;
-            if($fiat < 2000) {
+            if ($fiat < 100) {
                 Alert::error('Minimum Amount Not Met', 'Gold purchased must be more than RM 20.00');
                 return back();
             }
 
-        /*
+            /*
         BUSINESS LOGIC 
 
         If Sell:
             - 0% on trade
             - Minimum amount is RM100.00
-        */            
+        */
         } else {
             $fee = 0; # 0% fee on sell
             $nett = $fiat;
@@ -171,10 +176,10 @@ class TradeController extends Controller
                 Alert::error('Sell Gold', 'Insuffiecient gold balance to sell gold');
                 return back();
             }
-            if($fiat < 10000) {
+            if ($fiat < 10000) {
                 Alert::error('Minimum Amount Not Met', 'Gold sold must be more than RM 100.00');
                 return back();
-            }            
+            }
         }
 
         $trade = new Trade;
@@ -193,32 +198,54 @@ class TradeController extends Controller
         $trade->save();
 
         if ($trade->buy) {
-            Alert::success('Gold Bought', 'Gold purchase has successfully been created. Please proceed to make payment for the invoice');
-            $invoice = New Invoice;
+            // Alert::success('Gold Bought', 'Gold purchase has successfully been created. Please proceed to make payment for the invoice');
+            $invoice = new Invoice;
             $invoice->payable_type = 'App\Models\Trade';
             $invoice->payable_id = $trade->id;
             $invoice->user_id = $user->id;
             $invoice->status = 'Waiting For Payment';
             $invoice->amount = $trade->fiat;
             $invoice->currency = $trade->fiat_currency;
+
+            $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
+            $bill = $billplz->bill();  
+            $response = $bill->create(
+                'tzuppys4',
+                $user->email,
+                $user->mobile,
+                'Easy Gold',
+                \Duit\MYR::given($trade->fiat),
+                'https://easygold.com.my/billplz-callback',
+                'Easy Gold is an advanced gold platform',
+                [
+                    "reference_1_label" => "Gold Amount",
+                    "reference_1" => number_format(($gold / 1000000),2,".",","),
+                    "redirect_url" => 'https://easygold.com.my/billplz-redirect',
+                    "callback_url" => 'https://easygold.com.my/billplz-callback',
+                ]
+            );
+
+            $billplz_data = $response->toArray();
+
+            $invoice->billplz_id = $billplz_data['id'];
             $invoice->save();
+            return redirect($billplz_data['url']);
         } else {
             $user->balance -= $trade->gold;
             $user->save();
             Alert::success('Gold Sold', 'Gold  has successfully been sold. Please wait to receive the pay-out');
-            $payment = New Payment;
+            $payment = new Payment;
             $payment->payable_type = 'App\Models\Trade';
             $payment->payable_id = $trade->id;
             $payment->user_id = $user->id;
             $payment->status = 'Pending Transfer';
             $payment->amount = $trade->fiat;
-            $payment->currency = $trade->fiat_currency;            
+            $payment->currency = $trade->fiat_currency;
             $payment->save();
         }
 
         return back();
     }
-
 }
 
 

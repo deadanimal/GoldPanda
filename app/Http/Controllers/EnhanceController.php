@@ -30,9 +30,13 @@ class EnhanceController extends Controller
             return DataTables::collection($enhances)
                 ->addIndexColumn()
                 ->addColumn('amount_', function (Enhance $enhance) {                    
-                    $html_button = 'RM '.number_format((int)($enhance->loan + $enhance->interest)  / 100, 2, '.', '');
+                    $html_button = 'RM '.number_format((int)($enhance->capital)  / 100, 2, '.', '');
                     return $html_button;
-                })                
+                })  
+                ->addColumn('booked_', function (Enhance $enhance) {                    
+                    $html_button = 'RM '.number_format((int)($enhance->capital + $enhance->loan)  / 100, 2, '.', '');
+                    return $html_button;
+                })                                 
                 ->addColumn('gold_', function (Enhance $enhance) {                    
                     $html_button = number_format((int)$enhance->amount / 1000000, 3, '.', '').'g';
                     return $html_button;
@@ -69,7 +73,7 @@ class EnhanceController extends Controller
     {        
 
         $validatedData = $request->validate([
-            'fiat_amount' => ['required', 'gte:100.00', 'lte:20000.00'],
+            'fiat_amount' => ['required', 'gte:20.00', 'lte:20000.00'],
         ]);        
 
         $fiat_flow = $request->fiat_amount * 100; // in cent
@@ -93,8 +97,6 @@ class EnhanceController extends Controller
         $enhance->leverage = (int)$request->leverage;
         $enhance->currency = 'MYR';
         $enhance->status = 'Waiting For Payment';
-        $enhance->interest = (int)($fiat_leased/20);
-        $enhance->price = (int)($gold_price * $myr_price /100);
         $enhance->user_id = $user_id;
         $enhance->save();
 

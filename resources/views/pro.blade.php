@@ -95,11 +95,11 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Booking Deposit, RM</label>
-                                    <input type="number" class="form-control" name="fiat_amount" value=200 min=200 step="100" max="50000" onchange="enhance_gold_changed()">
+                                    <input type="number" class="form-control" name="fiat_amount" id="fiat_amount" value=200 min=200 step=100 max=50000 onchange="enhance_gold_changed()">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Multiplier</label>
-                                    <input type="number" class="form-control" name="leverage" value=1 min=1 step="1" onchange="enhance_gold_changed()"
+                                    <input type="number" class="form-control" name="leverage" id="leverage" value=1 min=1 step=1 max=9 onchange="enhance_gold_changed()"
                                         max="19">
                                 </div>
                                 <div class="mb-3">
@@ -122,7 +122,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">List of Enhances</h5>
+                            <h5 class="card-title">List of bookings</h5>
                             {{-- <h6 class="card-subtitle text-muted">- - -</h6> --}}
                         </div>
                         <div class="card-body">
@@ -131,7 +131,8 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Gold</th>
-                                        <th>Payment</th>
+                                        <th>Deposit</th>
+                                        <th>Booking</th>
                                         <th>Status</th>
                                         <th></th>
                                     </tr>
@@ -166,8 +167,11 @@
         enhance_gold_changed();
         function enhance_gold_changed() {
             var gold_price = {!! $gold_price->price * $myr_price->price / 10000 !!}
-            var gold_amount = document.getElementById('gold_amount').value;
-            document.getElementById('amount_enhanced').value = (0.85 * gold_amount * gold_price).toFixed(2);            
+            var fiat_amount = parseInt(document.getElementById('fiat_amount').value);
+            var leverage = parseInt(document.getElementById('leverage').value);
+            var total_ = (leverage + 1) * fiat_amount;
+            document.getElementById('amount_booked').value = total_
+            document.getElementById('gold_booked').value = (.95*total_ / gold_price).toFixed(3);
         }        
     </script>
 
@@ -236,6 +240,10 @@
                         data: 'amount_',
                         name: 'amount_'
                     },
+                    {
+                        data: 'booked_',
+                        name: 'booked_'
+                    },                    
                     {
                         data: 'status',
                         name: 'status'

@@ -81,6 +81,7 @@ class EnhanceController extends Controller
 
         $validatedData = $request->validate([
             'fiat_amount' => ['required', 'gte:20.00', 'lte:20000.00'],
+            'leverage' => ['required', 'gte:1', 'lte:10'],
         ]);        
 
         $fiat_flow = $request->fiat_amount * 100; // in cent

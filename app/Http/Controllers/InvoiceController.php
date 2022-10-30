@@ -183,8 +183,9 @@ class InvoiceController extends Controller
         $bill_id = $data['id'];
         $bill_paid = $data['paid'];
         $bill_paid_at = $data['paid_at'];
+        var_dump($bill_paid_at);
         $bill_x_signature = $data['x_signature'];
-        $bill_string = 'billplzid'.$bill_id.'|billplzpaid_at'.$bill_paid_at->format('Y-m-d H:i:s').' +0800|billplzpaid'.$bill_paid;
+        $bill_string = 'billplzid'.$bill_id.'|billplzpaid_at'.$bill_paid_at->format('Y-m-d H:i:s').'|billplzpaid'.$bill_paid;
         $bill_self_compute = hash_hmac('sha256', $bill_string, env('BILLPLZ_X_SIGNATURE'));
         if($bill_x_signature == $bill_self_compute) {
             if ($bill_paid == 'true') {
@@ -237,8 +238,7 @@ class InvoiceController extends Controller
     public function billplz_callback(Request $request) {
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
         $bill = $billplz->bill();        
-        $data = $bill->webhook($_POST);
-        var_dump($data);
+        $data = $bill->webhook($_POST);        
         return response('', 200);
     }
 }

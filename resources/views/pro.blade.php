@@ -95,12 +95,14 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label">Booking Deposit, RM</label>
-                                    <input type="number" class="form-control" name="fiat_amount" id="fiat_amount" value=200 min=200 step=100 max=50000 onchange="enhance_gold_changed()">
+                                    <input type="number" class="form-control" name="fiat_amount" id="fiat_amount" value=20.00 min=20.00 step=10 max=50000.00 onchange="enhance_gold_changed()">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Multiplier</label>
-                                    <input type="number" class="form-control" name="leverage" id="leverage" value=1 min=1 step=1 max=9 onchange="enhance_gold_changed()"
-                                        max="19">
+                                    <select class="form-control mb-3" name="leverage" id="leverage" onchange="enhance_gold_changed()">
+										<option value=4 selected>5X Package</option>
+										<option value=9>10X Package</option>
+									</select>                                    
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Amount Booked, RM</label>
@@ -170,7 +172,7 @@
             var fiat_amount = parseInt(document.getElementById('fiat_amount').value);
             var leverage = parseInt(document.getElementById('leverage').value);
             var total_ = (leverage + 1) * fiat_amount;
-            document.getElementById('amount_booked').value = total_
+            document.getElementById('amount_booked').value = total_.toFixed(2);
             document.getElementById('gold_booked').value = (.95*total_ / gold_price).toFixed(3);
         }        
     </script>

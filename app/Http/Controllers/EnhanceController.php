@@ -13,12 +13,13 @@ use Illuminate\Support\Facades\Redirect;
 
 use App\Http\Controllers\RewardController;
 
+use App\Models\User;
 use App\Models\Enhance;
 use App\Models\GoldPrice;
 use App\Models\ForexPrice;
 use App\Models\Invoice;
 use App\Models\Payment;
-
+use Billplz\Client;
 class EnhanceController extends Controller
 {
     public function home(Request $request)
@@ -85,6 +86,7 @@ class EnhanceController extends Controller
         $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first()->price;
 
         $user_id = $request->user()->id;
+        $user = User::find($user_id);
 
         $fiat_nett = ($fiat_flow + $fiat_leased) - $fiat_fee;
         $gold_amount = $fiat_nett * 100000000 / ($gold_price * $myr_price);
@@ -107,10 +109,32 @@ class EnhanceController extends Controller
         $invoice->status = 'Waiting For Payment';
         $invoice->amount = $enhance->capital;
         $invoice->currency = $enhance->currency;
-        $invoice->save();        
 
-        Alert::success('Gold Booked', 'Gold has successfully been booked. Please proceed to make payment for the invoice');
-        return back();
+        $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
+        $bill = $billplz->bill();  
+
+        $billplz_statement = 'Booking of '.number_format(($enhance->amount / 1000000), 3, ".", ",").' gram of gold at the price of RM'.number_format(($gold_price * $myr_price / 10000), 2, ".", ",").' per gram. Fee imposed on the purchased is RM'.number_format(($fiat_fee / 100), 2, ".", ",");
+        $response = $bill->create(
+            'tzuppys4',
+            $user->email,
+            $user->mobile,
+            'Easy Gold - Booking of Gold',
+            \Duit\MYR::given($enhance->capital),
+            'https://easygold.com.my/billplz-callback',
+            $billplz_statement,
+            [
+                "reference_1_label" => "Gold Amount",
+                "reference_1" => number_format(($enhance->amount / 1000000),3,".",","),
+                "redirect_url" => 'https://easygold.com.my/billplz-redirect',
+                "callback_url" => 'https://easygold.com.my/billplz-callback',
+            ]
+        );
+
+        $billplz_data = $response->toArray();
+
+        $invoice->billplz_id = $billplz_data['id'];
+        $invoice->save();
+        return redirect($billplz_data['url']);
     }    
 
     public function satu(Request $request)

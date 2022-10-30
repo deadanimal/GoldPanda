@@ -53,9 +53,15 @@ class TradeController extends Controller
                     return $html_statement;
                 })
                 ->addColumn('link', function (Trade $trade) {
-                    $url = '/trade/' . $trade->id;
-                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
-                    return $html_button;
+                    if ($trade->status == "Waiting For Payment") {
+                        $url = "https://billplz.com/bills/".$trade->invoice->billplz_id;
+                        $html_button = '<a href="' . $url . '"><button class="btn btn-primary">Pay</button></a>';
+                        return $html_button;
+                    } else {
+                        $url = '/trade/' . $trade->id;
+                        $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                        return $html_button;
+                    }
                 })
                 ->editColumn('created_at', function (Trade $trade) {
                     return [
@@ -155,7 +161,7 @@ class TradeController extends Controller
             $fee = $fiat / 20; # 5% fee on buy
             $nett = $fiat - $fee;
             $gold = $nett * 100000000 / $gold_in_ringgit;
-            if ($fiat < 100) {
+            if ($fiat < 2000) {
                 Alert::error('Minimum Amount Not Met', 'Gold purchased must be more than RM 20.00');
                 return back();
             }
@@ -207,19 +213,21 @@ class TradeController extends Controller
             $invoice->amount = $trade->fiat;
             $invoice->currency = $trade->fiat_currency;
 
+            $billplz_statement = 'Purchase of '.number_format(($gold / 1000000), 3, ".", ",").' gram of gold at the price of RM'.number_format(($gold_in_ringgit / 10000), 2, ".", ",").' per gram. Fee imposed on the purchased is RM'.number_format(($trade->fee / 100), 2, ".", ",");
+
             $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
-            $bill = $billplz->bill();  
+            $bill = $billplz->bill();
             $response = $bill->create(
                 'tzuppys4',
                 $user->email,
                 $user->mobile,
-                'Easy Gold',
+                'Easy Gold - Purchase of Gold',
                 \Duit\MYR::given($trade->fiat),
                 'https://easygold.com.my/billplz-callback',
-                'Easy Gold is an advanced gold platform',
+                $billplz_statement,
                 [
                     "reference_1_label" => "Gold Amount",
-                    "reference_1" => number_format(($gold / 1000000),2,".",","),
+                    "reference_1" => number_format(($gold / 1000000), 3, ".", ","),
                     "redirect_url" => 'https://easygold.com.my/billplz-redirect',
                     "callback_url" => 'https://easygold.com.my/billplz-callback',
                 ]

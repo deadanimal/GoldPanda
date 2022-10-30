@@ -91,11 +91,24 @@ class RewardController extends Controller
             return DataTables::collection($rewards)
                 ->addColumn('buyer_', function (Reward $reward) {
                     $url = '/user/' . $reward->buyer->id;
-                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">'.$reward->buyer->name.'</button></a>';
+                    $html_button = $reward->buyer->name;
                     return $html_button;
                 })
+                ->addColumn('level', function (Reward $reward) {
+                    if($reward->level == 1) {
+                        $html_statement = 'First downline';
+                    } else if($reward->level == 2) {
+                        $html_statement = 'Second downline';
+                    } else if($reward->level == 3) {
+                        $html_statement = 'Third downline';
+                    }  else {
+                        $html_statement = 'Profit';
+                    }
+
+                    return $html_statement;
+                })                   
                 ->addColumn('amount_', function (Reward $reward) {
-                    $html_statement = 'RM '.number_format($reward->amount / 100, 3, '.', ','); ;
+                    $html_statement = 'RM '.number_format($reward->amount / 100, 2, '.', ','); ;
                     return $html_statement;
                 })                
                 ->editColumn('created_at', function (reward $reward) {
@@ -104,7 +117,7 @@ class RewardController extends Controller
                         'timestamp' => ($reward->created_at && $reward->created_at != '0000-00-00 00:00:00') ? with(new Carbon($reward->created_at))->timestamp : ''
                     ];
                 })
-                ->rawColumns(['buyer_','amount_'])
+                ->rawColumns(['buyer_','amount_', 'level'])
                 ->make(true);
         }
         return view('reward.home', compact('rewards', 'user'));

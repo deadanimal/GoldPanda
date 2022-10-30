@@ -187,5 +187,6 @@ class InvoiceController extends Controller
         $bill = $billplz->bill();        
         $data = $bill->webhook($_POST);
         var_dump($data);
+        return response('', 200);
     }
 }

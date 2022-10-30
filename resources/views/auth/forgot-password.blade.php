@@ -6,11 +6,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="Modern and advanced gold market">
-	<meta name="author" content="Gold Panda">
+	<meta name="author" content="Easy Gold">
     <link rel="icon" type="image/png" href="/img/gold-bars.png" />
 
-	<!-- <title>Gold Panda - @yield('title')</title> -->
-    <title>Gold Panda</title>
+	<!-- <title>Easy Gold - @yield('title')</title> -->
+    <title>Easy Gold</title>
 
 	<link href="{{ URL::asset('css/modern.css') }}" rel="stylesheet">
 

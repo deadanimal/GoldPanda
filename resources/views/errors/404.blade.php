@@ -6,11 +6,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="Modern and advanced gold market">
-	<meta name="author" content="Gold Panda">
+	<meta name="author" content="Easy Gold">
     <link rel="icon" type="image/png" href="/img/gold-bars.png" />
 
-	<!-- <title>Gold Panda - @yield('title')</title> -->
-    <title>Gold Panda</title>
+	<!-- <title>Easy Gold - @yield('title')</title> -->
+    <title>Easy Gold</title>
 
 	<link href="{{ URL::asset('css/modern.css') }}" rel="stylesheet">
 
@@ -32,7 +32,7 @@
 							<h1 class="display-1 fw-bold">404</h1>
 							<p class="h1">Page not found.</p>
 							<p class="h2 fw-normal mt-3 mb-4">The page you are looking for might have been removed.</p>
-							<a href="/" class="btn btn-primary btn-lg">Return to website</a>
+							<a href="/dashboard" class="btn btn-primary btn-lg">Return to website</a>
 						</div>
 
 					</div>

@@ -18,26 +18,27 @@
             <div class="row">
 
 
-                <div class="col-xl-4">
+                <div class="col-xl-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Level</h5>
-                            <p class="card-text">{{ $user->level }}</p>
 
-                            <h5 class="card-title">Promoter</h5>
+                            <h4 class="card-title">Promoter</h4>
                             <p class="card-text">{{ $user->introducer->name }}</p>
 
-                            <h5 class="card-title">Code</h5>
+                            <h4 class="card-title">Code</h4>
                             <p class="card-text">{{ $user->code }}</p>
 
-                            <h5 class="card-title">Balance</h5>
+                            <h4 class="card-title">Balance</h4>
                             <p class="card-text">RM {{ number_format($user->reward / 100, 2, '.', ',') }}</p>
 
                         </div>
+                        @if($user->reward >= 2000)
+                        <a href="/reward/claim" type="button" class="btn btn-primary">Redeem Reward</a>
+                        @endif
                     </div>
                 </div>
 
-                <div class="col-xl-8">
+                <div class="col-xl-9">
 
                     <div class="card">
                         <div class="card-header">

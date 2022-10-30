@@ -31,11 +31,11 @@ class EnhanceController extends Controller
             return DataTables::collection($enhances)
                 ->addIndexColumn()
                 ->addColumn('amount_', function (Enhance $enhance) {                    
-                    $html_button = 'RM '.number_format((int)($enhance->capital)  / 100, 2, '.', '');
+                    $html_button = 'RM '.number_format((int)($enhance->capital)  / 100, 2, '.', ',');
                     return $html_button;
                 })  
-                ->addColumn('booked_', function (Enhance $enhance) {                    
-                    $html_button = 'RM '.number_format((int)($enhance->capital + $enhance->loan)  / 100, 2, '.', '');
+                ->addColumn('booked_', function (Enhance $enhance) {                
+                    $html_button = 'RM '.number_format((int)($enhance->capital + $enhance->loan)  / 100, 2, '.', ',');
                     return $html_button;
                 })                                 
                 ->addColumn('gold_', function (Enhance $enhance) {                    
@@ -43,9 +43,15 @@ class EnhanceController extends Controller
                     return $html_button;
                 })
                 ->addColumn('link', function (Enhance $enhance) {                    
-                    $url = '/enhance/'. $enhance->id;
-                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
-                    return $html_button;  
+                    if ($enhance->status == "Waiting For Payment") {
+                        $url = "https://billplz.com/bills/".$enhance->invoice->billplz_id;
+                        $html_button = '<a href="' . $url . '"><button class="btn btn-primary">Pay</button></a>';
+                        return $html_button;
+                    } else {
+                        $url = '/enhance/'. $enhance->id;
+                        $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                        return $html_button;  
+                    }                    
                 })   
                 ->addColumn('status', function (Enhance $enhance) {                    
                     $html_statement = ucwords($enhance->status);
@@ -113,6 +119,7 @@ class EnhanceController extends Controller
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
         $bill = $billplz->bill();  
 
+        $datetime = new DateTime('tomorrow');
         $billplz_statement = 'Booking of '.number_format(($enhance->amount / 1000000), 3, ".", ",").' gram of gold at the price of RM'.number_format(($gold_price * $myr_price / 10000), 2, ".", ",").' per gram. Fee imposed on the purchased is RM'.number_format(($fiat_fee / 100), 2, ".", ",");
         $response = $bill->create(
             'tzuppys4',
@@ -125,6 +132,7 @@ class EnhanceController extends Controller
             [
                 "reference_1_label" => "Gold Amount",
                 "reference_1" => number_format(($enhance->amount / 1000000),3,".",","),
+                "due_at" => new \DateTime($datetime->format('Y-m-d')),
                 "redirect_url" => 'https://easygold.com.my/billplz-redirect',
                 "callback_url" => 'https://easygold.com.my/billplz-callback',
             ]

@@ -213,6 +213,7 @@ class TradeController extends Controller
             $invoice->amount = $trade->fiat;
             $invoice->currency = $trade->fiat_currency;
 
+            $datetime = new DateTime('tomorrow');
             $billplz_statement = 'Purchase of '.number_format(($gold / 1000000), 3, ".", ",").' gram of gold at the price of RM'.number_format(($gold_in_ringgit / 10000), 2, ".", ",").' per gram. Fee imposed on the purchased is RM'.number_format(($trade->fee / 100), 2, ".", ",");
 
             $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
@@ -228,6 +229,7 @@ class TradeController extends Controller
                 [
                     "reference_1_label" => "Gold Amount",
                     "reference_1" => number_format(($gold / 1000000), 3, ".", ","),
+                    "due_at" => new \DateTime($datetime->format('Y-m-d')),
                     "redirect_url" => 'https://easygold.com.my/billplz-redirect',
                     "callback_url" => 'https://easygold.com.my/billplz-callback',
                 ]

@@ -75,18 +75,35 @@
                                 <h6 class="card-subtitle text-muted">Change your password to a new password</h6>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="/profile/password">
-                                    @csrf
-                                    {{-- <div class="mb-3">
+                                @if ($user->hasRole('super-admin'))
+                                    <form method="POST" action="/admin/user/{{$user->id}}/password">
+                                        @method('PUT')
+                                        @csrf
+                                        {{-- <div class="mb-3">
                                         <label class="form-label">Old Password</label>
                                         <input type="password" class="form-control" name="old_password">
                                     </div> --}}
-                                    <div class="mb-3">
-                                        <label class="form-label">New Password</label>
-                                        <input type="password" class="form-control" name="new_password">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Change Password</button>
-                                </form>
+                                        <div class="mb-3">
+                                            <label class="form-label">New Password</label>
+                                            <input type="password" class="form-control" name="new_password">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                    </form>
+                                @else
+                                    <form method="POST" action="/profile/password">
+                                        @method('PUT')
+                                        @csrf
+                                        {{-- <div class="mb-3">
+                                        <label class="form-label">Old Password</label>
+                                        <input type="password" class="form-control" name="old_password">
+                                    </div> --}}
+                                        <div class="mb-3">
+                                            <label class="form-label">New Password</label>
+                                            <input type="password" class="form-control" name="new_password">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
 
@@ -102,25 +119,29 @@
                                     <h6 class="card-subtitle text-muted">Change your password to a new password</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="/user/{{$user->id}}/kemaskini">
+                                    <form method="POST" action="/admin/user/{{ $user->id }}/kemaskini">
                                         @method('PUT')
                                         @csrf
                                         <div class="row">
                                             <div class="mb-3 col-6">
                                                 <label class="form-label">Identity Number</label>
-                                                <input type="text" class="form-control" name="ic" value="{{$user->ic}}">
+                                                <input type="text" class="form-control" name="ic"
+                                                    value="{{ $user->ic }}">
                                             </div>
                                             <div class="mb-3 col-6">
                                                 <label class="form-label">Mobile Number</label>
-                                                <input type="text" class="form-control" name="mobile" value="{{$user->mobile}}">
+                                                <input type="text" class="form-control" name="mobile"
+                                                    value="{{ $user->mobile }}">
                                             </div>
                                             <div class="mb-3 col-6">
                                                 <label class="form-label">Bank</label>
-                                                <input type="text" class="form-control" name="bank_account_name" value="{{$user->bank_account_name}}">
+                                                <input type="text" class="form-control" name="bank_account_name"
+                                                    value="{{ $user->bank_account_name }}">
                                             </div>
                                             <div class="mb-3 col-6">
                                                 <label class="form-label">Bank Account Number</label>
-                                                <input type="number" class="form-control" name="bank_account_number" value="{{$user->bank_account_number}}">
+                                                <input type="number" class="form-control" name="bank_account_number"
+                                                    value="{{ $user->bank_account_number }}">
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Update Profile</button>

@@ -47,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('enhance/{id}/kemaskini', [EnhanceController::class, 'kemaskini']);
     
     Route::get('profile', [ProfileController::class, 'satu']);
-    Route::post('profile/password', [ProfileController::class, 'change_password']);    
+    Route::put('profile/password', [ProfileController::class, 'change_password']);    
 
     Route::get('user/{id}', [ProfileController::class, 'satu_user']);    
 
@@ -68,13 +68,14 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->group(function
     Route::get('user', [ProfileController::class, 'admin']);    
     Route::get('user/{id}', [ProfileController::class, 'satu']);    
     Route::put('user/{id}/kemaskini', [ProfileController::class, 'kemaskini']);
+    Route::put('user/{id}/password', [ProfileController::class, 'kemaskini_password']);
     Route::get('reward', [RewardController::class, 'admin']);    
     Route::get('invoice', [InvoiceController::class, 'admin']);    
     Route::get('invoice/{id}', [InvoiceController::class, 'satu']);    
-    Route::get('invoice/{id}/kemaskini', [InvoiceController::class, 'kemaskini']);    
+    Route::put('invoice/{id}/kemaskini', [InvoiceController::class, 'kemaskini']);    
     Route::get('payment', [PaymentController::class, 'admin']);    
     Route::get('payment/{id}', [PaymentController::class, 'satu']);     
-    Route::get('payment/{id}/kemaskini', [PaymentController::class, 'kemaskini']);     
+    Route::put('payment/{id}/kemaskini', [PaymentController::class, 'kemaskini']);     
     
     
 });

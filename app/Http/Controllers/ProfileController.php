@@ -59,6 +59,28 @@ class ProfileController extends Controller
         return view('profile.satu', compact('user'));
     }
 
+    public function kemaskini(Request $request) {
+        $currrent_user = $request->user();
+        $id = (int)$request->route('id');
+        if($currrent_user->hasRole('super-admin') && $id) {
+            $user = User::find($id);
+            $user->ic = $request->ic;
+            $user->ic_verified = true;
+            $user->ic_verified_at = now();   
+            $user->mobile = $request->mobile;
+            $user->mobile_verified = true;
+            $user->mobile_verified_at = now();    
+            $user->bank_account_name = $request->bank_account_name;
+            $user->bank_account_number = $request->bank_account_number;
+            $user->bank_account_verified = true;
+            $user->bank_account_verified_at = now(); 
+            $user->save();                               
+        } else {
+            $user = User::find($currrent_user->id);
+        }
+        return view('profile.satu', compact('user'));
+    }    
+
     public function change_password(Request $request) {
         $user = $request->user();
         $request->validate([
@@ -71,6 +93,21 @@ class ProfileController extends Controller
         return back();
         
     }   
+
+    public function kemaskini_password(Request $request) {
+        $currrent_user = $request->user();
+        $id = (int)$request->route('id');
+        $user = User::find($id);
+        $request->validate([
+            'new_password' => ['required', Rules\Password::defaults()],
+        ]);
+        $user->password = Hash::make($request->new_password);        
+        Alert::success('Password', "User's password has been successfully changed");
+        $user->save();
+        
+        return back();
+        
+    }     
 
     public function daftar(Request $request) {
         $code = $request->route('code');

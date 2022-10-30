@@ -42,7 +42,6 @@ class RewardController extends Controller
 
         $first_reward = new Reward;
         $first_reward->amount = $first_level_amount;
-        $first_introducer->reward += $first_level_amount;
         $first_reward->currency = $currency;
         $first_reward->level = 1;
         $first_reward->tradable_id = $trade_id;
@@ -50,10 +49,11 @@ class RewardController extends Controller
         $first_reward->introducer_id = $first_introducer->id;
         $first_reward->buyer_id = $user_id;
         $first_reward->save();
+        $first_introducer->reward += $first_level_amount;
+        $first_introducer->save();
 
         $second_reward = new Reward;
-        $second_reward->amount = $second_level_amount;
-        $second_introducer->reward += $second_level_amount;
+        $second_reward->amount = $second_level_amount;        
         $second_reward->currency = $currency;
         $second_reward->level = 2;
         $second_reward->tradable_id = $trade_id;
@@ -61,10 +61,11 @@ class RewardController extends Controller
         $second_reward->introducer_id = $second_introducer->id;
         $second_reward->buyer_id = $user_id;
         $second_reward->save();
+        $second_introducer->reward += $second_level_amount;
+        $second_introducer->save();
 
         $third_reward = new Reward;
         $third_reward->amount = $third_level_amount;
-        $third_introducer->reward += $third_level_amount;
         $third_reward->currency = $currency;
         $third_reward->level = 3;
         $third_reward->tradable_id = $trade_id;
@@ -72,10 +73,11 @@ class RewardController extends Controller
         $third_reward->introducer_id = $third_introducer->id;
         $third_reward->buyer_id = $user_id;
         $third_reward->save();
+        $third_introducer->reward += $third_level_amount;
+        $third_introducer->save();
 
         $profit = new Reward;
         $profit->amount = $profit_amount;
-        $profit_person->reward += $profit_amount;
         $profit->currency = $currency;
         $profit->level = 0;
         $profit->tradable_id = $trade_id;
@@ -83,7 +85,10 @@ class RewardController extends Controller
         $profit->introducer_id = $profit_person->id;
         $profit->buyer_id = $user_id;
         $profit->save();
+        $profit_person->reward += $profit_amount;
+        $profit_person->save();
     }
+    
 
 
     public function home(Request $request) {

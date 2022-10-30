@@ -23,12 +23,6 @@ use App\Models\User;
 class ProfileController extends Controller
 {
 
-    public function home(Request $request) {
-        $user_id = $request->user()->id;
-        $user = User::find($user_id);
-        return view('profile.home', compact('user'));
-    }
-
     public function admin(Request $request) {
         $users = User::all();
         if ($request->ajax()) {
@@ -42,23 +36,12 @@ class ProfileController extends Controller
                     $html_statement = $user->mobile;
                     return $html_statement;
                 })      
-                ->addColumn('balance', function (user $user) {
-                    $html_statement = $user->balance;
-                    return $html_statement;
-                })   
-                ->addColumn('advanced', function (user $user) {
-                    $html_statement = $user->advanced;
-                    return $html_statement;
-                })  
-                ->addColumn('booked', function (user $user) {
-                    $html_statement = $user->booked;
-                    return $html_statement;
-                })  
-                ->addColumn('reward', function (user $user) {
-                    $html_statement = $user->reward;
-                    return $html_statement;
-                })                                                                                          
-                ->rawColumns([ 'name', 'mobile', 'balance', 'advanced', 'booked', 'reward'])
+                ->addColumn('link', function (user $user) {
+                    $url = '/admin/user/'.$user->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                    return $html_button;
+                })                                                                                            
+                ->rawColumns([ 'name', 'mobile', 'link'])
                 ->make(true);
         } else {
             return view('profile.admin');
@@ -66,8 +49,13 @@ class ProfileController extends Controller
     }
 
     public function satu(Request $request) {
+        $currrent_user = $request->user();
         $id = (int)$request->route('id');
-        $user = User::find($id);
+        if($currrent_user->hasRole('super-admin') && $id) {
+            $user = User::find($id);
+        } else {
+            $user = User::find($currrent_user->id);
+        }
         return view('profile.satu', compact('user'));
     }
 

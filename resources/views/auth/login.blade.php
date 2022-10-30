@@ -29,7 +29,7 @@
 					<div class="d-table-cell align-middle">
 
 						<div class="text-center mt-4">
-							<h1 class="h2">Gold Panda</h1>
+							<h1 class="h2">Easy Gold</h1>
 							<p class="lead">
                             Modern Gold Platform
 

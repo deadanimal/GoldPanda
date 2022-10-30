@@ -25,8 +25,6 @@
                                     <tr>
 										<th>Name</th>
                                         <th>Mobile</th>
-                                        <th>Balance</th>
-                                        <th></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -70,16 +68,8 @@
                         name: 'mobile'
                     },
                     {
-                        data: 'balance',
-                        name: 'balance'
-                    },
-                    {
-                        data: 'booked',
-                        name: 'booked'
-                    },
-                    {
-                        data: 'advanced',
-                        name: 'advanced'
+                        data: 'link',
+                        name: 'link'
                     },
 
                 ]

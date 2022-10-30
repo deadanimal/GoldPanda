@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('enhance/{id}', [EnhanceController::class, 'satu']);
     Route::get('enhance/{id}/kemaskini', [EnhanceController::class, 'kemaskini']);
     
-    Route::get('profile', [ProfileController::class, 'home']);
+    Route::get('profile', [ProfileController::class, 'satu']);
     Route::post('profile/password', [ProfileController::class, 'change_password']);    
 
     Route::get('user/{id}', [ProfileController::class, 'satu_user']);    

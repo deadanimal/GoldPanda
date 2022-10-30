@@ -30,19 +30,8 @@ class RewardController extends Controller
         $profit_amount = (int)($amount * 0.60);
 
         $first_introducer = User::where('introducer_id', $user->introducer_id)->first();
-        dd($first_introducer);
-
-        if (User::where('introducer_id', $first_introducer->introducer_id)->exists()) {
-            $second_introducer = User::where('introducer_id', $first_introducer->introducer_id)->first();
-        } else {
-            $second_introducer = User::where('code', 'SAUFIA')->first();
-        }
-
-        if (User::where('introducer_id', $second_introducer->introducer_id)->exists()) {
-            $third_introducer = User::where('introducer_id', $second_introducer->introducer_id)->first();
-        } else {
-            $third_introducer = User::where('code', 'SAUFIA')->first();
-        }
+        $second_introducer = User::where('introducer_id', $first_introducer->introducer_id)->first();
+        $third_introducer = User::where('introducer_id', $second_introducer->introducer_id)->first();
 
         if ($trade == 1) {
             $tradable_type = 'App\Models\Trade';

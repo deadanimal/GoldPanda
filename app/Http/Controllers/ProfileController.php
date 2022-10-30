@@ -118,7 +118,7 @@ class ProfileController extends Controller
             Alert::error('No Code Found', 'System is unable to find the registration code so system chose random consultant');           
         }
         Alert::success('User Registered', "You have been registered on the system. Please contact us to verify your account");
-        return redirect('/dashboard')
+        return redirect('/dashboard');
     }
 
     public function cipta(Request $request)

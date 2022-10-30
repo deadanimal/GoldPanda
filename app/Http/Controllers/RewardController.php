@@ -28,16 +28,16 @@ class RewardController extends Controller
         $third_level_amount = (int)($amount * 0.08);
         $profit_amount = (int)($amount * 0.60);
 
-        $first_introducer = User::where('user_id', $user_id)->first();
+        $first_introducer = User::where('introducer_id', $user_id)->first();
 
-        if (User::where('user_id', $first_introducer->introducer_id)->exists()) {
-            $second_introducer = User::where('user_id', $first_introducer->introducer_id)->first();
+        if (User::where('introducer_id', $first_introducer->introducer_id)->exists()) {
+            $second_introducer = User::where('introducer_id', $first_introducer->introducer_id)->first();
         } else {
             $second_introducer = User::where('code', 'SAUFIA')->first();
         }
 
-        if (User::where('user_id', $second_introducer->introducer_id)->exists()) {
-            $third_introducer = User::where('user_id', $second_introducer->introducer_id)->first();
+        if (User::where('introducer_id', $second_introducer->introducer_id)->exists()) {
+            $third_introducer = User::where('introducer_id', $second_introducer->introducer_id)->first();
         } else {
             $third_introducer = User::where('code', 'SAUFIA')->first();
         }

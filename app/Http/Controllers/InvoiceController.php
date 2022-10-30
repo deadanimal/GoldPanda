@@ -181,8 +181,11 @@ class InvoiceController extends Controller
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
         $bill = $billplz->bill();
         $data = $bill->redirect($_GET);
-
         $bill_id = $data['id'];
+        $invoice = Invoice::where('billplz_id', $bill_id)->first();
+        if($invoice->status != 'Waiting For Payment'){
+            return redirect('/dashboard');
+        }
         $bill_paid = $data['paid'];
         $bill_paid_at = $data['paid_at'];
         $bill_paid_at->setTimeZone(new DateTimeZone('Asia/Kuala_Lumpur'));
@@ -192,8 +195,7 @@ class InvoiceController extends Controller
         // if($bill_x_signature == $bill_self_compute) {
         //     dd('OK');
         // }
-        // if ($bill_paid) {
-        $invoice = Invoice::where('billplz_id', $bill_id)->first();
+        // if ($bill_paid) {        
         $invoice->status = 'Paid';
         $reward_controller = new RewardController;
         if ($invoice->payable_type == 'App\Models\Trade') {

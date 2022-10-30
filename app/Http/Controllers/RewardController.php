@@ -95,7 +95,7 @@ class RewardController extends Controller
         $user = $request->user();
         $rewards = Reward::where([
             ['introducer_id', '=', $user->id],
-            ['level', '>', 0],
+            // ['level', '>', 0],
         ])->get();
         if ($request->ajax()) {
             return DataTables::collection($rewards)

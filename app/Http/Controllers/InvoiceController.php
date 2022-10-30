@@ -21,7 +21,7 @@ use Billplz\Client;
 
 class InvoiceController extends Controller
 {
-    
+
 
     public function senarai(Request $request)
     {
@@ -74,14 +74,14 @@ class InvoiceController extends Controller
                     $html_button = 'RM ' . number_format((int)($invoice->amount)  / 100, 2, '.', '');
                     return $html_button;
                 })
-                ->addColumn('user', function (Invoice $invoice) {                    
-                    $html_button = $invoice->user->name.'('.$invoice->user->mobile.')';
-                    return $html_button;  
-                })                   
+                ->addColumn('user', function (Invoice $invoice) {
+                    $html_button = $invoice->user->name . '(' . $invoice->user->mobile . ')';
+                    return $html_button;
+                })
                 ->addColumn('action', function (Invoice $invoice) {
                     $html_button = '-';
                     if ($invoice->status == "Waiting For Payment") {
-                        $url = '/admin/invoice/'.$invoice->id.'/kemaskini?action=paid';
+                        $url = '/admin/invoice/' . $invoice->id . '/kemaskini?action=paid';
                         $html_button = '<a href="' . $url . '"><button class="btn btn-success">Paid</button></a>';
                     }
                     return $html_button;
@@ -96,7 +96,7 @@ class InvoiceController extends Controller
                         'timestamp' => ($invoice->created_at && $invoice->created_at != '0000-00-00 00:00:00') ? with(new Carbon($invoice->created_at))->timestamp : ''
                     ];
                 })
-                ->rawColumns([ 'amount_', 'status', 'user', 'action'])
+                ->rawColumns(['amount_', 'status', 'user', 'action'])
                 ->make(true);
         } else {
             return view('invoice.admin');
@@ -176,70 +176,72 @@ class InvoiceController extends Controller
         return back();
     }
 
-    public function billplz_redirect(Request $request) {
+    public function billplz_redirect(Request $request)
+    {
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
-        $bill = $billplz->bill();        
+        $bill = $billplz->bill();
         $data = $bill->redirect($_GET);
-        
+
         $bill_id = $data['id'];
         $bill_paid = $data['paid'];
         $bill_paid_at = $data['paid_at'];
         $bill_paid_at->setTimeZone(new DateTimeZone('Asia/Kuala_Lumpur'));
         $bill_x_signature = $data['x_signature'];
-        $bill_string = 'billplzid'.$bill_id.'|billplzpaid_at'.$bill_paid_at->format('Y-m-d H:i:s O').'|billplzpaid'.$bill_paid;
+        $bill_string = 'billplzid' . $bill_id . '|billplzpaid_at' . $bill_paid_at->format('Y-m-d H:i:s O') . '|billplzpaid' . $bill_paid;
         $bill_self_compute = hash_hmac('sha256', $bill_string, env('BILLPLZ_X_SIGNATURE'));
-        if($bill_x_signature == $bill_self_compute) {
-            if ($bill_paid == 'true') {
-                $invoice = Invoice::where('billplz_id', $bill_id)->first();
-                $invoice->status = 'Paid';
-                $reward_controller = new RewardController;
-                if ($invoice->payable_type == 'App\Models\Trade') {
-                    $trade = Trade::find($invoice->payable_id);
-                    $trade->status = 'Paid';
-                    $trade->save();
-                    $user = User::find($trade->user_id);
-                    $user->balance += $trade->gold;
-                    $user->save();
-                    $reward_controller->distribute_sell_reward(
-                        $trade->user_id,
-                        $trade->fee,
-                        $trade->fiat_currency,
-                        $trade->id,
-                        1
-                    );
-                } else {
-                    $enhance = Enhance::find($invoice->payable_id);
-                    $enhance->status = 'Paid';
-                    $enhance->save();
-                    $user = User::find($enhance->user_id);
-                    $user->booked += $enhance->amount;
-                    $user->save();
-    
-                    $fee_purchase = ($enhance->capital + $enhance->loan) / 20;
-                    $fee_loan = $enhance->loan / 20;
-                    $fee = $fee_purchase + $fee_loan;
-    
-                    $reward_controller->distribute_sell_reward(
-                        $enhance->user_id,
-                        $fee,
-                        $enhance->currency,
-                        $enhance->id,
-                        0
-                    );
-                }                
+        // if($bill_x_signature == $bill_self_compute) {
+        if ($bill_paid == 'true') {
+            $invoice = Invoice::where('billplz_id', $bill_id)->first();
+            $invoice->status = 'Paid';
+            $reward_controller = new RewardController;
+            if ($invoice->payable_type == 'App\Models\Trade') {
+                $trade = Trade::find($invoice->payable_id);
+                $trade->status = 'Paid';
+                $trade->save();
+                $user = User::find($trade->user_id);
+                $user->balance += $trade->gold;
+                $user->save();
+                $reward_controller->distribute_sell_reward(
+                    $trade->user_id,
+                    $trade->fee,
+                    $trade->fiat_currency,
+                    $trade->id,
+                    1
+                );
+            } else {
+                $enhance = Enhance::find($invoice->payable_id);
+                $enhance->status = 'Paid';
+                $enhance->save();
+                $user = User::find($enhance->user_id);
+                $user->booked += $enhance->amount;
+                $user->save();
+
+                $fee_purchase = ($enhance->capital + $enhance->loan) / 20;
+                $fee_loan = $enhance->loan / 20;
+                $fee = $fee_purchase + $fee_loan;
+
+                $reward_controller->distribute_sell_reward(
+                    $enhance->user_id,
+                    $fee,
+                    $enhance->currency,
+                    $enhance->id,
+                    0
+                );
             }
-            $invoice->save();
-            return view('invoice.billplz_redirect', compact('invoice'));
-        } else {
-            Alert::error('False Signature', 'You are not from billplz website.');
-            return redirect('/dashboard');
-        }        
+        }
+        $invoice->save();
+        return view('invoice.billplz_redirect', compact('invoice'));
+        // } else {
+        //     Alert::error('False Signature', 'You are not from billplz website.');
+        //     return redirect('/dashboard');
+        // }        
     }
 
-    public function billplz_callback(Request $request) {
+    public function billplz_callback(Request $request)
+    {
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
-        $bill = $billplz->bill();        
-        $data = $bill->webhook($_POST);        
+        $bill = $billplz->bill();
+        $data = $bill->webhook($_POST);
         return response('', 200);
     }
 }

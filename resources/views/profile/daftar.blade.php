@@ -22,6 +22,8 @@
 		<div class="splash-icon"></div>
 	</div>
 
+
+    @include('sweetalert::alert')
 	<main class="main h-100 w-100">
 		<div class="container h-100">
 			<div class="row h-100">
@@ -39,11 +41,18 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="m-sm-4">
-									<!-- <div class="text-center">
-										<img src="/img/avatars/avatar.jpg" alt="Linda Miller" class="img-fluid rounded-circle" width="132" height="132" />
-									</div> -->
-                                    <form method="POST" action="{{ route('login') }}">
+	
+                                    <form method="POST" action="{{ route('register') }}">
                                         @csrf
+                                        <input type="hidden" name="code" value="{{ $promoter->code }}">
+										<div class="mb-3">
+											<label>Consultant</label>
+											<input class="form-control form-control-lg" type="text" value="{{$promoter->name}} ({{$promoter->code}})"  readonly/>
+										</div>                                          
+										<div class="mb-3">
+											<label>Name</label>
+											<input class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name" />
+										</div>                                        
 										<div class="mb-3">
 											<label>Email</label>
 											<input class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" />
@@ -51,19 +60,13 @@
 										<div class="mb-3">
 											<label>Password</label>
 											<input class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" />
-											{{-- <small>
-												<a href="{{ route('password.request') }}">Forgot password?</a>
-											</small> --}}
 										</div>
-										<div>
-											{{-- <div class="form-check align-items-center">
-												<input id="customControlInline" type="checkbox" class="form-check-input" value="remember-me" name="remember-me"
-													checked>
-												<label class="form-check-label text-small" for="customControlInline">Remember me next time</label>
-											</div> --}}
-										</div>
+										<div class="mb-3">
+											<label>Confirm Password</label>
+											<input class="form-control form-control-lg" type="password" name="password_confirmation" placeholder="Confirm your password" />
+										</div>                                                                                  
 										<div class="text-center mt-3">											
-											<button type="submit" class="btn btn-lg btn-primary">Sign in</button>
+											<button type="submit" class="btn btn-lg btn-primary">Register</button>
 										</div>
 									</form>
 								</div>

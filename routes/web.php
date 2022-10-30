@@ -19,6 +19,7 @@ Route::get('about', [StatikController::class, 'about']);
 Route::get('faq', [StatikController::class, 'faq']);
 Route::get('privacy', [StatikController::class, 'privacy']);
 Route::get('terms', [StatikController::class, 'terms']);
+Route::get('register/{code}', [ProfileController::class, 'daftar']);
 
 
 Route::middleware(['auth'])->group(function () {

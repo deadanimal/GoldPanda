@@ -50,9 +50,9 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Buyer</th>
-                                        <th>Level</th>
-                                        <th>Amount</th>
+                                        <th>User</th>
+                                        <th>Product</th>
+                                        <th>Reward</th>
                                     </tr>
                                 </thead>
                                 <tbody>

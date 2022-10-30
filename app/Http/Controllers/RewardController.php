@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Models\Reward;
 use App\Models\User;
+use App\Models\Trade;
+use App\Models\Enhance;
 use App\Models\RewardProfile;
 
 class RewardController extends Controller
@@ -101,20 +103,17 @@ class RewardController extends Controller
             return DataTables::collection($rewards)
                 ->addColumn('buyer_', function (Reward $reward) {
                     $url = '/user/' . $reward->buyer->id;
-                    $html_button = $reward->buyer->name;
+                    $html_button = $reward->buyer->name.' (Level '.$reward->level.')';
                     return $html_button;
                 })
                 ->addColumn('level', function (Reward $reward) {
-                    if($reward->level == 1) {
-                        $html_statement = 'First downline';
-                    } else if($reward->level == 2) {
-                        $html_statement = 'Second downline';
-                    } else if($reward->level == 3) {
-                        $html_statement = 'Third downline';
-                    }  else {
-                        $html_statement = 'Profit';
+                    if($reward->tradable_type == 'App\Models\Trade') {
+                        $trade = Trade::find($reward->tradable_id);
+                        $html_statement = 'Bought RM '.number_format($trade->fiat / 100, 2, '.', ','); ;
+                    } else {
+                        $enhance = Enhance::find($reward->tradable_id);
+                        $html_statement = 'Booked RM '.number_format(($enhance->loan+$enhance->capital) / 100, 2, '.', ','); ;
                     }
-
                     return $html_statement;
                 })                   
                 ->addColumn('amount_', function (Reward $reward) {

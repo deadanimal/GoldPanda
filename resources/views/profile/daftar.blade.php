@@ -47,12 +47,20 @@
                                         <input type="hidden" name="code" value="{{ $promoter->code }}">
 										<div class="mb-3">
 											<label>Consultant</label>
-											<input class="form-control form-control-lg" type="text" value="{{$promoter->name}} ({{$promoter->code}})"  readonly/>
-										</div>                                          
+											<input class="form-control form-control-lg" type="text" value="{{$promoter->name}}"  readonly/>
+										</div>       
+										<div class="mb-3">
+											<label>Code</label>
+											<input class="form-control form-control-lg" type="text" value="{{$promoter->code}}"  readonly/>
+										</div>    										                                   
 										<div class="mb-3">
 											<label>Name</label>
 											<input class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name" />
-										</div>                                        
+										</div>      
+										<div class="mb-3">
+											<label>Mobile</label>
+											<input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter your mobile number" />
+										</div>										                                  
 										<div class="mb-3">
 											<label>Email</label>
 											<input class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email" />

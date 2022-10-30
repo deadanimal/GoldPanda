@@ -131,6 +131,7 @@ class ProfileController extends Controller
         $user->level = $new_level;
         $user->introducer_id = $promoter->id;
         $user->code = $code;
+        $user->mobile = '+6'.$request->mobile;
         $user->save();        
 
         event(new Registered($user));

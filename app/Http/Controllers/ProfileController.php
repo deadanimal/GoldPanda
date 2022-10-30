@@ -117,8 +117,7 @@ class ProfileController extends Controller
             $promoter = User::where('code', 'SAUFIA')->first(); 
             Alert::error('No Code Found', 'System is unable to find the registration code so system chose random consultant');           
         }
-        Alert::success('User Registered', "You have been registered on the system. Please contact us to verify your account");
-        return redirect('/dashboard');
+        return view('profile.daftar', compact('promoter'));
     }
 
     public function cipta(Request $request)
@@ -162,7 +161,8 @@ class ProfileController extends Controller
 
         event(new Registered($user));
         Auth::login($user);
-        return redirect(RouteServiceProvider::HOME);
+        Alert::success('User Registered', "You have been registered on the system. Please contact us to verify your account");
+        return redirect('/dashboard');
     }    
     
     public function generate_unique_code() {

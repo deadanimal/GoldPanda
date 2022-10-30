@@ -30,6 +30,7 @@ class RewardController extends Controller
         $profit_amount = (int)($amount * 0.60);
 
         $first_introducer = User::where('introducer_id', $user->introducer_id)->first();
+        dd($first_introducer);
 
         if (User::where('introducer_id', $first_introducer->introducer_id)->exists()) {
             $second_introducer = User::where('introducer_id', $first_introducer->introducer_id)->first();

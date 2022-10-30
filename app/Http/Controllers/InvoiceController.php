@@ -189,8 +189,8 @@ class InvoiceController extends Controller
         $bill_x_signature = $data['x_signature'];
         $bill_string = 'billplzid' . $bill_id . '|billplzpaid_at' . $bill_paid_at->format('Y-m-d H:i:s O') . '|billplzpaid' . $bill_paid;
         $bill_self_compute = hash_hmac('sha256', $bill_string, env('BILLPLZ_X_SIGNATURE'));
-        // if($bill_x_signature == $bill_self_compute) {
-        if ($bill_paid == 'true') {
+        if($bill_x_signature == $bill_self_compute) {
+        if ($bill_paid) {
             $invoice = Invoice::where('billplz_id', $bill_id)->first();
             $invoice->status = 'Paid';
             $reward_controller = new RewardController;
@@ -231,10 +231,10 @@ class InvoiceController extends Controller
         }
         $invoice->save();
         return view('invoice.billplz_redirect', compact('invoice'));
-        // } else {
-        //     Alert::error('False Signature', 'You are not from billplz website.');
-        //     return redirect('/dashboard');
-        // }        
+        } else {
+            Alert::error('False Signature', 'You are not from billplz website.');
+            return redirect('/dashboard');
+        }        
     }
 
     public function billplz_callback(Request $request)

@@ -29,9 +29,9 @@ class RewardController extends Controller
         $third_level_amount = (int)($amount * 0.08);
         $profit_amount = (int)($amount * 0.60);
 
-        $first_introducer = User::where('introducer_id', $user->introducer_id)->first();
-        $second_introducer = User::where('introducer_id', $first_introducer->introducer_id)->first();
-        $third_introducer = User::where('introducer_id', $second_introducer->introducer_id)->first();
+        $first_introducer = User::find($user->introducer_id);
+        $second_introducer = User::find($first_introducer->introducer_id);
+        $third_introducer = User::find($second_introducer->introducer_id);
 
         if ($trade == 1) {
             $tradable_type = 'App\Models\Trade';

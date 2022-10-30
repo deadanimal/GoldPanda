@@ -23,12 +23,13 @@ class RewardController extends Controller
 
     public function distribute_sell_reward($user_id, $amount, $currency, $trade_id, $trade) {
 
+        $user = User::find($user_id);
         $first_level_amount = (int)($amount * 0.20);
         $second_level_amount = (int)($amount * 0.12);
         $third_level_amount = (int)($amount * 0.08);
         $profit_amount = (int)($amount * 0.60);
 
-        $first_introducer = User::where('introducer_id', $user_id)->first();
+        $first_introducer = User::where('introducer_id', $user->id)->first();
 
         if (User::where('introducer_id', $first_introducer->introducer_id)->exists()) {
             $second_introducer = User::where('introducer_id', $first_introducer->introducer_id)->first();
@@ -84,7 +85,7 @@ class RewardController extends Controller
         $profit->level = 0;
         $profit->tradable_id = $trade_id;
         $profit->tradable_type = $tradable_type;
-        $profit->introducer_id = 0;
+        $profit->introducer_id = 8;
         $profit->buyer_id = $user_id;
         $profit->save();
     }

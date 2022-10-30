@@ -64,6 +64,7 @@
 										</div>
 										<div class="text-center mt-3">											
 											<button type="submit" class="btn btn-lg btn-primary">Sign in</button>
+											{{-- <p><a href="/register">Register a new account</a></p> --}}
 										</div>
 									</form>
 								</div>

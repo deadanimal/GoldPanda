@@ -19,6 +19,7 @@ Route::get('about', [StatikController::class, 'about']);
 Route::get('faq', [StatikController::class, 'faq']);
 Route::get('privacy', [StatikController::class, 'privacy']);
 Route::get('terms', [StatikController::class, 'terms']);
+Route::get('register', [ProfileController::class, 'daftar']);
 Route::get('register/{code}', [ProfileController::class, 'daftar']);
 Route::post('register/{code}', [ProfileController::class, 'cipta']);
 

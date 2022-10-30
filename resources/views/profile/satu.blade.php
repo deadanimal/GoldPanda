@@ -40,8 +40,8 @@
                                     @endif
                                 </p>
 
-                                <h5 class="card-title">Nationality</h5>
-                                <p class="card-text">{{ $user->nationality }}</p>
+                                <h5 class="card-title">Email</h5>
+                                <p class="card-text">{{ $user->email }}</p>
 
                                 <h5 class="card-title">Mobile Number</h5>
                                 <p class="card-text">
@@ -115,8 +115,8 @@
                         <div class="col-xl-8">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title">Password</h5>
-                                    <h6 class="card-subtitle text-muted">Change your password to a new password</h6>
+                                    <h5 class="card-title">User Detail</h5>
+                                    <h6 class="card-subtitle text-muted">Update the information to verify the user</h6>
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="/admin/user/{{ $user->id }}/kemaskini">

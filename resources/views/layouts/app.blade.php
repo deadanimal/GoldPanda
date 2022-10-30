@@ -60,6 +60,12 @@
                     </li>
 
                     {{-- <li class="sidebar-item">
+                        <a class="sidebar-link" href="/agent">
+                            <i class="align-middle me-2 fas fa-fw fa-users"></i> <span class="align-middle">Agent</span>
+                        </a>
+                    </li>                     --}}
+
+                    {{-- <li class="sidebar-item">
 						<a class="sidebar-link" href="/blockchain">
 							<i class="align-middle me-2 fas fa-fw fa-server"></i> <span class="align-middle">Blockchain</span>
 						</a>

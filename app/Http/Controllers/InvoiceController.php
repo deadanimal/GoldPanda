@@ -184,7 +184,7 @@ class InvoiceController extends Controller
         $bill_paid = $data['paid'];
         $bill_paid_at = $data['paid_at'];
         $bill_x_signature = $data['x_signature'];
-        $bill_string = 'billplzid'.$bill_id.'|billplzpaid_at'.$bill_paid_at.'|billplzpaid'.$bill_paid;
+        $bill_string = 'billplzid'.$bill_id.'|billplzpaid_at'.$bill_paid_at->format('Y-m-d H:i:s').' +0800|billplzpaid'.$bill_paid;
         $bill_self_compute = hash_hmac('sha256', $bill_string, env('BILLPLZ_X_SIGNATURE'));
         if($bill_x_signature == $bill_self_compute) {
             if ($bill_paid == 'true') {

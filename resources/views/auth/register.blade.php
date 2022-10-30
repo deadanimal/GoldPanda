@@ -42,7 +42,7 @@
 									<!-- <div class="text-center">
 										<img src="/img/avatars/avatar.jpg" alt="Linda Miller" class="img-fluid rounded-circle" width="132" height="132" />
 									</div> -->
-                                    <form method="POST" action="{{ route('register') }}">
+                                    <form method="POST" action="/register/">
                                         @csrf
 										<div class="mb-3">
 											<label>Name</label>

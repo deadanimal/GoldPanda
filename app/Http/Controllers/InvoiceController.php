@@ -182,7 +182,8 @@ class InvoiceController extends Controller
     {
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
         $bill = $billplz->bill();
-        $data = implode(" ",$bill->redirect($_GET));
+        $data = $bill->redirect($_GET);
+        dd($data);
         $bill_id = $data['id'];
         $invoice = Invoice::where('billplz_id', $bill_id)->first();
         if($invoice->status != 'Waiting For Payment'){

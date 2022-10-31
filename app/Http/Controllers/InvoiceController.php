@@ -183,7 +183,6 @@ class InvoiceController extends Controller
         $billplz = Client::make(env('BILLPLZ_API_KEY'), env('BILLPLZ_X_SIGNATURE'));
         $bill = $billplz->bill();
         $data = $bill->redirect($_GET);
-        dd($data);
         $bill_id = $data['id'];
         $invoice = Invoice::where('billplz_id', $bill_id)->first();
         if($invoice->status != 'Waiting For Payment'){
@@ -194,8 +193,9 @@ class InvoiceController extends Controller
         $bill_paid_at->setTimeZone(new DateTimeZone('Asia/Kuala_Lumpur'));
         $bill_x_signature = $data['x_signature'];
         $bill_string = 'billplzid' . $bill_id . '|billplzpaid_at' . $bill_paid_at->format('Y-m-d H:i:s O') . '|billplzpaid' . $bill_paid;
+        dd($bill_string);
         $bill_self_compute = hash_hmac('sha256', $bill_string, env('BILLPLZ_X_SIGNATURE'));
-        return view('test', compact('data', 'bill_string'));
+        return view('test', compact('bill_string'));
         // // if($bill_x_signature == $bill_self_compute) {
         // //     dd('OK');
         // // }

@@ -105,11 +105,11 @@ class ProfileController extends Controller
         if ($request->ajax()) {
             return DataTables::collection($users)
                 ->addIndexColumn()
-                ->addColumn('name', function (user $user) {
+                ->addColumn('name', function (User $user) {
                     $html_button = $user->name;
                     return $html_button;
                 })     
-                ->addColumn('identity', function (user $user) {
+                ->addColumn('identity', function (User $user) {
                     if($user->ic_verified) {
                         $html_button = '<span class="badge rounded-pill bg-success">Verified</span>';
                     } else {
@@ -117,7 +117,7 @@ class ProfileController extends Controller
                     }
                     return $html_button;
                 })  
-                ->addColumn('bank_account', function (user $user) {
+                ->addColumn('bank_account', function (User $user) {
                     if($user->bank_account_verified) {
                         $html_button = '<span class="badge rounded-pill bg-success">Verified</span>';
                     } else {
@@ -125,19 +125,62 @@ class ProfileController extends Controller
                     }
                     return $html_button;
                 })                                              
-                ->addColumn('mobile', function (user $user) {
+                ->addColumn('mobile', function (User $user) {
                     $html_statement = $user->mobile;
                     return $html_statement;
-                })      
-                ->addColumn('link', function (user $user) {
+                })    
+                ->addColumn('cum_sales', function (User $user) {                    
+                    $amount = Reward::where([
+                        ['introducer_id','=', $user->id],
+                        ['level','=', 1],
+                    ])->sum('amount');   
+                    $html_statement = 'RM '.number_format((int)($amount)  / 100, 2, '.', ',');
+                    return $html_statement;
+                })     
+                ->addColumn('cum_downlines', function (User $user) {
+                    $amount1 = Reward::where([
+                        ['introducer_id','=', $user->id],
+                        ['level','=', 2],
+                    ])->sum('amount');  
+                    $amount2 = Reward::where([
+                        ['introducer_id','=', $user->id],
+                        ['level','=', 3],
+                    ])->sum('amount');                        
+                    $html_statement = 'RM '.number_format((int)($amount1+$amount2)  / 100, 2, '.', ',');
+                    return $html_statement;
+                })    
+                ->addColumn('monthly_sales', function (User $user) {                    
+                    $amount = Reward::where([
+                        ['introducer_id','=', $user->id],
+                        ['level','=', 1],
+                        ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+                    ])->sum('amount');   
+                    $html_statement = 'RM '.number_format((int)($amount)  / 100, 2, '.', ',');
+                    return $html_statement;
+                })     
+                ->addColumn('monthly_downlines', function (User $user) {
+                    $amount1 = Reward::where([
+                        ['introducer_id','=', $user->id],
+                        ['level','=', 2],
+                        ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+                    ])->sum('amount');  
+                    $amount2 = Reward::where([
+                        ['introducer_id','=', $user->id],
+                        ['level','=', 3],
+                        ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+                    ])->sum('amount');                        
+                    $html_statement = 'RM '.number_format((int)($amount1+$amount2)  / 100, 2, '.', ',');
+                    return $html_statement;
+                })                                                  
+                ->addColumn('link', function (User $user) {
                     $url = '/user/'.$user->id;
                     $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
                     return $html_button;
                 })                                                                                            
-                ->rawColumns([ 'name', 'mobile', 'link', 'identity', 'bank_account'])
+                ->rawColumns([ 'name', 'mobile', 'link', 'identity', 'bank_account', 'cum_sales', 'cum_downlines', 'monthly_sales', 'monthly_downlines'])
                 ->make(true);
         } else {
-            return view('profile.senarai_agent', compact('data'));
+            return view('profile.senarai_agent', compact('data', 'user'));
         }
     }    
 

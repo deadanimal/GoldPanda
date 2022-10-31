@@ -17,6 +17,22 @@
 
             <div class="row">
 
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="card-title">Upline</h4>
+                            <p class="card-text">{{ $user->introducer->name }}</p>                         
+
+                            <h4 class="card-title">My Code</h4>
+                            <p class="card-text">{{ $user->code }}</p>
+
+
+                        </div>
+             
+                    </div>
+                </div>
+
 
                 <div class="col">
                     <div class="w-100">
@@ -112,9 +128,10 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Identity Status</th>
-                                        <th>Bank Account Status</th>
-                                        <th>Mobile</th>
+                                        <th>Cumulative</th>
+                                        <th>Cumulative Downline</th>
+                                        <th>Monthly</th>
+                                        <th>Monthly Downline</th>                                        
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -153,17 +170,21 @@
                         name: 'name'
                     },
                     {
-                        data: 'identity',
-                        name: 'identity'
+                        data: 'cum_sales',
+                        name: 'cum_sales'
                     },
                     {
-                        data: 'bank_account',
-                        name: 'bank_account'
+                        data: 'cum_downlines',
+                        name: 'cum_downlines'
                     },
                     {
-                        data: 'mobile',
-                        name: 'mobile'
+                        data: 'monthly_sales',
+                        name: 'monthly_sales'
                     },
+                    {
+                        data: 'monthly_downlines',
+                        name: 'monthly_downlines'
+                    },                                                                                
                     {
                         data: 'link',
                         name: 'link'

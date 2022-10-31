@@ -25,9 +25,9 @@
             <a class="navbar-brand fw-bold" href="/">
                 Easy Gold
             </a>
-            <a class="btn btn-warning btn-pill my-2 ms-2" href="/dashboard">
+            {{-- <a class="btn btn-warning btn-pill my-2 ms-2" href="/dashboard">
                 Dashboard
-            </a>
+            </a> --}}
         </div>
     </nav>
 
@@ -38,12 +38,10 @@
                     <div class="row">
                         <div class="col-md-12 col-xl-8 text-center mx-auto">
                             <div class="d-block my-4">
-                                <h1 class="display-4 fw-bold mb-3 text-white">Modern Gold Platform</h1>
-                                <p class="lead fw-light mb-3 landing-text">A professional package that comes with
-                                    hunderds of
-                                    UI components, forms, tables,
-                                    charts, dashboards, pages and svg icons.
-                                    Each one is fully customizable, responsive and easy to use.</p>
+                                <h1 class="display-4 fw-bold mb-3 text-white">Easy Gold</h1>
+                                <p class="lead fw-light mb-3 landing-text">
+                                    Easy Gold is an advanced platform developed to help you increase your wealth with gold. Now everyone can trade and book gold anywhere, anytime.                                    
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -54,10 +52,7 @@
 
     <div class="py-3 bg-white landing-nav">
         <div class="container text-center">
-            <a href="" class="btn btn-lg btn-pill btn-link text-dark">Trade Gold</a>
-            <a href="/product-advance" class="btn btn-lg btn-pill btn-link text-dark">Advance Gold</a>
-            <a href="/product-enhance" class="btn btn-lg btn-pill btn-link text-dark">Enhance Gold</a>
-            <a href="/faq" class="btn btn-lg btn-pill btn-link text-dark">F.A.Q.</a>
+            <a href="/dashboard" class="btn btn-lg btn-pill btn-primary">Access Gold Platform</a>
         </div>
     </div>
 

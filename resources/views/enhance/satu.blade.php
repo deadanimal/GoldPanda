@@ -24,12 +24,12 @@
                                     value="{{ number_format($enhance->capital / 100, 2, '.', ',') }}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Fee Amount, RM</label>
+                                <label class="form-label">Booking Amount, RM</label>
                                 <input type="text" class="form-control"
-                                    value="{{ number_format($fee / 100, 2, '.', ',') }}" readonly>
+                                    value="{{ number_format(($enhance->capital + $enhance->loan) / 100, 2, '.', ',') }}" readonly>
                             </div>    
                             <div class="mb-3">
-                                <label class="form-label">Total Amount, RM</label>
+                                <label class="form-label">Completion Fee, RM</label>
                                 <input type="text" class="form-control"
                                     value="{{ number_format($total_amount / 100, 2, '.', ',') }}" readonly>
                             </div>                                                      

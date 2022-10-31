@@ -174,11 +174,11 @@
                                         <option value=5 selected>Accumulation RM20</option>
                                         <option value=6>Accumulation RM50</option>
                                         <option value=7>Accumulation RM100</option>
-                                        <option value=1>1 Dinar (4.25g)</option>
+                                        {{-- <option value=1>1 Dinar (4.25g)</option>
                                         <option value=2>5 Dinar (21.25g)</option>
-                                        <option value=3>10 Dinar (42.50g)</option>                                        
-                                        <option value=4>5X Gold Package</option>
-                                        <option value=9>10X Gold Package</option>
+                                        <option value=3>10 Dinar (42.50g)</option>                                         --}}
+                                        <option value=4>Gold Multiplier 5X</option>
+                                        <option value=9>Gold Multiplier 10X</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">

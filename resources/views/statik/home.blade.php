@@ -7,65 +7,39 @@
     <section class="py-6">
         <div class="container">
             <div class="mb-4 text-center">
-                <h2>Multiple demos</h2>
-                <p class="text-muted">Multiple color schemes & dashboard layouts available to make this template your very
-                    own.</p>
+                <h2>Gold Product</h2>
+                <p class="text-muted">
+                    Buy, sell, and book 99.99% investment-grade gold starting from RM 20.
+                </p>
             </div>
 
             <div class="row pb-3">
                 <div class="col-md-6 col-lg-4 text-center">
-                    <a class="mb-3 card overflow-hidden" href="dashboard-default.html?theme=modern" target="_blank">
+                    <a class="mb-3 card overflow-hidden" href="/pro">
                         <div class="px-4 pt-4">
-                            <img src="img/screenshots/modern.png" class="img-fluid card-img-hover landing-img"
-                                alt="Modern Bootstrap 5 Dashboard Theme" />
+                            <img src="/img/photos/prod1.png" class="img-fluid card-img-hover landing-img"
+                                 />
                         </div>
                     </a>
-                    <h4 class="mb-3">Modern Theme</h4>
+                    <h4 class="mb-3">Gold Trade & Book</h4>
                 </div>
                 <div class="col-md-6 col-lg-4 text-center">
-                    <a class="mb-3 card overflow-hidden" href="dashboard-default.html?theme=light" target="_blank">
+                    <a class="mb-3 card overflow-hidden" href="/user">
                         <div class="px-4 pt-4">
-                            <img src="img/screenshots/light.png" class="img-fluid card-img-hover landing-img"
+                            <img src="/img/photos/prod2.png" class="img-fluid card-img-hover landing-img"
                                 alt="Light Bootstrap 5 Dashboard Theme" />
                         </div>
                     </a>
-                    <h4 class="mb-3">Light Theme</h4>
+                    <h4 class="mb-3">Manage Your Team</h4>
                 </div>
                 <div class="col-md-6 col-lg-4 text-center">
-                    <a class="mb-3 card overflow-hidden" href="dashboard-default.html?theme=dark" target="_blank">
+                    <a class="mb-3 card overflow-hidden" href="/reward">
                         <div class="px-4 pt-4">
-                            <img src="img/screenshots/dark.png" class="img-fluid card-img-hover landing-img"
+                            <img src="/img/photos/prod3.png" class="img-fluid card-img-hover landing-img"
                                 alt="Dark Bootstrap 5 Dashboard Theme" />
                         </div>
                     </a>
-                    <h4 class="mb-3">Dark Theme</h4>
-                </div>
-                <div class="col-md-6 col-lg-4 text-center">
-                    <a class="mb-3 card overflow-hidden" href="dashboard-default.html" target="_blank">
-                        <div class="px-4 pt-4">
-                            <img src="img/screenshots/dashboard-default.png" class="img-fluid card-img-hover landing-img"
-                                alt="Default Bootstrap 5 Dashboard Theme" />
-                        </div>
-                    </a>
-                    <h4 class="mb-3">Default Dashboard</h4>
-                </div>
-                <div class="col-md-6 col-lg-4 text-center">
-                    <a class="mb-3 card overflow-hidden" href="dashboard-analytics.html" target="_blank">
-                        <div class="px-4 pt-4">
-                            <img src="img/screenshots/dashboard-analytics.png" class="img-fluid card-img-hover landing-img"
-                                alt="Analytics Bootstrap 5 Dashboard Theme" />
-                        </div>
-                    </a>
-                    <h4 class="mb-3">Analytics Dashboard</h4>
-                </div>
-                <div class="col-md-6 col-lg-4 text-center">
-                    <a class="mb-3 card overflow-hidden" href="dashboard-e-commerce.html" target="_blank">
-                        <div class="px-4 pt-4">
-                            <img src="img/screenshots/dashboard-e-commerce.png" class="img-fluid card-img-hover landing-img"
-                                alt="E-Commerce Bootstrap 5 Dashboard Theme" />
-                        </div>
-                    </a>
-                    <h4 class="mb-3">E-commerce Dashboard</h4>
+                    <h4 class="mb-3">Get Reward From Selling</h4>
                 </div>
             </div>
         </div>
@@ -75,8 +49,8 @@
         <div class="container">
 
             <div class="mb-4 text-center">
-                <h2>Testimonials</h2>
-                <p class="text-muted">Here's what some of our 3,000 customers have to say about working with our products.
+                <h2>Features</h2>
+                <p class="text-muted">Here's why some of our happy gold savers and users of Easy Gold keep using Easy Gold.
                 </p>
             </div>
 
@@ -84,153 +58,29 @@
                 <div class="col-md-6 col-lg-4">
                     <blockquote class="card border">
                         <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <img src="img/brands/b.svg" width="48" height="48" alt="Bootstrap" />
-                                </div>
-                                <div class="ps-3">
-                                    <h5 class="mb-1 mt-2">Nikita</h5><small
-                                        class="d-block text-muted h5 fw-normal">Bootstrap Themes</small>
-                                </div>
-                            </div>
-                            <p class="lead mb-2">“We are totally amazed with a simplicity and the design of the template.
-                                Probably saved us hundreds of hours of
-                                development. We are absolutely amazed with the support Bootlab has provided us.”</p>
+                            <p class="lead mb-2">
+                                Redeem your physical gold starting from 1 gram.                                
+                            </p>
 
-                            <div class="landing-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
                         </div>
                     </blockquote>
-                    <blockquote class="card border">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <img src="img/brands/b.svg" width="48" height="48" alt="Bootstrap" />
-                                </div>
-                                <div class="ps-3">
-                                    <h5 class="mb-1 mt-2">Jason</h5><small
-                                        class="d-block text-muted h5 fw-normal">Bootstrap Themes</small>
-                                </div>
-                            </div>
-                            <p class="lead mb-2">“As a DB guy, this template has made my life easy porting over an old
-                                website to a new responsive version. I
-                                can focus more on the data and less on the layout.”</p>
 
-                            <div class="landing-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </blockquote>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <blockquote class="card border">
                         <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <img src="img/brands/b.svg" width="48" height="48" alt="Bootstrap" />
-                                </div>
-                                <div class="ps-3">
-                                    <h5 class="mb-1 mt-2">Alejandro</h5><small
-                                        class="d-block text-muted h5 fw-normal">Bootstrap Themes</small>
-                                </div>
-                            </div>
-                            <p class="lead mb-2">“Everything is so properly set up that any new additions I'd make would
-                                feel like a native extension of the
-                                theme versus a simple hack. I definitely feel like this will save me hundredths of hours I'd
-                                otherwise spend on designing.”</p>
+                            <p class="lead mb-2">Refer your friends and family and get rewarded with gold.</p>
 
-                            <div class="landing-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
                         </div>
                     </blockquote>
-                    <blockquote class="card border">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <img src="img/brands/b.svg" width="48" height="48" alt="Bootstrap" />
-                                </div>
-                                <div class="ps-3">
-                                    <h5 class="mb-1 mt-2">Richard</h5><small
-                                        class="d-block text-muted h5 fw-normal">Bootstrap Themes</small>
-                                </div>
-                            </div>
-                            <p class="lead mb-2">“This template was just what we were after; its modern, works perfectly
-                                and is visually beautiful , we couldn't
-                                be happier. The support really is excellent, I look forward to working with these guys for a
-                                long time to come!”</p>
 
-                            <div class="landing-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </blockquote>
                 </div>
                 <div class="col-md-6 col-lg-4 d-block d-md-none d-lg-block">
                     <blockquote class="card border">
                         <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <img src="img/brands/b.svg" width="48" height="48" alt="Bootstrap" />
-                                </div>
-                                <div class="ps-3">
-                                    <h5 class="mb-1 mt-2">Jordi</h5><small
-                                        class="d-block text-muted h5 fw-normal">Bootstrap Themes</small>
-                                </div>
-                            </div>
-                            <p class="lead mb-2">“I ran into a problem and contacted support. Within 24 hours, I not only
-                                received a response but even an
-                                updated version that solved my problem and works like a charm. Fantastic customer service!”
+                            <p class="lead mb-2">Counter inflation and expand your wealth by exploring gold products.
                             </p>
 
-                            <div class="landing-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </blockquote>
-                    <blockquote class="card border">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div>
-                                    <img src="img/brands/b.svg" width="48" height="48" alt="Bootstrap" />
-                                </div>
-                                <div class="ps-3">
-                                    <h5 class="mb-1 mt-2">Martin</h5><small
-                                        class="d-block text-muted h5 fw-normal">Bootstrap Themes</small>
-                                </div>
-                            </div>
-                            <p class="lead mb-2">“I just began to test and use this theme and I can find that it cover my
-                                expectatives. Good support from the
-                                developer.”</p>
-
-                            <div class="landing-stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
                         </div>
                     </blockquote>
                 </div>

@@ -308,7 +308,7 @@
                 document.getElementById('gold_booked').value = (.95 * total_ / gold_price).toFixed(3);
             } else {
                 document.getElementById('fiat_amount').readOnly = false;
-                var fiat_amount = parseInt(document.getElementById('fiat_amount').value);
+                var fiat_amount = parseFloat(document.getElementById('fiat_amount').value);
                 var total_ = (leverage + 1) * fiat_amount;
                 document.getElementById('amount_booked').value = total_.toFixed(2);
                 document.getElementById('gold_booked').value = (.95 * total_ / gold_price).toFixed(3);

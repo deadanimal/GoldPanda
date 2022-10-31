@@ -224,6 +224,7 @@ class InvoiceController extends Controller
                         $trade->id,
                         1
                     );
+                    Alert::success('Transaction Successful', 'Your gold purchase is successful. We appreciate your business.');
                 } else {
                     $enhance = Enhance::find($invoice->payable_id);
                     $enhance->status = 'Paid';
@@ -253,12 +254,13 @@ class InvoiceController extends Controller
                         $enhance->id,
                         0
                     );
+                    Alert::success('Transaction Successful', 'Your gold booking has successfully been made. We appreciate your business.');
                 }
                 $invoice->save();
-            }            
-        return view('invoice.billplz_redirect', compact('invoice'));
+            }                        
+            return redirect('/pro');
         } else {
-            Alert::error('False Signature', 'You are not from billplz website.');
+            Alert::error('False Signature', 'Your transaction is not successful, please contact our support team.');
             return redirect('/dashboard');
         }        
     }

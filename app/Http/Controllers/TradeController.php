@@ -138,9 +138,13 @@ class TradeController extends Controller
     public function cipta(Request $request)
     {
         $user = $request->user();
+        $nature = (int)$request->nature;
 
-        if ($user->bank_account_verified == false) {
-            Alert::error('Unverified Account', 'Please verify your identity, mobile number, and bank account before you make a trade.');
+        if ($user->ic_verified == false) {
+            Alert::error('Unverified Account', 'Please verify your identity and mobile number before you make a purchase.');
+            return back();
+        } else if ($user->bank_account_verified == false && $nature == false) {
+            Alert::error('Unverified Account', 'Please verify your bank account before you sell gold.');
             return back();
         }
 

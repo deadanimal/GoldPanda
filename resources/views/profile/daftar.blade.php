@@ -55,11 +55,15 @@
 										</div>    										                                   
 										<div class="mb-3">
 											<label>Name</label>
-											<input class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name" />
-										</div>      
+											<input class="form-control form-control-lg" type="text" name="name" placeholder="Enter your name as per NRIC" />
+										</div>   
+										<div class="mb-3">
+											<label>NRIC</label>
+											<input class="form-control form-control-lg" type="text" name="nric" placeholder="Enter your NRIC number e.g. 801020109010" />
+										</div>   										   
 										<div class="mb-3">
 											<label>Mobile</label>
-											<input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter your mobile number" />
+											<input class="form-control form-control-lg" type="text" name="mobile" placeholder="Enter your mobile number e.g. 0123456789" />
 										</div>										                                  
 										<div class="mb-3">
 											<label>Email</label>

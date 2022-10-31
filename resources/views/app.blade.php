@@ -10,9 +10,9 @@
 
 			<div class="header">
 				<h1 class="header-title">
-					RM {{ number_format($myr_price->price * $gold_price->price  / 100 / 100, 2, '.', ',')  }}
+					Easy Gold 
 				</h1>
-				<p id="priceDatetime" class="header-subtitle"></p>
+				<p class="text-white">Advanced and Modern Gold Platform</p>
 			</div>
 
 			<div class="row">

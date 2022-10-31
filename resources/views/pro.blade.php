@@ -84,6 +84,7 @@
 
             </div>
 
+
             <div class="row">
 
 
@@ -112,7 +113,9 @@
                                     <label class="form-label">Amount Advanced, RM</label>
                                     <input type="number" class="form-control" id="amount_advanced" readonly>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Advance Gold</button>
+                                @if ($user->balance >= 1000000)
+                                    <button type="submit" class="btn btn-primary">Advance Gold</button>
+                                @endif
                             </form>
                         </div>
                     </div>
@@ -158,23 +161,30 @@
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">Book Gold</h5>
-                            <h6 class="card-subtitle text-muted">Book extra gold</h6>
+                            <h6 class="card-subtitle text-muted">Book gold for future investment</h6>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="/enhance">
                                 @csrf
+
+                                <div class="mb-3">
+                                    <label class="form-label">Package</label>
+                                    <select class="form-control mb-3" name="leverage" id="leverage"
+                                        onchange="enhance_gold_changed()">
+                                        <option value=5 selected>Accumulation RM20</option>
+                                        <option value=6>Accumulation RM50</option>
+                                        <option value=7>Accumulation RM100</option>
+                                        <option value=1>1 Dinar (4.25g)</option>
+                                        <option value=2>5 Dinar (21.25g)</option>
+                                        <option value=3>10 Dinar (42.50g)</option>                                        
+                                        <option value=4>5X Gold Package</option>
+                                        <option value=9>10X Gold Package</option>
+                                    </select>
+                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Booking Deposit, RM</label>
                                     <input type="number" class="form-control" name="fiat_amount" id="fiat_amount"
                                         value=20.00 min=20.00 step=10 max=50000.00 onchange="enhance_gold_changed()">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Multiplier</label>
-                                    <select class="form-control mb-3" name="leverage" id="leverage"
-                                        onchange="enhance_gold_changed()">
-                                        <option value=4 selected>5X Package</option>
-                                        <option value=9>10X Package</option>
-                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Amount Booked, RM</label>
@@ -266,54 +276,86 @@
 
         function enhance_gold_changed() {
             var gold_price = {!! ($gold_price->price * $myr_price->price) / 10000 !!}
-            var fiat_amount = parseInt(document.getElementById('fiat_amount').value);
             var leverage = parseInt(document.getElementById('leverage').value);
-            var total_ = (leverage + 1) * fiat_amount;
-            document.getElementById('amount_booked').value = total_.toFixed(2);
-            document.getElementById('gold_booked').value = (.95 * total_ / gold_price).toFixed(3);
+            if (leverage == 1 || leverage == 2 || leverage == 3) {
+                document.getElementById('fiat_amount').readOnly = true;
+
+                if (leverage == 1) {
+                    document.getElementById('gold_booked').value = 4.25;
+                    var total_ = 4.25 * 1.05 * gold_price;
+                } else if (leverage == 2) {
+                    document.getElementById('gold_booked').value = 21.25;
+                    var total_ = 21.25 * 1.05 * gold_price;
+                } else {
+                    document.getElementById('gold_booked').value = 42.50;
+                    var total_ = 42.50 * 1.05 * gold_price;
+                }
+                document.getElementById('amount_booked').value = total_.toFixed(2);
+                document.getElementById('fiat_amount').value = (total_ / 10).toFixed(2);
+
+            } else if (leverage == 5 || leverage == 6 || leverage == 7) {
+                document.getElementById('fiat_amount').readOnly = true;
+                if (leverage == 5) {
+                    var deposit = 20.00;
+                } else if(leverage == 6) {
+                    var deposit = 50.00;
+                } else if(leverage == 7) {
+                    var deposit = 100.00;
+                }
+                document.getElementById('fiat_amount').value = deposit;
+                var total_ = deposit * 10;
+                document.getElementById('amount_booked').value = total_;
+                document.getElementById('gold_booked').value = (.95 * total_ / gold_price).toFixed(3);
+            } else {
+                document.getElementById('fiat_amount').readOnly = false;
+                document.getElementById('fiat_amount').value = 20.00;
+                var fiat_amount = parseInt(document.getElementById('fiat_amount').value);
+                var total_ = (leverage + 1) * fiat_amount;
+                document.getElementById('amount_booked').value = total_.toFixed(2);
+                document.getElementById('gold_booked').value = (.95 * total_ / gold_price).toFixed(3);
+            }
         }
     </script>
 
-<script type="text/javascript">
-	$(function() {
+    <script type="text/javascript">
+        $(function() {
 
-		var table = $('.trade-datatable').DataTable({
-			processing: true,
-			serverSide: true,
-			responsive: true,
-			ajax: "/trade",
-			columns: [
-				{
-					data: {
-						_: "created_at.display",
-						sort: "created_at.timestamp",
-						filter: 'created_at.display'
-					},
-					name: 'created_at.display'
-				},
-				{
-					data: 'gold_',
-					name: 'gold_'
-				},
-				{
-					data: 'fiat_',
-					name: 'fiat_'
-				},
-				{
-					data: 'status_',
-					name: 'status_'
-				},
-				{
-					data: 'link',
-					name: 'link'
-				},				
+            var table = $('.trade-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: "/trade",
+                columns: [{
+                        data: {
+                            _: "created_at.display",
+                            sort: "created_at.timestamp",
+                            filter: 'created_at.display'
+                        },
+                        name: 'created_at.display'
+                    },
+                    {
+                        data: 'gold_',
+                        name: 'gold_'
+                    },
+                    {
+                        data: 'fiat_',
+                        name: 'fiat_'
+                    },
+                    {
+                        data: 'status_',
+                        name: 'status_'
+                    },
+                    {
+                        data: 'link',
+                        name: 'link'
+                    },
 
-			]
-		});
+                ]
+            });
 
 
-	});
-</script>
+        });
+    </script>
 
     <script type="text/javascript">
         $(function() {

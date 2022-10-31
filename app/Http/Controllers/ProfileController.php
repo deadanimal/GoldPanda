@@ -16,6 +16,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\Rules;
 
+use App\Models\Reward;
 use App\Models\Profile;
 use App\Models\User;
 
@@ -48,16 +49,118 @@ class ProfileController extends Controller
         }
     }
 
+    public function agent(Request $request) {
+        $user = $request->user();
+        $users = User::where('introducer_id', $user->id)->get();
+
+        // $first_level_agents = User::where('introducer_id', $user->id)->count();
+        // $second_level_agents = User::where('introducer_id.introducer_id', $user->id)->count();
+
+        $all_agent_cumulative = Reward::where('introducer_id', $user->id)->sum('amount');
+        $first_agent_cumulative = Reward::where([
+            ['introducer_id','=', $user->id],
+            ['level','=', 1],
+        ])->sum('amount');
+        $second_agent_cumulative = Reward::where([
+            ['introducer_id','=', $user->id],
+            ['level','=', 2],
+        ])->sum('amount');
+        $third_agent_cumulative = Reward::where([
+            ['introducer_id','=', $user->id],
+            ['level','=', 3],
+        ])->sum('amount');
+
+        $all_agent_monthly = Reward::where([
+            ['introducer_id', '=', $user->id],
+            ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+        ])->sum('amount');
+        $first_agent_monthly = Reward::where([
+            ['introducer_id', '=', $user->id],
+            ['level','=', 1],
+            ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+        ])->sum('amount');  
+        $second_agent_monthly = Reward::where([
+            ['introducer_id', '=', $user->id],
+            ['level','=', 2],
+            ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+        ])->sum('amount'); 
+        $third_agent_monthly = Reward::where([
+            ['introducer_id', '=', $user->id],
+            ['level','=', 3],
+            ['created_at', 'like', Carbon::now()->format("Y-m")."%"]
+        ])->sum('amount');                         
+
+
+
+        $data = (object) array(
+            'all_agent_cumulative' => $all_agent_cumulative,
+            'first_agent_cumulative' => $first_agent_cumulative,
+            'second_agent_cumulative' => $second_agent_cumulative,
+            'third_agent_cumulative' => $third_agent_cumulative,
+            'all_agent_monthly' => $all_agent_monthly,
+            'first_agent_monthly' => $first_agent_monthly,
+            'second_agent_monthly' => $second_agent_monthly,
+            'third_agent_monthly' => $third_agent_monthly,            
+        );
+        if ($request->ajax()) {
+            return DataTables::collection($users)
+                ->addIndexColumn()
+                ->addColumn('name', function (user $user) {
+                    $html_button = $user->name;
+                    return $html_button;
+                })     
+                ->addColumn('identity', function (user $user) {
+                    if($user->ic_verified) {
+                        $html_button = '<span class="badge rounded-pill bg-success">Verified</span>';
+                    } else {
+                        $html_button = '<span class="badge rounded-pill bg-danger">Unverified</span>';
+                    }
+                    return $html_button;
+                })  
+                ->addColumn('bank_account', function (user $user) {
+                    if($user->bank_account_verified) {
+                        $html_button = '<span class="badge rounded-pill bg-success">Verified</span>';
+                    } else {
+                        $html_button = '<span class="badge rounded-pill bg-danger">Unverified</span>';
+                    }
+                    return $html_button;
+                })                                              
+                ->addColumn('mobile', function (user $user) {
+                    $html_statement = $user->mobile;
+                    return $html_statement;
+                })      
+                ->addColumn('link', function (user $user) {
+                    $url = '/user/'.$user->id;
+                    $html_button = '<a href="' . $url . '"><button class="btn btn-primary">View</button></a>';
+                    return $html_button;
+                })                                                                                            
+                ->rawColumns([ 'name', 'mobile', 'link', 'identity', 'bank_account'])
+                ->make(true);
+        } else {
+            return view('profile.senarai_agent', compact('data'));
+        }
+    }    
+
     public function satu(Request $request) {
         $currrent_user = $request->user();
         $id = (int)$request->route('id');
-        if($currrent_user->hasRole('super-admin') && $id) {
+        if($id) {
             $user = User::find($id);
         } else {
             $user = User::find($currrent_user->id);
         }
         return view('profile.satu', compact('user'));
     }
+
+    public function satu_agent(Request $request) {
+        $currrent_user = $request->user();
+        $id = (int)$request->route('id');
+        $user = User::where([
+            ['id', '=', $id],
+            ['introducer_id', '=', $currrent_user->id]
+        ])->first();
+        return view('profile.satu_agent', compact('user'));
+    }       
 
     public function kemaskini(Request $request) {
         $currrent_user = $request->user();
@@ -80,6 +183,13 @@ class ProfileController extends Controller
         }
         return view('profile.satu', compact('user'));
     }    
+
+    public function sah_pengguna(Request $request) {
+        $currrent_user = $request->user();
+        $id = (int)$request->route('id');
+    }
+
+    public function sah_bank(Request $request) {}
 
     public function change_password(Request $request) {
         $user = $request->user();
@@ -105,8 +215,7 @@ class ProfileController extends Controller
         Alert::success('Password', "User's password has been successfully changed");
         $user->save();
         
-        return back();
-        
+        return back();        
     }     
 
     public function daftar(Request $request) {
@@ -126,18 +235,13 @@ class ProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'code' => ['required', 'string', 'max:6'],
+            'nric' => ['required', 'string'],
+            'mobile' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        if (User::where('code', $request->code)->exists()) {
-            $promoter = User::where('code', $request->code)->first();
-        } else {
-            Alert::error('No Code Found', 'System is unable to find the registration code. Please try to register again');
-            return back();
-        }        
 
-        $promoter = User::where('id', $promoter->introducer_id)->first();
-
+        $promoter = User::where('code', $request->code)->first();
 
         $new_level = $promoter->level + 1;
         if ($new_level > 5) {
@@ -156,6 +260,7 @@ class ProfileController extends Controller
         $user->level = $new_level;
         $user->introducer_id = $promoter->id;
         $user->code = $code;
+        $user->ic = $request->nric;
         $user->mobile = '+6'.$request->mobile;
         $user->save();        
 

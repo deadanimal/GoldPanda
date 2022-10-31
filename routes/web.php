@@ -53,7 +53,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/{id}', [ProfileController::class, 'satu_user']);    
 
     Route::get('reward', [RewardController::class, 'home']);    
-    Route::post('reward/redeem', [RewardController::class, 'redeem']);    
+    Route::post('reward/redeem', [RewardController::class, 'redeem']);  
+    Route::get('user', [ProfileController::class, 'agent']);    
+    Route::get('user/{id}', [ProfileController::class, 'satu_agent']);        
     
     
 });

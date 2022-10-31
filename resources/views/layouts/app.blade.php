@@ -59,11 +59,11 @@
                         </a>
                     </li>
 
-                    {{-- <li class="sidebar-item">
-                        <a class="sidebar-link" href="/agent">
-                            <i class="align-middle me-2 fas fa-fw fa-users"></i> <span class="align-middle">Agent</span>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/user">
+                            <i class="align-middle me-2 fas fa-fw fa-users"></i> <span class="align-middle">Consultant</span>
                         </a>
-                    </li>                     --}}
+                    </li>                    
 
                     {{-- <li class="sidebar-item">
 						<a class="sidebar-link" href="/blockchain">

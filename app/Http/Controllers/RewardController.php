@@ -29,12 +29,12 @@ class RewardController extends Controller
         $first_level_amount = (int)($amount * 0.25);
         $second_level_amount = (int)($amount * 0.15);
         $third_level_amount = (int)($amount * 0.05);
-        $profit_amount = (int)($amount * 0.55);
+        //$profit_amount = (int)($amount * 0.55);
 
         $first_introducer = User::find($user->introducer_id);
         $second_introducer = User::find($first_introducer->introducer_id);
         $third_introducer = User::find($second_introducer->introducer_id);
-        $profit_person = User::find(8);
+        //$profit_person = User::find(8);
 
         if ($trade == 1) {
             $tradable_type = 'App\Models\Trade';
@@ -78,17 +78,17 @@ class RewardController extends Controller
         $third_introducer->reward += $third_level_amount;
         $third_introducer->save();
 
-        $profit = new Reward;
-        $profit->amount = $profit_amount;
-        $profit->currency = $currency;
-        $profit->level = 0;
-        $profit->tradable_id = $trade_id;
-        $profit->tradable_type = $tradable_type;
-        $profit->introducer_id = $profit_person->id;
-        $profit->buyer_id = $user_id;
-        $profit->save();
-        $profit_person->reward += $profit_amount;
-        $profit_person->save();
+        // $profit = new Reward;
+        // $profit->amount = $profit_amount;
+        // $profit->currency = $currency;
+        // $profit->level = 0;
+        // $profit->tradable_id = $trade_id;
+        // $profit->tradable_type = $tradable_type;
+        // $profit->introducer_id = $profit_person->id;
+        // $profit->buyer_id = $user_id;
+        // $profit->save();
+        // $profit_person->reward += $profit_amount;
+        // $profit_person->save();
     }
     
 

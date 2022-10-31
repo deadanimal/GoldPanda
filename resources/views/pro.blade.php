@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Ringgit Malaysia, RM</label>
-                                    <input type="number" class="form-control" name="fiat" id="fiat" value=20 min=20
+                                    <input type="number" class="form-control" name="fiat" id="fiat" value=20 min=1
                                         step=1 max=10000 onchange="trade_gold_changed()">
                                 </div>
                                 <div class="mb-3">

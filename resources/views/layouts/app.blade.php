@@ -80,43 +80,43 @@
                     @role('super-admin')
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/trade">
-                                <span class="align-middle">Trade</span>
+                                <span class="align-middle" style="color:red">Trade</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/advance">
-                                <span class="align-middle">Advance</span>
+                                <span class="align-middle" style="color:red">Advance</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/enhance">
-                                <span class="align-middle">Enhance</span>
+                                <span class="align-middle" style="color:red">Enhance</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/invoice">
-                                <span class="align-middle">Invoice</span>
+                                <span class="align-middle" style="color:red">Invoice</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/payment">
-                                <span class="align-middle">Payment</span>
+                                <span class="align-middle" style="color:red">Payment</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/user">
-                                <span class="align-middle">User</span>
+                                <span class="align-middle" style="color:red">User</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="/admin/reward">
-                                <span class="align-middle">Reward</span>
+                                <span class="align-middle" style="color:red">Reward</span>
                             </a>
                         </li>
                     @endrole

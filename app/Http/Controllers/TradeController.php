@@ -163,7 +163,7 @@ class TradeController extends Controller
         */
         if ($nature == 1) {
             $fee = $fiat / 20; # 5% fee on buy
-            $nett = $fiat - $fee;
+            $nett = $fiat + $fee;
             $gold = $nett * 100000000 / $gold_in_ringgit;
             if ($fiat < 2000) {
                 Alert::error('Minimum Amount Not Met', 'Gold purchased must be more than RM 20.00');
@@ -214,7 +214,7 @@ class TradeController extends Controller
             $invoice->payable_id = $trade->id;
             $invoice->user_id = $user->id;
             $invoice->status = 'Waiting For Payment';
-            $invoice->amount = $trade->fiat;
+            $invoice->amount = $trade->nett;
             $invoice->currency = $trade->fiat_currency;
 
             $datetime = new DateTime('tomorrow');
@@ -227,7 +227,7 @@ class TradeController extends Controller
                 $user->email,
                 $user->mobile,
                 'Easy Gold - Purchase of Gold',
-                \Duit\MYR::given($trade->fiat),
+                \Duit\MYR::given($trade->nett),
                 'https://easygold.com.my/billplz-callback',
                 $billplz_statement,
                 [

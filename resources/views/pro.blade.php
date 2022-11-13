@@ -39,10 +39,18 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Ringgit Malaysia, RM</label>
+                                    <label class="form-label">Amount, RM</label>
                                     <input type="number" class="form-control" name="fiat" id="fiat" value=20 min=20
                                         step=1 max=10000 onchange="trade_gold_changed()">
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fee, RM</label>
+                                    <input type="number" class="form-control" name="fiat_fee" id="fiat_fee" readonly>
+                                </div>   
+                                <div class="mb-3">
+                                    <label class="form-label">Total, RM</label>
+                                    <input type="number" class="form-control" name="fiat_total" id="fiat_total" readonly>
+                                </div>                                                                  
                                 <div class="mb-3">
                                     <label class="form-label">Gold Amount, g</label>
                                     <input type="number" class="form-control" name="gold_amount" id="gold_amount" readonly>
@@ -85,7 +93,7 @@
             </div>
 
 
-            <div class="row">
+            {{-- <div class="row">
 
 
                 <div class="col-xl-3">
@@ -129,7 +137,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">List of Advances</h5>
-                            {{-- <h6 class="card-subtitle text-muted">- - -</h6> --}}
+                            
                         </div>
                         <div class="card-body">
                             <table class="table table-striped table-sm advance-datatable">
@@ -150,7 +158,7 @@
 
                 </div>
 
-            </div>
+            </div> --}}
 
             <div class="row">
 
@@ -174,11 +182,13 @@
                                         <option value=5 selected>Accumulation RM20</option>
                                         <option value=6>Accumulation RM50</option>
                                         <option value=7>Accumulation RM100</option>
+                                        {{-- <option value=8>Accumulation RM500</option>
+                                        <option value=10>Accumulation RM1,000</option> --}}
                                         {{-- <option value=1>1 Dinar (4.25g)</option>
                                         <option value=2>5 Dinar (21.25g)</option>
                                         <option value=3>10 Dinar (42.50g)</option>                                         --}}
-                                        <option value=4>Gold Multiplier 5X</option>
-                                        <option value=9>Gold Multiplier 10X</option>
+                                        {{-- <option value=4>Gold Multiplier 5X</option> --}}
+                                        <option value=9>Gold Multiplier</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -251,26 +261,32 @@
         function trade_gold_changed() {
             var gold_price = {!! ($gold_price->price * $myr_price->price) / 10000 !!}
 
-            var fiat_amount = document.getElementById('fiat').value;
+            var fiat_amount = parseFloat(document.getElementById('fiat').value);
             var gold_amount = 0;
 
             if (document.getElementById('nature').value == 1) {
-                gold_amount = (0.95 * fiat_amount) / gold_price;
+                fiat_fee = parseFloat(fiat_amount / 20);
+                fiat_total = fiat_amount + fiat_fee;
+                gold_amount = fiat_total / gold_price;
             } else {
+                fiat_fee = 0.00;
+                fiat_total = fiat_amount;
                 gold_amount = fiat_amount / gold_price;
-            }
+            }            
+            fiat_total = parseFloat(fiat_total);
             document.getElementById('gold_amount').value = gold_amount.toFixed(3);
-            console.log(gold_amount);
+            document.getElementById('fiat_fee').value = fiat_fee.toFixed(2);
+            document.getElementById('fiat_total').value = fiat_total.toFixed(2);
 
         }
 
-        advance_gold_changed();
+        // advance_gold_changed();
 
-        function advance_gold_changed() {
-            var gold_price = {!! ($gold_price->price * $myr_price->price) / 10000 !!}
-            var gold_amount = document.getElementById('gold_amount').value;
-            document.getElementById('amount_advanced').value = (0.85 * gold_amount * gold_price).toFixed(2);
-        }
+        // function advance_gold_changed() {
+        //     var gold_price = {!! ($gold_price->price * $myr_price->price) / 10000 !!}
+        //     var gold_amount = document.getElementById('gold_amount').value;
+        //     document.getElementById('amount_advanced').value = (0.85 * gold_amount * gold_price).toFixed(2);
+        // }
 
         enhance_gold_changed();
 

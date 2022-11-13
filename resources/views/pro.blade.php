@@ -267,7 +267,7 @@
             if (document.getElementById('nature').value == 1) {
                 fiat_fee = parseFloat(fiat_amount / 20);
                 fiat_total = fiat_amount + fiat_fee;
-                gold_amount = fiat_total / gold_price;
+                gold_amount = fiat_amount / gold_price;
             } else {
                 fiat_fee = 0.00;
                 fiat_total = fiat_amount;

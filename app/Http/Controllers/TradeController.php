@@ -164,8 +164,8 @@ class TradeController extends Controller
         if ($nature == 1) {
             $fee = $fiat / 20; # 5% fee on buy
             $nett = $fiat + $fee;
-            $gold = $nett * 100000000 / $gold_in_ringgit;
-            if ($fiat < 2000) {
+            $gold = $fiat * 100000000 / $gold_in_ringgit;
+            if ($nett < 2000) {
                 Alert::error('Minimum Amount Not Met', 'Gold purchased must be more than RM 20.00');
                 return back();
             }

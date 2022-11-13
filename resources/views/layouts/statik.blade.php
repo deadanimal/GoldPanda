@@ -31,7 +31,7 @@
         </div>
     </nav>
 
-    <section class="pt-7 pb-5 landing-bg text-white overflow-hidden">
+    <section class="pt-7 pb-5 landing-bg text-white overflow-hidden" style="background-image: url(/img/home-bg.jpeg);background-size: cover;">
         <div class="container py-4">
             <div class="row">
                 <div class="col-xl-11 mx-auto">

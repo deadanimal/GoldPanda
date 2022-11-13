@@ -16,28 +16,28 @@
             <div class="row pb-3">
                 <div class="col-md-6 col-lg-4 text-center">
                     <a class="mb-3 card overflow-hidden" href="/pro">
-                        <div class="px-4 pt-4">
-                            <img src="/img/photos/prod1.png" class="img-fluid card-img-hover landing-img"
+                        
+                            <img src="/img/photos/prod1.jpeg" class="img-fluid card-img-hover landing-img"
                                  />
-                        </div>
+                        
                     </a>
-                    <h4 class="mb-3">Gold Trade & Book</h4>
+                    <h4 class="mb-3">Buy and Sell Gold</h4>
                 </div>
                 <div class="col-md-6 col-lg-4 text-center">
                     <a class="mb-3 card overflow-hidden" href="/user">
-                        <div class="px-4 pt-4">
-                            <img src="/img/photos/prod2.png" class="img-fluid card-img-hover landing-img"
+                        
+                            <img src="/img/photos/prod2.jpeg" class="img-fluid card-img-hover landing-img"
                                 alt="Light Bootstrap 5 Dashboard Theme" />
-                        </div>
+                        
                     </a>
-                    <h4 class="mb-3">Manage Your Team</h4>
+                    <h4 class="mb-3">Invest in Gold</h4>
                 </div>
                 <div class="col-md-6 col-lg-4 text-center">
                     <a class="mb-3 card overflow-hidden" href="/reward">
-                        <div class="px-4 pt-4">
+                        
                             <img src="/img/photos/prod3.png" class="img-fluid card-img-hover landing-img"
                                 alt="Dark Bootstrap 5 Dashboard Theme" />
-                        </div>
+                        
                     </a>
                     <h4 class="mb-3">Get Reward From Selling</h4>
                 </div>

@@ -13,8 +13,9 @@ class StatikController extends Controller
 {
 
     public function home() {
-
-        return view('statik.home');
+        $gold_price = GoldPrice::latest()->first();
+        $myr_price = ForexPrice::where('currency', 'MYR')->latest()->first();  
+        return view('statik.home', compact('gold_price', 'myr_price'));
     }
 
     public function advance() {

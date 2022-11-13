@@ -25,9 +25,9 @@
             <a class="navbar-brand fw-bold" href="/">
                 Easy Gold
             </a>
-            {{-- <a class="btn btn-warning btn-pill my-2 ms-2" href="/dashboard">
-                Dashboard
-            </a> --}}
+            <p class="btn btn-warning btn-pill my-2 ms-2">
+                RM {{ number_format(($myr_price->price * $gold_price->price) / 100 / 100, 2, '.', ',') }}
+            </p>
         </div>
     </nav>
 

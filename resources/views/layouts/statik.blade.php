@@ -25,9 +25,9 @@
             <a class="navbar-brand fw-bold" href="/">
                 Easy Gold
             </a>
-            <p class="btn btn-warning btn-pill my-2 ms-2">
+            {{-- <p class="btn btn-warning btn-pill my-2 ms-2">
                 RM {{ number_format(($myr_price->price * $gold_price->price) / 100 / 100, 2, '.', ',') }}
-            </p>
+            </p> --}}
         </div>
     </nav>
 
@@ -38,7 +38,9 @@
                     <div class="row">
                         <div class="col-md-12 col-xl-8 text-center mx-auto">
                             <div class="d-block my-4">
-                                <h1 class="display-4 fw-bold mb-3 text-white">Easy Gold</h1>
+                                {{-- <h1 class="display-4 fw-bold mb-3 text-white">Easy Gold</h1> --}}
+                                <h1 class="display-4 fw-bold mb-3 text-white">RM {{ number_format(($myr_price->price * $gold_price->price) / 100 / 100, 2, '.', ',') }}</h1>
+                                <p id="priceDatetime" class="header-subtitle"></p>
                                 <p class="lead fw-light mb-3 landing-text">
                                     Easy Gold is an advanced platform developed to help you increase your wealth with gold. Now everyone can trade and book gold anywhere, anytime.                                    
                                 </p>
@@ -70,6 +72,13 @@
         </defs>
     </svg>
     <script src="{{ URL::asset('js/app.js') }}"></script>
+
+    <script type="text/javascript">
+        var goldPriceDatetime = {!! json_encode($gold_price->created_at) !!}
+
+        var statement = 'Price of gold as of ' + moment(goldPriceDatetime).format("DD/MM/YYYY h:mma");
+        document.getElementById("priceDatetime").innerHTML = statement;
+    </script>
 
 </body>
 
